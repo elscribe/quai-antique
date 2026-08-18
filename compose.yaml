@@ -1,0 +1,8 @@
+services:
+  web:
+    build: .
+    container_name: quai-antique-front
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+
