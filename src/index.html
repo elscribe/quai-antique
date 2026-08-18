@@ -3,30 +3,139 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Quai Antique</title>
+    <title>Quai Antique - Restaurant savoyard</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="#accueil">Quai Antique</a>
+      <a class="brand" href="#accueil" aria-label="Retour à l'accueil Quai Antique">
+        Quai Antique
+      </a>
       <nav class="main-nav" aria-label="Navigation principale">
         <a href="#accueil">Accueil</a>
         <a href="#galerie">Galerie</a>
         <a href="#carte">La carte</a>
         <a href="#reservation">Réservation</a>
+        <a href="#compte">Mon compte</a>
       </nav>
     </header>
 
     <main>
       <section id="accueil" class="hero">
-        <p class="eyebrow">Restaurant à Chambéry</p>
-        <h1>Quai Antique</h1>
-        <p>
-          Une première page d'accueil pour le projet fil rouge du restaurant
-          Quai Antique.
-        </p>
+        <div class="hero__content">
+          <p class="eyebrow">Restaurant à Chambéry</p>
+          <h1>Une cuisine savoyarde simple, fraîche et généreuse.</h1>
+          <p>
+            Quai Antique présente une cuisine de saison dans un cadre chaleureux,
+            avec une réservation pensée pour rester rapide sur mobile comme sur ordinateur.
+          </p>
+          <div class="hero__actions">
+            <a class="button button--primary" href="#reservation">Réserver une table</a>
+            <a class="button button--secondary" href="#galerie">Voir la galerie</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-section section-grid" aria-labelledby="valeurs-title">
+        <div class="section-heading">
+          <p class="eyebrow">Accueil</p>
+          <h2 id="valeurs-title">Les informations à voir rapidement</h2>
+        </div>
+
+        <article class="feature-card">
+          <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=900&q=80" alt="Assiette dressée dans une cuisine de restaurant">
+          <div>
+            <h3>Bienvenue au Quai Antique</h3>
+            <p>
+              La page d'accueil présente le restaurant et oriente directement vers
+              les actions principales : consulter la galerie ou réserver.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80" alt="Produits frais sur un étal">
+          <div>
+            <h3>Des produits frais</h3>
+            <p>
+              Le contenu met en avant les produits et l'esprit du restaurant sans
+              surcharger l'utilisateur, surtout sur mobile.
+            </p>
+          </div>
+        </article>
+
+        <article class="feature-card">
+          <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=900&q=80" alt="Table de restaurant préparée pour un service">
+          <div>
+            <h3>Réservation en ligne</h3>
+            <p>
+              La réservation reste visible dès l'accueil pour répondre au besoin
+              principal d'un visiteur qui souhaite venir au restaurant.
+            </p>
+          </div>
+        </article>
+      </section>
+
+      <section id="galerie" class="content-section" aria-labelledby="galerie-title">
+        <div class="section-heading">
+          <p class="eyebrow">Galerie</p>
+          <h2 id="galerie-title">Aperçu de la salle et des plats</h2>
+          <p>
+            La galerie sera ensuite reliée aux données de l'application. Pour cette
+            première version, elle sert surtout à poser la structure responsive.
+          </p>
+        </div>
+
+        <div class="gallery-grid">
+          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80" alt="Salle de restaurant avec tables dressées">
+          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=900&q=80" alt="Plat coloré servi dans une assiette">
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80" alt="Plat de restaurant servi à table">
+          <img src="https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=900&q=80" alt="Dessert servi dans un restaurant">
+        </div>
+      </section>
+
+      <section id="carte" class="content-section split-section" aria-labelledby="carte-title">
+        <div>
+          <p class="eyebrow">La carte</p>
+          <h2 id="carte-title">Une carte courte et lisible</h2>
+          <p>
+            La carte sera détaillée dans une prochaine étape. L'objectif côté front
+            sera de garder une lecture claire des plats, menus et informations utiles.
+          </p>
+        </div>
+        <ul class="info-list" aria-label="Points prévus pour la carte">
+          <li>Entrées, plats et desserts</li>
+          <li>Mise en avant des menus</li>
+          <li>Affichage lisible sur mobile</li>
+        </ul>
+      </section>
+
+      <section id="reservation" class="content-section reservation-panel" aria-labelledby="reservation-title">
+        <div>
+          <p class="eyebrow">Réservation</p>
+          <h2 id="reservation-title">Préparer le parcours de réservation</h2>
+          <p>
+            Cette zone prépare la future page de réservation. Elle permettra de
+            choisir une date, une heure et un nombre de couverts.
+          </p>
+        </div>
+        <a class="button button--primary" href="#compte">Continuer vers mon compte</a>
       </section>
     </main>
+
+    <footer class="site-footer">
+      <div>
+        <strong>Quai Antique</strong>
+        <p>Restaurant savoyard - Chambéry</p>
+      </div>
+      <div>
+        <strong>Horaires</strong>
+        <p>Midi et soir, du mardi au dimanche</p>
+      </div>
+      <div id="compte">
+        <strong>Contact</strong>
+        <p>contact@quai-antique.example</p>
+      </div>
+    </footer>
   </body>
 </html>
-
