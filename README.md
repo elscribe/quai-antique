@@ -1,6 +1,6 @@
-# Quai Antique Front
+# Quai Antique
 
-Projet front-end du restaurant Quai Antique, réalisé dans le cadre du projet fil
+Projet du restaurant Quai Antique, réalisé dans le cadre du projet fil
 rouge de formation.
 
 ## Objectif
