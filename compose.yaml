@@ -3,6 +3,5 @@ services:
     build: .
     container_name: quai-antique
     ports:
-      - "8080:80"
+      - "82:80"
     restart: unless-stopped
-
