@@ -3,146 +3,31 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Quai Antique - Restaurant savoyard</title>
+    <meta name="description" content="Quai Antique, restaurant savoyard à Chambéry : carte, galerie et réservation en ligne.">
+    <title>Quai Antique — Restaurant savoyard</title>
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
     <header class="site-header">
-      <a class="brand" href="#accueil" aria-label="Retour à l'accueil Quai Antique">
-        Quai Antique
-      </a>
-
-      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">
-        Menu
-      </button>
-
+      <a class="brand" href="#accueil" aria-label="Retour à l'accueil Quai Antique">Quai Antique</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">Menu</button>
       <nav id="main-navigation" class="main-nav" aria-label="Navigation principale">
-        <a href="#accueil">Accueil</a>
-        <a href="#galerie">Galerie</a>
-        <a href="#carte">La carte</a>
-        <a href="#reservation">Réservation</a>
-        <a href="#compte">Mon compte</a>
+        <a href="#accueil">Accueil</a><a href="#galerie">Galerie</a><a href="#carte">La carte</a><a href="#reservation">Réserver</a><a href="#connexion">Connexion</a>
       </nav>
     </header>
-
-    <main>
-      <section id="accueil" class="hero">
-        <div class="hero__content">
-          <p class="eyebrow">Restaurant à Chambéry</p>
-          <h1>Une cuisine savoyarde simple, fraîche et généreuse.</h1>
-          <p>
-            Quai Antique présente une cuisine de saison dans un cadre chaleureux,
-            avec une réservation pensée pour rester rapide sur mobile comme sur ordinateur.
-          </p>
-          <div class="hero__actions">
-            <a class="button button--primary" href="#reservation">Réserver une table</a>
-            <a class="button button--secondary" href="#galerie">Voir la galerie</a>
-          </div>
-        </div>
-      </section>
-
-      <section class="content-section section-grid" aria-labelledby="valeurs-title">
-        <div class="section-heading">
-          <p class="eyebrow">Accueil</p>
-          <h2 id="valeurs-title">Les informations à voir rapidement</h2>
-        </div>
-
-        <article class="feature-card">
-          <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=900&q=80" alt="Assiette dressée dans une cuisine de restaurant">
-          <div>
-            <h3>Bienvenue au Quai Antique</h3>
-            <p>
-              La page d'accueil présente le restaurant et oriente directement vers
-              les actions principales : consulter la galerie ou réserver.
-            </p>
-          </div>
-        </article>
-
-        <article class="feature-card">
-          <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80" alt="Produits frais sur un étal">
-          <div>
-            <h3>Des produits frais</h3>
-            <p>
-              Le contenu met en avant les produits et l'esprit du restaurant sans
-              surcharger l'utilisateur, surtout sur mobile.
-            </p>
-          </div>
-        </article>
-
-        <article class="feature-card">
-          <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=900&q=80" alt="Table de restaurant préparée pour un service">
-          <div>
-            <h3>Réservation en ligne</h3>
-            <p>
-              La réservation reste visible dès l'accueil pour répondre au besoin
-              principal d'un visiteur qui souhaite venir au restaurant.
-            </p>
-          </div>
-        </article>
-      </section>
-
-      <section id="galerie" class="content-section" aria-labelledby="galerie-title">
-        <div class="section-heading">
-          <p class="eyebrow">Galerie</p>
-          <h2 id="galerie-title">Aperçu de la salle et des plats</h2>
-          <p>
-            La galerie sera ensuite reliée aux données de l'application. Pour cette
-            première version, elle sert surtout à poser la structure responsive.
-          </p>
-        </div>
-
-        <div class="gallery-grid">
-          <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80" alt="Salle de restaurant avec tables dressées">
-          <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=900&q=80" alt="Plat coloré servi dans une assiette">
-          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80" alt="Plat de restaurant servi à table">
-          <img src="https://images.unsplash.com/photo-1529042410759-befb1204b468?auto=format&fit=crop&w=900&q=80" alt="Dessert servi dans un restaurant">
-        </div>
-      </section>
-
-      <section id="carte" class="content-section split-section" aria-labelledby="carte-title">
-        <div>
-          <p class="eyebrow">La carte</p>
-          <h2 id="carte-title">Une carte courte et lisible</h2>
-          <p>
-            La carte sera détaillée dans une prochaine étape. L'objectif côté front
-            sera de garder une lecture claire des plats, menus et informations utiles.
-          </p>
-        </div>
-        <ul class="info-list" aria-label="Points prévus pour la carte">
-          <li>Entrées, plats et desserts</li>
-          <li>Mise en avant des menus</li>
-          <li>Affichage lisible sur mobile</li>
-        </ul>
-      </section>
-
-      <section id="reservation" class="content-section reservation-panel" aria-labelledby="reservation-title">
-        <div>
-          <p class="eyebrow">Réservation</p>
-          <h2 id="reservation-title">Préparer le parcours de réservation</h2>
-          <p>
-            Cette zone prépare la future page de réservation. Elle permettra de
-            choisir une date, une heure et un nombre de couverts.
-          </p>
-        </div>
-        <a class="button button--primary" href="#compte">Continuer vers mon compte</a>
-      </section>
+    <main id="contenu">
+      <section id="accueil" class="hero" aria-labelledby="hero-title"><div class="hero__content"><p class="eyebrow">Restaurant à Chambéry</p><h1 id="hero-title">Une cuisine savoyarde simple, fraîche et généreuse.</h1><p>Quai Antique vous accueille autour d'une cuisine de saison, dans un cadre chaleureux inspiré des Alpes.</p><div class="hero__actions"><a class="button button--primary" href="#reservation">Réserver une table</a><a class="button button--secondary" href="#carte">Découvrir la carte</a></div></div></section>
+      <section class="content-section section-grid" aria-labelledby="valeurs-title"><div class="section-heading"><p class="eyebrow">Notre maison</p><h2 id="valeurs-title">L'essentiel avant de venir</h2><p>Une information claire, des produits de saison et un parcours de réservation rapide.</p></div><article class="feature-card"><img src="../assets/chef-arnaud.png" alt="Le chef Arnaud en cuisine"><div><h3>Une cuisine de caractère</h3><p>Des recettes savoyardes travaillées avec des produits frais et locaux.</p></div></article><article class="feature-card"><img src="../assets/terrasse.png" alt="Terrasse du restaurant Quai Antique"><div><h3>Un cadre chaleureux</h3><p>Une salle conviviale et une terrasse pour profiter de chaque saison.</p></div></article><article class="feature-card"><img src="../assets/chef-dressage.png" alt="Dressage d'une assiette par le chef"><div><h3>Un service attentif</h3><p>Une équipe disponible pour vous accompagner avant et pendant votre repas.</p></div></article></section>
+      <section id="galerie" class="content-section" aria-labelledby="galerie-title"><div class="section-heading"><p class="eyebrow">Galerie</p><h2 id="galerie-title">Le Quai Antique en images</h2><p>Découvrez la salle, la terrasse et quelques spécialités de la maison.</p></div><div class="gallery-grid" id="gallery-list" aria-live="polite"></div><dialog id="gallery-dialog" class="gallery-dialog" aria-labelledby="gallery-dialog-title"><button class="dialog-close" type="button" aria-label="Fermer l'image">×</button><img id="gallery-dialog-image" src="" alt=""><p id="gallery-dialog-title"></p></dialog></section>
+      <section id="carte" class="content-section menu-section" aria-labelledby="carte-title"><div class="section-heading"><p class="eyebrow">La carte</p><h2 id="carte-title">Une carte savoyarde de saison</h2><p>Filtrez les plats pour préparer votre repas.</p></div><div class="menu-filters" role="group" aria-label="Filtrer la carte"><button class="filter-button is-active" type="button" data-category="all">Tout</button><button class="filter-button" type="button" data-category="entree">Entrées</button><button class="filter-button" type="button" data-category="plat">Plats</button><button class="filter-button" type="button" data-category="dessert">Desserts</button></div><div class="menu-grid" id="menu-list" aria-live="polite"></div></section>
+      <section id="reservation" class="content-section reservation-section" aria-labelledby="reservation-title"><div class="section-heading"><p class="eyebrow">Réservation</p><h2 id="reservation-title">Réservez votre table</h2><p>Les créneaux sont proposés par tranche de 15 minutes. La disponibilité réelle sera confirmée par le serveur.</p></div><form id="reservation-form" class="reservation-form" novalidate><div class="form-grid"><div class="form-field"><label for="name">Nom <span aria-hidden="true">*</span></label><input id="name" name="name" type="text" autocomplete="name" required aria-describedby="name-error"><p class="field-error" id="name-error"></p></div><div class="form-field"><label for="email">Adresse e-mail <span aria-hidden="true">*</span></label><input id="email" name="email" type="email" autocomplete="email" required aria-describedby="email-error"><p class="field-error" id="email-error"></p></div><div class="form-field"><label for="date">Date <span aria-hidden="true">*</span></label><input id="date" name="date" type="date" required aria-describedby="date-error"><p class="field-error" id="date-error"></p></div><div class="form-field"><label for="time">Heure <span aria-hidden="true">*</span></label><select id="time" name="time" required aria-describedby="time-error"><option value="">Choisir une heure</option><option>12:00</option><option>12:15</option><option>12:30</option><option>12:45</option><option>13:00</option><option>19:00</option><option>19:15</option><option>19:30</option><option>19:45</option><option>20:00</option><option>20:15</option><option>20:30</option></select><p class="field-error" id="time-error"></p></div><div class="form-field"><label for="guests">Nombre de couverts <span aria-hidden="true">*</span></label><input id="guests" name="guests" type="number" min="1" max="12" required aria-describedby="guests-error"><p class="field-error" id="guests-error"></p></div><div class="form-field"><label for="allergies">Allergies ou régime alimentaire</label><input id="allergies" name="allergies" type="text" maxlength="200" placeholder="Ex. sans fruits à coque"></div><div class="form-field form-field--wide"><label for="message">Demande particulière <span class="optional">(facultatif)</span></label><textarea id="message" name="message" rows="4" maxlength="500"></textarea></div></div><p class="form-note"><span aria-hidden="true">*</span> Champs obligatoires. Pour confirmer la réservation, une connexion sera nécessaire.</p><p id="form-message" class="form-message" role="status" aria-live="polite"></p><button class="button button--primary" type="submit" id="reservation-submit">Vérifier la disponibilité</button></form></section>
+      <section id="connexion" class="content-section account-section" aria-labelledby="connexion-title"><div class="section-heading"><p class="eyebrow">Espace client</p><h2 id="connexion-title">Connexion</h2><p>Connectez-vous pour retrouver et gérer vos réservations.</p></div><form id="login-form" class="compact-form" novalidate><div class="form-field"><label for="login-email">Adresse e-mail</label><input id="login-email" name="email" type="email" autocomplete="email" required></div><div class="form-field"><label for="login-password">Mot de passe</label><input id="login-password" name="password" type="password" autocomplete="current-password" minlength="8" required></div><button class="button button--primary" type="submit">Se connecter</button><p id="login-message" class="form-message" role="status"></p></form></section>
+      <section id="inscription" class="content-section account-section" aria-labelledby="inscription-title"><div><p class="eyebrow">Nouveau client</p><h2 id="inscription-title">Créer un compte</h2><p>Un compte permettra de consulter, modifier ou annuler vos réservations.</p></div><a class="button button--secondary-dark" href="#connexion">Accéder à la connexion</a></section>
+      <section id="compte" class="content-section dashboard-section" aria-labelledby="compte-title"><div class="section-heading"><p class="eyebrow">Espace client</p><h2 id="compte-title">Mes réservations</h2><p>Maquette fonctionnelle de l'espace client, prête à être alimentée par l'API.</p></div><div class="reservation-list"><article class="reservation-card"><div><strong>Exemple de réservation</strong><p>Les données réelles apparaîtront après connexion.</p></div><span class="status-badge">En attente</span><div class="card-actions"><button class="button button--small" type="button" disabled>Modifier</button><button class="button button--small" type="button" disabled>Annuler</button></div></article></div></section>
+      <section id="administration" class="content-section dashboard-section" aria-labelledby="administration-title"><div class="section-heading"><p class="eyebrow">Administration</p><h2 id="administration-title">Gérer le restaurant</h2><p>Interface prévue pour le personnel : les droits et données seront contrôlés par Symfony.</p></div><div class="admin-grid"><article class="admin-card"><h3>Horaires et capacité</h3><p>Services, créneaux de 15 minutes et nombre maximum de convives.</p><button class="button button--small" type="button" disabled>Gérer</button></article><article class="admin-card"><h3>Carte et menus</h3><p>Catégories, plats, menus, descriptions et prix.</p><button class="button button--small" type="button" disabled>Gérer</button></article><article class="admin-card"><h3>Galerie</h3><p>Ajouter, modifier ou retirer les photos du restaurant.</p><button class="button button--small" type="button" disabled>Gérer</button></article><article class="admin-card"><h3>Réservations</h3><p>Filtrer et traiter les demandes par date.</p><button class="button button--small" type="button" disabled>Gérer</button></article></div></section>
     </main>
-
-    <footer class="site-footer">
-      <div>
-        <strong>Quai Antique</strong>
-        <p>Restaurant savoyard - Chambéry</p>
-      </div>
-      <div>
-        <strong>Horaires</strong>
-        <p>Midi et soir, du mardi au dimanche</p>
-      </div>
-      <div id="compte">
-        <strong>Contact</strong>
-        <p>contact@quai-antique.example</p>
-      </div>
-    </footer>
-
+    <footer class="site-footer"><div><strong>Quai Antique</strong><p>Restaurant savoyard — Chambéry</p></div><div><strong>Horaires</strong><p>Du mardi au dimanche, midi et soir</p></div><div><strong>Contact</strong><p>contact@quai-antique.example</p></div></footer>
     <script src="main.js"></script>
   </body>
 </html>

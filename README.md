@@ -45,5 +45,13 @@ docker compose down
 
 ## État du projet
 
-Cette version contient une page d'accueil statique responsive. Les prochaines
-étapes consisteront à compléter les pages galerie, carte, réservation et compte.
+La partie Front contient maintenant une interface responsive avec accueil,
+galerie interactive, carte filtrable, formulaire de réservation validé en
+JavaScript et préparation de l'appel API `POST /api/reservations`.
+
+Le parcours fonctionne en mode démonstration tant que l'API Symfony n'est pas
+branchée. La base de données, l'authentification, la validation définitive et
+l'enregistrement des réservations appartiennent au projet Back.
+
+Le rapport pédagogique et les scénarios de test sont dans
+`RAPPORT-FRONT-ORAL.md`.
