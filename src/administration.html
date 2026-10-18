@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quai Antique — Administration</title>
+    <link rel="stylesheet" href="styles.css?v=front-multipage-1">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html">Quai Antique</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">Menu</button>
+      <nav id="main-navigation" class="main-nav" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a><a href="espace-client.html">Espace client</a><a href="connexion.html">Déconnexion</a>
+      </nav>
+    </header>
+    <main class="dashboard" id="contenu">
+      <p>ADMINISTRATION</p><h1>Gérer le restaurant</h1>
+      <div class="admin-grid">
+        <article class="dashboard-card"><h2>Horaires et capacité</h2><p>Services, créneaux et nombre maximum de convives.</p><button class="button button--outline" disabled>Gérer</button></article>
+        <article class="dashboard-card"><h2>Carte et menus</h2><p>Catégories, plats, descriptions et prix.</p><button class="button button--outline" disabled>Gérer</button></article>
+        <article class="dashboard-card"><h2>Galerie</h2><p>Ajouter, modifier ou retirer les photos du restaurant.</p><button class="button button--outline" disabled>Gérer</button></article>
+        <article class="dashboard-card"><h2>Réservations</h2><p>Filtrer et traiter les demandes par date.</p><button class="button button--outline" disabled>Gérer</button></article>
+      </div>
+      <p class="dashboard-note">Les droits et les données seront contrôlés par Symfony.</p>
+    </main>
+    <script src="main.js"></script>
+  </body>
+</html>
