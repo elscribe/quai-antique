@@ -92,3 +92,20 @@ document.querySelector('#login-form')?.addEventListener('submit', (event) => {
   message.textContent = 'Connexion simulée : l’API Symfony sera branchée ensuite.';
   message.className = 'form-message form-message--success';
 });
+
+document.querySelector('#registration-form')?.addEventListener('submit', (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const data = Object.fromEntries(new FormData(form).entries());
+  const message = document.querySelector('#registration-message');
+  const password = String(data.password || '');
+  const validPassword = password.length >= 8 && /[A-Z]/.test(password) && /\d/.test(password);
+  if (!data.firstName?.trim() || !data.lastName?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email || '') || !validPassword || password !== data.confirmPassword) {
+    message.textContent = 'Vérifiez vos informations : e-mail valide, mot de passe de 8 caractères avec une majuscule et un chiffre, puis confirmation identique.';
+    message.className = 'form-message form-message--error';
+    return;
+  }
+  form.reset();
+  message.textContent = 'Compte simulé créé côté Front. Symfony enregistrera le compte, le mot de passe chiffré et les préférences.';
+  message.className = 'form-message form-message--success';
+});

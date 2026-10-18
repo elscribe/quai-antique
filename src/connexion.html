@@ -1,1 +1,50 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Quai Antique — Connexion</title><link rel="stylesheet" href="styles.css?v=front-multipage-1"></head><body><header class="site-header"><a class="brand" href="index.html">Quai Antique</a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">Menu</button><nav id="main-navigation" class="main-nav" aria-label="Navigation principale"><a href="index.html">Accueil</a><a href="carte.html">Carte</a><a href="galerie.html">Galerie</a><a aria-current="page" href="connexion.html">Connexion</a></nav></header><main class="form-page" id="contenu"><section class="auth-layout"><div><p>ESPACE CLIENT</p><h1>Connexion</h1><p>Connectez-vous pour retrouver et gérer vos réservations.</p></div><form id="login-form" class="booking-form" novalidate><label>Adresse e-mail<input id="login-email" name="email" type="email" autocomplete="email" required></label><label>Mot de passe<input id="login-password" name="password" type="password" autocomplete="current-password" minlength="8" required></label><button class="button" type="submit">Se connecter</button><p id="login-message" class="form-message" role="status"></p><p>Nouveau client ? <a href="reservation.html">Réserver une table</a></p></form></section></main><script src="main.js?v=front-multipage-3"></script></body></html>
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quai Antique — Connexion</title>
+    <link rel="stylesheet" href="styles.css?v=front-multipage-3">
+  </head>
+  <body>
+    <header class="site-header site-header--auth">
+      <a class="brand" href="index.html">Quai Antique</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">Menu</button>
+      <nav id="main-navigation" class="main-nav" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a><a href="carte.html">Carte</a><a href="galerie.html">Galerie</a><a aria-current="page" href="connexion.html">Connexion</a>
+      </nav>
+    </header>
+    <main class="account-page" id="contenu">
+      <p class="eyebrow">VOTRE ESPACE</p>
+      <h1>Connexion ou création de compte</h1>
+      <p class="account-lead">Connectez-vous pour finaliser votre réservation ou créer un compte pour mémoriser vos préférences.</p>
+      <div class="account-cards">
+        <section class="account-card">
+          <h2>Se connecter</h2><p>Retrouvez vos réservations et vos informations personnelles.</p>
+          <form id="login-form" class="account-form" novalidate>
+            <label>Adresse e-mail<input id="login-email" name="email" type="email" autocomplete="email" placeholder="vous@exemple.fr" required></label>
+            <label>Mot de passe<input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="••••••••" minlength="8" required></label>
+            <div class="account-options"><label><input type="checkbox" name="remember"> Se souvenir de moi</label><a href="contact.html">Mot de passe oublié ?</a></div>
+            <button class="button" type="submit">Valider et se connecter</button>
+            <p id="login-message" class="form-message" role="status"></p>
+          </form>
+          <p class="account-switch">Vous n'avez pas encore de compte ?<br><a href="#create-account">Créer un compte</a></p>
+        </section>
+        <section class="account-card account-card--registration" id="create-account">
+          <h2>Créer un compte</h2><p>Vos préférences et allergies seront reprises lors de vos prochaines réservations.</p>
+          <form id="registration-form" class="account-form" novalidate>
+            <div class="account-form__columns"><label>Prénom<input name="firstName" autocomplete="given-name" required></label><label>Nom<input name="lastName" autocomplete="family-name" required></label></div>
+            <label>Adresse e-mail<input name="email" type="email" autocomplete="email" placeholder="jean.dupont@exemple.fr" required></label>
+            <div class="account-form__columns"><label>Mot de passe<input name="password" type="password" autocomplete="new-password" minlength="8" required></label><label>Confirmer le mot de passe<input name="confirmPassword" type="password" autocomplete="new-password" minlength="8" required></label></div>
+            <p class="password-hint">8 caractères minimum, dont 1 majuscule et 1 chiffre.</p>
+            <label>Nombre de couverts par défaut<select name="defaultGuests"><option>1 personne</option><option selected>2 personnes</option><option>3 personnes</option><option>4 personnes</option></select></label>
+            <fieldset class="allergy-options"><legend>Allergies ou régimes alimentaires</legend><label><input type="checkbox" name="allergies" value="Gluten"> Gluten</label><label><input type="checkbox" name="allergies" value="Lactose"> Lactose</label><label><input type="checkbox" name="allergies" value="Fruits à coque"> Fruits à coque</label></fieldset>
+            <button class="button" type="submit">Créer mon compte</button>
+            <p id="registration-message" class="form-message" role="status"></p>
+          </form>
+        </section>
+      </div>
+    </main>
+    <script src="main.js?v=front-multipage-5"></script>
+  </body>
+</html>
