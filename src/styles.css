@@ -67,6 +67,26 @@ h1,h2,h3 { font-family:Montserrat,Arial,sans-serif; }
 .menu-offers h3 { display:flex; justify-content:space-between; margin:0 0 18px; color:var(--gold); font-size:20px; }
 .menu-offers p { margin:0; font-size:14px; line-height:28px; }
 .form-page,.dashboard { width:min(1050px,calc(100% - 48px)); margin:0 auto; padding:64px 0 96px; }
+.reservation-page { width:min(1282px,calc(100% - 48px)); min-height:1100px; margin:0 auto; padding:34px 0 110px; }
+.eyebrow { margin:0 0 8px; color:var(--gold); font-size:12px; font-weight:500; letter-spacing:.06em; }
+.reservation-page h1 { margin:0 0 6px; font-size:34px; line-height:42px; }
+.reservation-lead { margin:0 0 54px; color:#736b61; }
+.reservation-form { display:grid; width:min(670px,100%); gap:26px; }
+.reservation-basics { display:grid; grid-template-columns:300px 340px; gap:30px; }
+.reservation-basics label,.reservation-note { display:grid; gap:8px; font-size:12px; font-weight:500; }
+.reservation-basics select,.reservation-basics input { min-height:42px; padding:9px 12px; font-size:13px; }
+.time-slots,.allergy-options { margin:0; border:0; padding:0; }
+.time-slots legend,.allergy-options legend { margin-bottom:12px; padding:0; font-size:12px; font-weight:500; }
+.time-slots div { display:flex; flex-wrap:wrap; gap:8px; }
+.time-slot { min-width:54px; min-height:34px; border:1px solid #d1c7ba; border-radius:3px; padding:5px 8px; background:var(--surface); color:var(--ink); font:500 12px/1 'Hind Madurai',Arial,sans-serif; cursor:pointer; }
+.time-slot.is-selected,.time-slot:hover,.time-slot:focus-visible { border-color:var(--gold); background:var(--gold); color:var(--white); }
+.allergy-options { display:flex; flex-wrap:wrap; gap:14px 24px; }
+.allergy-options legend { flex-basis:100%; }
+.allergy-options label { display:flex; align-items:center; gap:7px; font-size:12px; }
+.allergy-options input { width:14px; height:14px; accent-color:var(--gold); }
+.reservation-note textarea { min-height:88px; padding:10px 12px; font-size:13px; }
+.reservation-form .button { justify-self:start; min-width:220px; }
+.reservation-caption { width:min(670px,100%); margin-top:24px; color:#736b61; font-size:13px; }
 .booking-form { display:grid; gap:20px; width:min(760px,100%); margin:0 auto; padding:32px; border:1px solid var(--line); border-radius:8px; background:var(--white); }
 .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
 .form-grid label,.booking-form>label { display:grid; gap:6px; font-weight:500; }
@@ -88,4 +108,4 @@ input:focus,select:focus,textarea:focus { outline:3px solid rgba(144,100,39,.22)
 .site-footer p { margin:0 0 12px; font-size:14px; line-height:20px; }.site-footer a { display:block; margin-bottom:8px; color:var(--white); font-size:14px; text-decoration:none; }.site-footer a:hover { color:#d9b56c; }
 .footer-legal { position:absolute; right:max(40px,calc((100% - 1280px)/2)); bottom:28px; left:max(40px,calc((100% - 1280px)/2)); border-top:1px solid var(--white); padding-top:14px; font-size:12px!important; }.site-footer--compact { display:block; min-height:auto; padding:22px 8%; }
 @media (max-width:1100px) { .home-intro,.home-preview--dark,.home-preview--light,.auth-layout { grid-template-columns:1fr; gap:32px; padding:64px 24px; }.home-intro>div,.home-preview>div,.auth-layout>div { width:min(554px,100%); margin:auto; }.home-intro img,.home-preview--light img { width:min(455px,100%); height:auto; margin:auto; }.home-preview__images { width:min(762px,100%); grid-template-columns:repeat(2,1fr); gap:16px; margin:auto; }.home-preview__images img { width:100%; }.site-footer { grid-template-columns:repeat(2,1fr); gap:32px; padding-bottom:88px; } }
-@media (max-width:760px) { .site-header { min-height:64px; padding:0 20px; }.brand { font-size:20px; }.menu-toggle { display:block; }.main-nav { display:none; width:100%; flex-direction:column; align-items:stretch; gap:0; padding:12px 0; }.main-nav.is-open { display:flex; }.main-nav a { border-top:1px solid rgba(255,255,255,.18); padding:10px 0; }.site-header { flex-wrap:wrap; }.home-hero { min-height:420px; padding-top:74px; }.home-hero h1 { font-size:32px; line-height:40px; }.home-hero p { font-size:14px; line-height:20px; }.gallery-page,.menu-columns,.menu-offers,.form-grid,.admin-grid { grid-template-columns:1fr; }.gallery-page { gap:16px; width:min(100% - 40px,500px); }.menu-page,.form-page,.dashboard { width:min(100% - 40px,560px); }.menu-columns { gap:10px; }.menu-offers { gap:16px; }.auth-layout { padding:32px 0; }.site-footer { grid-template-columns:1fr; padding:40px 20px 84px; }.footer-legal { right:20px; left:20px; }.dashboard-card { display:block; }.dashboard-card .button { margin:14px 8px 0 0; } }
+@media (max-width:760px) { .site-header { min-height:64px; padding:0 20px; }.brand { font-size:20px; }.menu-toggle { display:block; }.main-nav { display:none; width:100%; flex-direction:column; align-items:stretch; gap:0; padding:12px 0; }.main-nav.is-open { display:flex; }.main-nav a { border-top:1px solid rgba(255,255,255,.18); padding:10px 0; }.site-header { flex-wrap:wrap; }.home-hero { min-height:420px; padding-top:74px; }.home-hero h1 { font-size:32px; line-height:40px; }.home-hero p { font-size:14px; line-height:20px; }.gallery-page,.menu-columns,.menu-offers,.form-grid,.admin-grid,.reservation-basics { grid-template-columns:1fr; }.gallery-page { gap:16px; width:min(100% - 40px,500px); }.menu-page,.form-page,.dashboard,.reservation-page { width:min(100% - 40px,560px); }.menu-columns { gap:10px; }.menu-offers { gap:16px; }.auth-layout { padding:32px 0; }.site-footer { grid-template-columns:1fr; padding:40px 20px 84px; }.footer-legal { right:20px; left:20px; }.dashboard-card { display:block; }.dashboard-card .button { margin:14px 8px 0 0; }.reservation-page { min-height:auto; padding:36px 0 72px; }.reservation-lead { margin-bottom:36px; }.reservation-basics { gap:18px; }.time-slot { flex:1 1 54px; } }

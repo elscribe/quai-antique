@@ -1,1 +1,45 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Quai Antique — Réservation</title><link rel="stylesheet" href="styles.css?v=front-multipage-1"></head><body><header class="site-header"><a class="brand" href="index.html">Quai Antique</a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">Menu</button><nav id="main-navigation" class="main-nav" aria-label="Navigation principale"><a href="index.html">Accueil</a><a href="carte.html">Carte</a><a href="galerie.html">Galerie</a><a href="connexion.html">Connexion</a></nav></header><main class="form-page" id="contenu"><section class="page-intro page-intro--center"><p>RÉSERVER</p><h1>Réservez votre table</h1><span></span><p>Choisissez votre date, votre créneau et le nombre de convives.</p></section><form id="reservation-form" class="booking-form" novalidate><div class="form-grid"><label>Nom *<input id="name" name="name" required aria-describedby="name-error"><small id="name-error" class="field-error"></small></label><label>Adresse e-mail *<input id="email" name="email" type="email" required aria-describedby="email-error"><small id="email-error" class="field-error"></small></label><label>Date *<input id="date" name="date" type="date" required aria-describedby="date-error"><small id="date-error" class="field-error"></small></label><label>Heure *<select id="time" name="time" required aria-describedby="time-error"><option value="">Choisir une heure</option><option>12:00</option><option>12:30</option><option>13:00</option><option>19:00</option><option>19:30</option><option>20:00</option></select><small id="time-error" class="field-error"></small></label><label>Nombre de couverts *<input id="guests" name="guests" type="number" min="1" max="12" required aria-describedby="guests-error"><small id="guests-error" class="field-error"></small></label><label>Allergies ou régime alimentaire<input id="allergies" name="allergies" placeholder="Ex. sans fruits à coque"></label><label class="form-wide">Demande particulière<textarea id="message" name="message" rows="4"></textarea></label></div><p id="form-message" class="form-message" role="status"></p><button id="reservation-submit" class="button" type="submit">Vérifier la disponibilité</button></form></main><script src="main.js"></script></body></html>
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quai Antique — Réservation</title>
+    <link rel="stylesheet" href="styles.css?v=front-multipage-2">
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html">Quai Antique</a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">Menu</button>
+      <nav id="main-navigation" class="main-nav" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a><a href="carte.html">Carte</a><a href="galerie.html">Galerie</a><a href="connexion.html">Connexion</a>
+      </nav>
+    </header>
+    <main class="reservation-page" id="contenu">
+      <p class="eyebrow">RÉSERVATION</p>
+      <h1>Réserver une table</h1>
+      <p class="reservation-lead">Choisissez votre date, votre créneau et indiquez vos allergies.</p>
+      <form id="reservation-form" class="reservation-form" novalidate>
+        <div class="reservation-basics">
+          <label>Nombre de couverts
+            <select id="guests" name="guests" required aria-describedby="guests-error"><option value="">Choisir</option><option value="1">1 personne</option><option value="2">2 personnes</option><option value="3">3 personnes</option><option value="4">4 personnes</option><option value="5">5 personnes</option><option value="6">6 personnes</option></select>
+            <small id="guests-error" class="field-error"></small>
+          </label>
+          <label>Date du repas
+            <input id="date" name="date" type="date" required aria-describedby="date-error">
+            <small id="date-error" class="field-error"></small>
+          </label>
+        </div>
+        <fieldset class="time-slots"><legend>Service du midi</legend><div><button type="button" class="time-slot" aria-pressed="false" data-time="12:00">12:00</button><button type="button" class="time-slot" aria-pressed="false" data-time="12:15">12:15</button><button type="button" class="time-slot" aria-pressed="false" data-time="12:30">12:30</button><button type="button" class="time-slot" aria-pressed="false" data-time="12:45">12:45</button><button type="button" class="time-slot" aria-pressed="false" data-time="13:00">13:00</button><button type="button" class="time-slot" aria-pressed="false" data-time="13:15">13:15</button></div></fieldset>
+        <fieldset class="time-slots"><legend>Service du soir</legend><div><button type="button" class="time-slot" aria-pressed="false" data-time="19:00">19:00</button><button type="button" class="time-slot" aria-pressed="false" data-time="19:15">19:15</button><button type="button" class="time-slot" aria-pressed="false" data-time="19:30">19:30</button><button type="button" class="time-slot" aria-pressed="false" data-time="19:45">19:45</button><button type="button" class="time-slot" aria-pressed="false" data-time="20:00">20:00</button><button type="button" class="time-slot" aria-pressed="false" data-time="20:15">20:15</button></div></fieldset>
+        <input id="time" name="time" type="hidden" required aria-describedby="time-error">
+        <small id="time-error" class="field-error"></small>
+        <fieldset class="allergy-options"><legend>Allergies ou régimes particuliers</legend><label><input type="checkbox" name="allergies" value="Gluten"> Gluten</label><label><input type="checkbox" name="allergies" value="Lactose"> Lactose</label><label><input type="checkbox" name="allergies" value="Fruits à coque"> Fruits à coque</label><label><input type="checkbox" name="allergies" value="Végétarien"> Végétarien</label></fieldset>
+        <label class="reservation-note">Précision complémentaire<textarea id="message" name="message" rows="3" placeholder="Une demande particulière ?"></textarea></label>
+        <p id="form-message" class="form-message" role="status"></p>
+        <button id="reservation-submit" class="button" type="submit">Continuer vers la connexion</button>
+      </form>
+      <p class="reservation-caption">La disponibilité réelle et la finalisation de la réservation seront reliées à Symfony.</p>
+    </main>
+    <script src="main.js?v=front-multipage-3"></script>
+  </body>
+</html>

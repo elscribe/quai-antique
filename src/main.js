@@ -37,16 +37,27 @@ const setError = (field, message) => {
   if (error) error.textContent = message;
 };
 
+document.querySelectorAll('.time-slot').forEach((slot) => {
+  slot.addEventListener('click', () => {
+    document.querySelectorAll('.time-slot').forEach((button) => {
+      button.classList.remove('is-selected');
+      button.setAttribute('aria-pressed', 'false');
+    });
+    slot.classList.add('is-selected');
+    slot.setAttribute('aria-pressed', 'true');
+    document.querySelector('#time').value = slot.dataset.time;
+    setError('time', '');
+  });
+});
+
 reservationForm?.addEventListener('submit', (event) => {
   event.preventDefault();
-  ['name', 'email', 'date', 'time', 'guests'].forEach((field) => setError(field, ''));
+  ['date', 'time', 'guests'].forEach((field) => setError(field, ''));
   const data = Object.fromEntries(new FormData(reservationForm).entries());
   const errors = {};
-  if (!data.name?.trim()) errors.name = 'Indiquez votre nom.';
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email || '')) errors.email = 'Indiquez une adresse e-mail valide.';
   if (!data.date) errors.date = 'Choisissez une date.';
-  if (!data.time) errors.time = 'Choisissez une heure.';
-  if (!Number.isInteger(Number(data.guests)) || Number(data.guests) < 1 || Number(data.guests) > 12) errors.guests = 'Choisissez entre 1 et 12 couverts.';
+  if (!data.time) errors.time = 'Choisissez un créneau.';
+  if (!Number.isInteger(Number(data.guests)) || Number(data.guests) < 1 || Number(data.guests) > 6) errors.guests = 'Choisissez le nombre de couverts.';
   Object.entries(errors).forEach(([field, message]) => setError(field, message));
   if (Object.keys(errors).length) {
     formMessage.textContent = 'Vérifiez les champs signalés.';
@@ -58,10 +69,14 @@ reservationForm?.addEventListener('submit', (event) => {
   submitButton.textContent = 'Envoi en cours…';
   window.setTimeout(() => {
     reservationForm.reset();
-    formMessage.textContent = "Demande validée en mode démonstration. L'API Symfony sera branchée ensuite.";
+    document.querySelectorAll('.time-slot').forEach((button) => {
+      button.classList.remove('is-selected');
+      button.setAttribute('aria-pressed', 'false');
+    });
+    formMessage.textContent = 'Créneau enregistré en mode démonstration. La connexion et la disponibilité réelle seront reliées à Symfony.';
     formMessage.className = 'form-message form-message--success';
     submitButton.disabled = false;
-    submitButton.textContent = 'Vérifier la disponibilité';
+    submitButton.textContent = 'Continuer vers la connexion';
   }, 400);
 });
 
