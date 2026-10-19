@@ -6,15 +6,22 @@
     <title>Quai Antique — Administration</title>
     <link rel="stylesheet" href="styles.css?v=front-multipage-1">
   </head>
-  <body>
-    <header class="site-header">
+  <body class="admin-body">
+    <aside class="admin-sidebar" aria-label="Navigation administration">
       <a class="brand" href="index.html">Quai Antique</a>
+      <p>ESPACE ADMIN</p>
+      <nav><a aria-current="page" href="administration.html">Tableau de bord</a><a href="#reservations">Réservations</a><a href="#horaires">Horaires</a><a href="#galerie-admin">Galerie d'images</a><a href="#carte-admin">Carte &amp; menus</a></nav>
+      <div><strong>Arnaud Michant</strong><span>Administrateur</span><a href="connexion.html">Déconnexion</a></div>
+    </aside>
+    <header class="site-header site-header--admin">
+      <a class="brand" href="index.html">Quai Antique</a>
+      <span>Admin</span>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation">Menu</button>
       <nav id="main-navigation" class="main-nav" aria-label="Navigation principale">
         <a href="index.html">Accueil</a><a href="espace-client.html">Espace client</a><a href="connexion.html">Déconnexion</a>
       </nav>
     </header>
-    <main class="dashboard" id="contenu">
+    <main class="dashboard admin-dashboard" id="contenu">
       <p>ADMINISTRATION</p><h1>Gérer le restaurant</h1>
       <div class="admin-grid">
         <article class="dashboard-card"><h2>Horaires et capacité</h2><p>Services, créneaux et nombre maximum de convives.</p><button class="button button--outline" disabled>Gérer</button></article>
@@ -24,6 +31,11 @@
       </div>
       <p class="dashboard-note">Les droits et les données seront contrôlés par Symfony.</p>
     </main>
-    <script src="main.js?v=front-multipage-5"></script>
+    <footer class="admin-footer">
+      <strong>Navigation administrateur</strong>
+      <a href="administration.html">Tableau de bord</a><a href="#reservations">Réservations</a><a href="#horaires">Horaires</a><a href="#galerie-admin">Galerie d'images</a><a href="#carte-admin">Carte &amp; menus</a>
+      <hr><b>Arnaud Michant</b><span>Administrateur · <a href="connexion.html">Déconnexion</a></span><small>Dernière mise à jour : aujourd'hui à 09h42</small>
+    </footer>
+    <script src="main.js?v=front-multipage-7"></script>
   </body>
 </html>
