@@ -1,74 +1,64 @@
-# Quai Antique — Rapport de réalisation Front
+# Quai Antique — Rapport de tests Front
 
-## Périmètre
+**Date de l'audit :** 19 octobre 2026
+**Périmètre :** les quatre premières leçons du projet fil rouge Front.
+**Environnement :** navigateur, serveur HTTP local et maquettes finales Figma.
 
-Cette version réalise la partie visible et interactive du Front du projet fil rouge : interface responsive, galerie, carte filtrable, formulaire de réservation, validation JavaScript et préparation de l'appel API. La base de données, la validation définitive, l'authentification et l'enregistrement restent dans le Back Symfony.
+## Objectif
 
-## Correspondance avec les cours du profil rouge
+Vérifier que l'interface visible de Quai Antique est structurée, responsive et interactive avant le branchement du Back Symfony. Une réussite dans ce rapport ne signifie jamais qu'une donnée a été enregistrée en base : les réservations et connexions testées sont explicitement des simulations Front.
 
-| Cours | Réalisation dans le projet |
-|---|---|
-| Réaliser l'interface utilisateur | hiérarchie visuelle, navigation, composants, labels, messages, responsive et accessibilité de base |
-| Partie Front Responsive | grilles adaptatives, menu mobile, champs utilisables sur téléphone, tests de largeur |
-| Dynamiser partie Front | menu mobile, galerie modale, filtre de carte, rendu de contenu par JavaScript, validation du formulaire |
-| Appeler API depuis le front | fonction `sendReservation`, `fetch` POST préparé vers `/api/reservations`, états chargement/succès/erreur |
-| Recommandations sécurité front | pas de secret dans le navigateur, `textContent` pour les messages, validation serveur attendue, pas de confiance dans les données client |
-| Mettre en ligne partie front application | Docker/Nginx conservé et vérifiable avec `docker compose up --build` |
+## État des leçons
 
-## Étapes de code
-
-### Étape 1 — Structurer l'interface
-
-`index.html` contient maintenant les zones accueil, galerie, carte, réservation et compte. Chaque zone possède un titre accessible et une navigation claire. Les images locales du dossier `assets` sont utilisées à la place des images génériques.
-
-### Étape 2 — Rendre l'interface responsive
-
-`styles.css` utilise une grille flexible et deux seuils responsive. Sur mobile, la navigation devient un bouton, les cartes passent en une colonne et le formulaire reste lisible sans défilement horizontal.
-
-### Étape 3 — Dynamiser la galerie
-
-`main.js` construit les cartes à partir de `galleryItems`. Un clic ouvre une boîte de dialogue native `dialog`. Le contenu est injecté avec `textContent` et `createElement`, pas avec `innerHTML`.
-
-### Étape 4 — Dynamiser la carte
-
-Les plats sont regroupés dans `menuItems`. Les boutons « Tout », « Entrées », « Plats » et « Desserts » filtrent les données et reconstruisent uniquement les cartes correspondantes.
-
-### Étape 5 — Construire le formulaire
-
-Le formulaire demande le nom, l'e-mail, la date, l'heure, le nombre de couverts et une demande facultative. Chaque champ obligatoire possède un label et une zone d'erreur associée.
-
-### Étape 6 — Valider côté navigateur
-
-`validateReservation` contrôle les champs avant l'envoi. Le formulaire signale les erreurs, positionne le focus sur le premier champ incorrect et conserve les messages lisibles par lecteur d'écran.
-
-### Étape 7 — Préparer l'API
-
-`sendReservation` fonctionne actuellement en mode démonstration pour permettre de tester le parcours sans Back. Quand Symfony sera disponible, il suffira de renseigner `API_BASE_URL` et de connecter la route POST `/api/reservations`. La validation Back restera obligatoire.
-
-## Scénarios de test manuel
-
-| ID | Test | Résultat attendu |
+| Leçon | État | Preuve présente dans le projet |
 |---|---|---|
-| T01 | Ouvrir la page sur ordinateur | toutes les sections et images s'affichent |
-| T02 | Réduire la fenêtre sous 860 px | le bouton Menu apparaît et la navigation s'ouvre/se ferme |
-| T03 | Cliquer une image de galerie | la boîte de dialogue affiche l'image et son titre |
-| T04 | Filtrer la carte par « Plats » | seuls les plats sont affichés |
-| T05 | Envoyer le formulaire vide | erreurs visibles, focus sur le nom, aucun envoi |
-| T06 | Saisir un e-mail invalide | message d'erreur sur l'e-mail |
-| T07 | Saisir une date passée | message d'erreur sur la date |
-| T08 | Saisir 0 ou 13 couverts | message d'erreur sur le nombre |
-| T09 | Envoyer des données valides | état de chargement puis message de démonstration |
-| T10 | Naviguer au clavier | lien d'accès rapide, focus et boutons utilisables |
-| T11 | Lancer Docker | la page est servie sur le port défini par `compose.yaml` |
-| T12 | Brancher l'API et provoquer une erreur | message générique affiché, détails techniques non exposés |
+| 1. Modéliser la partie Front depuis un brief | Validée | Brief, parcours, wireframes, design system et mockups finaux disponibles dans Figma ; écrans correspondants créés dans le dépôt. |
+| 2. Réaliser la partie Front responsive | Validée techniquement | 11 pages vérifiées à 390 px, 768 px et 1440 px sans débordement horizontal. |
+| 3. Réaliser l'interface utilisateur | Validée avec contrôle visuel à poursuivre | Pages, navigation, titres, contenus, footer et liens d'évitement présents. La comparaison pixel par pixel avec Figma reste une revue visuelle distincte. |
+| 4. Dynamiser la partie Front | Validée côté navigateur | Menu mobile, modale galerie et validations JavaScript testés ; les résultats sont annoncés comme simulés. |
 
-## Explication orale courte
+## Périmètre des pages
 
-« J'ai commencé par structurer les besoins du restaurant en sections visibles : accueil, galerie, carte, réservation et compte. J'ai ensuite appliqué une mise en page responsive pour les écrans mobiles et desktop. J'ai utilisé JavaScript pour rendre la galerie interactive, filtrer la carte et valider le formulaire. Le formulaire transforme les données avec `FormData`, affiche les erreurs côté navigateur et prépare un appel `fetch` en POST. La validation côté Front améliore l'expérience, mais le Back devra refaire ses propres contrôles avant d'enregistrer la réservation. Enfin, j'ai prévu des tests manuels pour les cas valides, les erreurs, le responsive, l'accessibilité et le déploiement Docker. »
+Les pages testées sont : accueil, galerie, carte, réservation, connexion, espace client, administration, contact, mentions légales, confidentialité et CGU/CGV.
 
-## Limites à annoncer au jury
+## Cas de test exécutés
 
-- Le mode démonstration ne crée pas de réservation réelle.
-- L'API Symfony et la base de données sont nécessaires pour la confirmation définitive.
-- L'authentification et les droits d'administration appartiennent au Back.
-- Il faut produire les captures et compléter le rapport de tests après exécution réelle dans le navigateur.
+| ID | Action | Résultat attendu | Résultat obtenu | Statut |
+|---|---|---|---|---|
+| T01 | Ouvrir les 11 pages | Une page possède une langue française, un titre principal, un contenu principal et un footer. | Les 11 pages comportent `lang="fr"`, un `<h1>`, un `<main>` et un footer. | Validé |
+| T02 | Afficher chaque page à 390 px | Aucun défilement horizontal ; interface mobile utilisable. | Aucun débordement horizontal constaté sur les 11 pages. | Validé |
+| T03 | Afficher chaque page à 768 px | Aucun défilement horizontal ; mise en page tablette cohérente. | Aucun débordement horizontal constaté sur les 11 pages. | Validé |
+| T04 | Afficher chaque page à 1440 px | Aucun défilement horizontal ; mise en page desktop lisible. | Aucun débordement horizontal constaté sur les 11 pages. | Validé |
+| T05 | Ouvrir le menu sur mobile | Le bouton Menu ouvre la navigation et met à jour son état. | Les quatre liens sont visibles et `aria-expanded` passe à `true`. | Validé |
+| T06 | Ouvrir une image de la galerie | Une modale affiche l'image sélectionnée ; elle peut être fermée. | La galerie contient neuf cartes ; l'ouverture de la modale a été confirmée sur une carte. | Validé |
+| T07 | Envoyer la réservation sans information | Un message demande de corriger les champs ; aucune réservation réelle n'est créée. | Message affiché : « Vérifiez les champs signalés. » | Validé |
+| T08 | Envoyer une réservation complète | Une confirmation de démonstration est affichée. | Message affiché : « Créneau enregistré en mode démonstration. » | Validé Front |
+| T09 | Envoyer la connexion vide puis complète | Une erreur est affichée puis une confirmation de démonstration. | Les deux messages attendus sont affichés. | Validé Front |
+| T10 | Contrôler les liens d'évitement | Chaque page propose « Aller au contenu » vers `#contenu`. | Les 11 pages ont le lien et la cible `<main id="contenu">`. | Validé |
+| T11 | Consulter les erreurs navigateur | Aucune erreur JavaScript bloquante. | Aucune erreur ni alerte détectée sur la page contrôlée après les parcours de test. | Validé |
+| T12 | Comparer chaque page avec Figma | Les écrans doivent correspondre aux mockups finaux. | Revue visuelle à effectuer écran par écran ; ne pas déclarer une correspondance pixel parfaite avant cette étape. | À poursuivre |
+
+## Limites assumées — dépend du Back Symfony
+
+- authentification réelle et gestion de session ;
+- mot de passe chiffré et droits administrateur ;
+- disponibilité réelle des créneaux ;
+- création, modification et annulation persistées ;
+- données réelles de l'espace client et de l'administration ;
+- contrôles de sécurité côté serveur.
+
+## Captures à conserver pour la preuve jury
+
+Ajouter dans le dossier de preuve, après une démonstration manuelle, une capture par famille de test :
+
+1. accueil à 1440 px ;
+2. menu ouvert à 390 px ;
+3. galerie avec modale ouverte ;
+4. réservation invalide ;
+5. réservation en mode démonstration ;
+6. lien « Aller au contenu » affiché après appui sur la touche Tab ;
+7. comparaison d'un écran Figma et de sa page web correspondante.
+
+## Formulation pour l'oral
+
+« J'ai séparé le contrôle de l'interface et le contrôle des données. Avant Symfony, j'ai vérifié les onze pages à trois largeurs d'écran, le menu mobile, la galerie et les validations de formulaires. Les messages indiquent volontairement le mode démonstration : le Front améliore le parcours utilisateur, mais le Back devra ensuite vérifier les droits, la disponibilité et enregistrer les données. J'ai aussi ajouté un lien d'évitement sur chaque page afin qu'une navigation au clavier puisse accéder directement au contenu principal. »
