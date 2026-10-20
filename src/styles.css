@@ -86,6 +86,7 @@ h1,h2,h3 { font-family:Montserrat,Arial,sans-serif; }
 .allergy-options input { width:14px; height:14px; accent-color:var(--gold); }
 .reservation-note textarea { min-height:88px; padding:10px 12px; font-size:13px; }
 .reservation-form .button { justify-self:start; min-width:220px; }
+.reservation-form input[aria-invalid='true'], .reservation-form select[aria-invalid='true'], .account-form input[aria-invalid='true'] { border-color:#a12626; box-shadow:0 0 0 2px rgba(161,38,38,.12); }
 .reservation-caption { width:min(670px,100%); margin-top:24px; color:#736b61; font-size:13px; }
 .site-header--auth { min-height:72px; border-bottom:0; }
 .account-page { width:min(1202px,calc(100% - 48px)); margin:0 auto; padding:44px 0 96px; }
