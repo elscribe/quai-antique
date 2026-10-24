@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quai Antique — Espace client</title>
+    <link rel="stylesheet" href="styles.css?v=front-multipage-1" />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+    <header class="site-header site-header--account">
+      <a class="brand" href="index.html">Quai Antique</a>
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="main-navigation"
+      >
+        Menu
+      </button>
+      <nav
+        id="main-navigation"
+        class="main-nav"
+        aria-label="Navigation principale"
+      >
+        <a href="index.html">Accueil</a><a href="carte.html">Carte</a
+        ><a href="galerie.html">Galerie</a
+        ><a href="reservation.html">Réserver</a
+        ><a aria-current="page" href="espace-client.html">Mon compte</a>
+      </nav>
+    </header>
+    <main class="dashboard client-dashboard" id="contenu">
+      <p>MON ESPACE CLIENT</p>
+      <h1>Bonjour Jean</h1>
+      <p class="dashboard-note">Gérez vos réservations et vos préférences.</p>
+      <section class="client-section">
+        <h2>Ma prochaine réservation</h2>
+        <article class="dashboard-card client-booking">
+          <div>
+            <strong>Vendredi 13 novembre 2026</strong>
+            <p>19h30 · 2 couverts</p>
+            <p>Allergies : aucune</p>
+          </div>
+          <span>Confirmée</span>
+          <div>
+            <button class="button button--outline" type="button" disabled>
+              Modifier</button
+            ><button class="button button--outline" type="button" disabled>
+              Annuler
+            </button>
+          </div>
+        </article>
+        <a class="button" href="reservation.html">Nouvelle réservation</a>
+      </section>
+      <section class="client-section">
+        <p>HISTORIQUE</p>
+        <article class="dashboard-card">
+          <div>
+            <strong>Samedi 24 octobre 2026</strong>
+            <p>12h30 · 4 couverts</p>
+          </div>
+          <span>Passée</span>
+        </article>
+      </section>
+      <section class="client-section client-profile">
+        <p>MES INFORMATIONS</p>
+        <form class="account-form" novalidate>
+          <label>Prénom<input value="Jean" autocomplete="given-name" /></label
+          ><label>Nom<input value="Dupont" autocomplete="family-name" /></label
+          ><label
+            >Adresse e-mail<input
+              value="jean.dupont@exemple.fr"
+              type="email"
+              autocomplete="email" /></label
+          ><label
+            >Couverts par défaut<select>
+              <option>1 personne</option>
+              <option selected>2 personnes</option>
+              <option>3 personnes</option>
+              <option>4 personnes</option>
+            </select></label
+          ><label
+            >Allergies déclarées<input
+              value="Aucune allergie enregistrée"
+              readonly /></label
+          ><button class="button" type="button" disabled>
+            Enregistrer les modifications
+          </button>
+          <p>ZONE SENSIBLE</p>
+          <small
+            >Supprimer votre compte effacera vos données personnelles.</small
+          ><button class="button button--outline" type="button" disabled>
+            Supprimer mon compte
+          </button>
+        </form>
+      </section>
+      <p class="dashboard-note">
+        Les données réelles, les modifications et la suppression de compte
+        seront sécurisées par Symfony.
+      </p>
+    </main>
+    <footer class="site-footer">
+      <div>
+        <strong>Le Quai Antique</strong>
+        <p>Chambéry</p>
+        <p>
+          Cuisine gastronomique inspirée par le terroir savoyard et orchestrée
+          avec passion par le Chef Arnaud Michant.
+        </p>
+      </div>
+      <div>
+        <strong>Plan du site</strong><a href="index.html">Accueil</a
+        ><a href="galerie.html">Notre galerie</a
+        ><a href="carte.html">La carte &amp; menus</a
+        ><a href="reservation.html">Réserver une table</a
+        ><a href="contact.html">Contact &amp; accès</a>
+      </div>
+      <div>
+        <strong>Contact &amp; accès</strong>
+        <p>
+          14 Quai de la Rive Gauche<br />73000 Chambéry<br />04 79 12 34 56<br />contact@lequaiantique.fr
+        </p>
+      </div>
+      <div>
+        <strong>Mentions</strong
+        ><a href="mentions-legales.html">Mentions légales</a
+        ><a href="confidentialite.html">Confidentialité</a
+        ><a href="cgu-cgv.html">CGU / CGV</a>
+      </div>
+      <p class="footer-legal">© 2026 Le Quai Antique. Tous droits réservés.</p>
+    </footer>
+    <script type="module" src="main.js?v=front-multipage-7"></script>
+  </body>
+</html>

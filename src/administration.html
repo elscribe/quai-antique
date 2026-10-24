@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quai Antique — Administration</title>
+    <link rel="stylesheet" href="styles.css?v=front-multipage-1" />
+  </head>
+  <body class="admin-body">
+    <a class="skip-link" href="#contenu">Aller au contenu</a>
+    <aside class="admin-sidebar" aria-label="Navigation administration">
+      <a class="brand" href="index.html">Quai Antique</a>
+      <p>ESPACE ADMIN</p>
+      <nav>
+        <a aria-current="page" href="administration.html">Tableau de bord</a
+        ><a href="modifier-reservation.html">Réservations</a
+        ><a href="#horaires">Horaires</a
+        ><a href="gestion-galerie.html">Galerie d'images</a
+        ><a href="gestion-carte.html">Carte &amp; menus</a>
+      </nav>
+      <div>
+        <strong>Arnaud Michant</strong><span>Administrateur</span
+        ><a href="connexion.html">Déconnexion</a>
+      </div>
+    </aside>
+    <header class="site-header site-header--admin">
+      <a class="brand" href="index.html">Quai Antique</a>
+      <span>Admin</span>
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="main-navigation"
+      >
+        Menu
+      </button>
+      <nav
+        id="main-navigation"
+        class="main-nav"
+        aria-label="Navigation principale"
+      >
+        <a href="index.html">Accueil</a
+        ><a href="espace-client.html">Espace client</a
+        ><a href="connexion.html">Déconnexion</a>
+      </nav>
+    </header>
+    <main class="admin-dashboard" id="contenu">
+      <div class="admin-heading">
+        <div>
+          <p class="eyebrow">TABLEAU DE BORD</p>
+          <h1>Bonjour Arnaud</h1>
+          <p>Mardi 15 octobre 2026</p>
+        </div>
+        <button class="button" type="button" data-demo-action>
+          Ajouter une réservation
+        </button>
+      </div>
+
+      <section class="admin-metrics" aria-label="Indicateurs du jour">
+        <article>
+          <span>Réservations aujourd'hui</span><strong>18</strong
+          ><small>7 midi · 11 soir</small>
+        </article>
+        <article>
+          <span>Couverts prévus</span><strong>54</strong
+          ><small>Capacité du jour : 80</small>
+        </article>
+        <article>
+          <span>Allergies à préparer</span><strong>6</strong
+          ><small>À transmettre en cuisine</small>
+        </article>
+        <article>
+          <span>Tables disponibles</span><strong>4</strong
+          ><small>Créneaux ouverts ce soir</small>
+        </article>
+      </section>
+
+      <section class="admin-panel" id="reservations">
+        <div class="admin-panel__heading">
+          <div>
+            <p class="eyebrow">AUJOURD'HUI</p>
+            <h2>Réservations du jour</h2>
+          </div>
+          <button class="button button--outline" type="button" data-demo-action>
+            Voir toutes les réservations
+          </button>
+        </div>
+        <div class="admin-reservation-list">
+          <div
+            class="admin-reservation-row admin-reservation-row--labels"
+            aria-hidden="true"
+          >
+            <span>Client</span><span>Heure</span><span>Couverts</span
+            ><span>Allergies</span><span>Statut</span><span>Actions</span>
+          </div>
+          <article class="admin-reservation-row">
+            <div>
+              <b>Sophie Martin</b><small>sophie.martin@exemple.fr</small>
+            </div>
+            <span data-label="Heure">12h15</span
+            ><span data-label="Couverts">4</span
+            ><span data-label="Allergies">Lactose</span
+            ><span
+              class="admin-status admin-status--confirmed"
+              data-label="Statut"
+              >Confirmée</span
+            ><a class="button button--outline" href="modifier-reservation.html"
+              >Modifier</a
+            >
+          </article>
+          <article class="admin-reservation-row">
+            <div>
+              <b>Pierre Lemoine</b><small>pierre.lemoine@exemple.fr</small>
+            </div>
+            <span data-label="Heure">19h30</span
+            ><span data-label="Couverts">2</span
+            ><span data-label="Allergies">Gluten, crustacés</span
+            ><span
+              class="admin-status admin-status--pending"
+              data-label="Statut"
+              >À préparer</span
+            ><a class="button button--outline" href="modifier-reservation.html"
+              >Modifier</a
+            >
+          </article>
+        </div>
+      </section>
+
+      <section class="admin-panel admin-quick" aria-labelledby="gestion-rapide">
+        <div>
+          <p class="eyebrow">RACCOURCIS</p>
+          <h2 id="gestion-rapide">Gestion rapide</h2>
+        </div>
+        <article id="horaires">
+          <div>
+            <h3>Horaires</h3>
+            <p>Service du midi : 12h–14h · Service du soir : 19h–22h</p>
+          </div>
+          <button class="button button--outline" type="button" data-demo-action>
+            Gérer
+          </button>
+        </article>
+        <article id="galerie-admin">
+          <div>
+            <h3>Galerie</h3>
+            <p>12 photos publiées</p>
+          </div>
+          <a class="button button--outline" href="gestion-galerie.html"
+            >Gérer</a
+          >
+        </article>
+        <article id="carte-admin">
+          <div>
+            <h3>Carte &amp; menus</h3>
+            <p>17 plats · 3 menus</p>
+          </div>
+          <a class="button button--outline" href="gestion-carte.html">Gérer</a>
+        </article>
+      </section>
+      <p id="admin-message" class="form-message" role="status"></p>
+    </main>
+    <footer class="admin-footer">
+      <strong>Navigation administrateur</strong>
+      <a href="administration.html">Tableau de bord</a
+      ><a href="#reservations">Réservations</a><a href="#horaires">Horaires</a
+      ><a href="#galerie-admin">Galerie d'images</a
+      ><a href="#carte-admin">Carte &amp; menus</a>
+      <hr />
+      <b>Arnaud Michant</b
+      ><span>Administrateur · <a href="connexion.html">Déconnexion</a></span
+      ><small>Dernière mise à jour : aujourd'hui à 09h42</small>
+    </footer>
+    <script type="module" src="main.js?v=front-multipage-7"></script>
+  </body>
+</html>

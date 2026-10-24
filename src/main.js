@@ -1,125 +1,301 @@
-const API_BASE_URL = "";
+const footerStyles = document.createElement("link");
+footerStyles.rel = "stylesheet";
+footerStyles.href = "footer.css?v=figma-footer-3";
+document.head.append(footerStyles);
+
+const publicFooterMarkup = `<footer class="site-footer"><div class="footer-brand"><strong>Le Quai Antique</strong><p>Chambéry</p><p>Cuisine gastronomique savoyarde.</p></div><div class="footer-section"><strong>Plan du site</strong><a href="index.html">Accueil</a><a href="galerie.html">Notre galerie</a><a href="carte.html">La carte &amp; menus</a><a href="reservation.html">Réserver une table</a><a href="contact.html">Contact &amp; accès</a></div><div class="footer-section"><strong>Contact &amp; accès</strong><p>14 Quai de la Rive Gauche<br>73000 Chambéry<br>04 79 12 34 56</p></div><div class="footer-section"><strong>Mentions</strong><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgu-cgv.html">CGU / CGV</a></div></footer>`;
+
+document.querySelectorAll(".site-footer").forEach((footer) => {
+  if (!footer.classList.contains("admin-footer"))
+    footer.outerHTML = publicFooterMarkup;
+});
+
+const legalDestinations = {
+  "Mentions légales": "mentions-legales.html",
+  Confidentialité: "confidentialite.html",
+  "CGU / CGV": "cgu-cgv.html",
+};
+document.querySelectorAll(".site-footer a").forEach((link) => {
+  const destination = legalDestinations[link.textContent.trim()];
+  if (destination) link.setAttribute("href", destination);
+});
+
+const galleryActions = document.querySelector("#gallery-list");
+if (galleryActions) {
+  galleryActions.insertAdjacentHTML(
+    "afterend",
+    `<section class="gallery-actions" aria-label="Actions après la galerie"><a class="button button--outline" href="carte.html">Voir la carte</a><a class="button" href="reservation.html">Réserver une table</a></section>`,
+  );
+}
 
 const menuToggle = document.querySelector(".menu-toggle");
-const mainNavigation = document.querySelector("#main-navigation");
-if (menuToggle && mainNavigation) {
-  menuToggle.addEventListener("click", () => {
-    const isOpen = mainNavigation.classList.toggle("is-open");
-    menuToggle.setAttribute("aria-expanded", String(isOpen));
-  });
-  mainNavigation.addEventListener("click", (event) => {
-    if (event.target instanceof HTMLAnchorElement) {
-      mainNavigation.classList.remove("is-open");
-      menuToggle.setAttribute("aria-expanded", "false");
-    }
-  });
-}
+const navigation = document.querySelector("#main-navigation");
 
-const galleryItems = [
-  { src: "../assets/salle accueil.png", alt: "Salle d'accueil du restaurant", title: "La salle d'accueil" },
-  { src: "../assets/salle.png", alt: "Salle du restaurant Quai Antique", title: "Une salle conviviale" },
-  { src: "../assets/terrasse.png", alt: "Terrasse du restaurant", title: "La terrasse" },
-  { src: "../assets/fondu.png", alt: "Fondue savoyarde", title: "La fondue savoyarde" },
-  { src: "../assets/rissoles.png", alt: "Rissoles savoyardes", title: "Les rissoles" },
-  { src: "../assets/fromages.png", alt: "Sélection de fromages", title: "Les fromages" },
-  { src: "../assets/gateau.png", alt: "Dessert maison", title: "Le dessert maison" },
-  { src: "../assets/coktail.png", alt: "Cocktail servi au restaurant", title: "Un cocktail maison" }
-];
-const menuItems = [
-  { name: "Rissoles savoyardes", category: "entree", label: "Entrée", description: "Pâte croustillante, légumes de saison et herbes fraîches." },
-  { name: "Assiette de fromages", category: "entree", label: "Entrée", description: "Sélection de fromages des Alpes et confiture maison." },
-  { name: "Fondue du Quai", category: "plat", label: "Plat", description: "Fromages savoyards fondus, pain de campagne et salade." },
-  { name: "Diots de Savoie", category: "plat", label: "Plat", description: "Diots mijotés, polenta crémeuse et jus au vin blanc." },
-  { name: "Dessert aux fruits", category: "dessert", label: "Dessert", description: "Création du moment selon les arrivages de saison." }
-];
+menuToggle?.addEventListener("click", () => {
+  const open = navigation.classList.toggle("is-open");
+  menuToggle.setAttribute("aria-expanded", String(open));
+});
 
-function renderGallery() {
-  const gallery = document.querySelector("#gallery-list");
-  if (!gallery) return;
-  gallery.replaceChildren(...galleryItems.map((item) => {
-    const button = document.createElement("button");
-    button.className = "gallery-card"; button.type = "button";
-    button.dataset.src = item.src; button.dataset.alt = item.alt; button.dataset.title = item.title;
-    const image = document.createElement("img"); image.src = item.src; image.alt = item.alt; image.loading = "lazy";
-    const caption = document.createElement("span"); caption.textContent = item.title;
-    button.append(image, caption); return button;
-  }));
-}
+navigation?.addEventListener("click", (event) => {
+  if (event.target instanceof HTMLAnchorElement) {
+    navigation.classList.remove("is-open");
+    menuToggle?.setAttribute("aria-expanded", "false");
+  }
+});
 
-function renderMenu(category = "all") {
-  const menu = document.querySelector("#menu-list");
-  if (!menu) return;
-  const items = category === "all" ? menuItems : menuItems.filter((item) => item.category === category);
-  menu.replaceChildren(...items.map((item) => {
-    const article = document.createElement("article"); article.className = "menu-card";
-    const label = document.createElement("p"); label.className = "eyebrow"; label.textContent = item.label;
-    const title = document.createElement("h3"); title.textContent = item.name;
-    const description = document.createElement("p"); description.textContent = item.description;
-    article.append(label, title, description); return article;
-  }));
-}
-document.querySelectorAll(".filter-button").forEach((button) => button.addEventListener("click", () => {
-  document.querySelectorAll(".filter-button").forEach((item) => item.classList.remove("is-active"));
-  button.classList.add("is-active"); renderMenu(button.dataset.category);
-}));
-
+const gallery = document.querySelector("#gallery-list");
 const galleryDialog = document.querySelector("#gallery-dialog");
-document.querySelector("#gallery-list")?.addEventListener("click", (event) => {
+gallery?.addEventListener("click", (event) => {
   const card = event.target.closest(".gallery-card");
   if (!card || !galleryDialog) return;
   const image = document.querySelector("#gallery-dialog-image");
-  image.src = card.dataset.src; image.alt = card.dataset.alt;
-  document.querySelector("#gallery-dialog-title").textContent = card.dataset.title;
+  image.src = card.dataset.src;
+  image.alt = card.dataset.alt;
+  document.querySelector("#gallery-dialog-title").textContent =
+    card.dataset.title;
   galleryDialog.showModal();
 });
-document.querySelector(".dialog-close")?.addEventListener("click", () => galleryDialog.close());
-galleryDialog?.addEventListener("click", (event) => { if (event.target === galleryDialog) galleryDialog.close(); });
+document
+  .querySelector(".dialog-close")
+  ?.addEventListener("click", () => galleryDialog?.close());
+galleryDialog?.addEventListener("click", (event) => {
+  if (event.target === galleryDialog) galleryDialog.close();
+});
 
 const reservationForm = document.querySelector("#reservation-form");
 const formMessage = document.querySelector("#form-message");
 const submitButton = document.querySelector("#reservation-submit");
-function setFieldError(name, message) {
-  const field = document.querySelector(`#${name}`); const error = document.querySelector(`#${name}-error`);
-  if (!field || !error) return;
-  field.setAttribute("aria-invalid", message ? "true" : "false"); error.textContent = message;
-}
-function validateReservation(data) {
-  const errors = {};
-  if (!data.name.trim()) errors.name = "Indiquez votre nom.";
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) errors.email = "Indiquez une adresse e-mail valide.";
-  if (!data.date) errors.date = "Choisissez une date.";
-  else if (data.date < new Date().toISOString().slice(0, 10)) errors.date = "La date doit être future.";
-  if (!data.time) errors.time = "Choisissez une heure.";
-  if (!Number.isInteger(Number(data.guests)) || Number(data.guests) < 1 || Number(data.guests) > 12) errors.guests = "Choisissez entre 1 et 12 couverts.";
-  return errors;
-}
-async function sendReservation(data) {
-  if (!API_BASE_URL) { await new Promise((resolve) => window.setTimeout(resolve, 500)); return { demo: true }; }
-  const response = await fetch(`${API_BASE_URL}/api/reservations`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) });
-  if (!response.ok) throw new Error("La réservation n'a pas pu être envoyée.");
-  return response.json();
-}
-reservationForm?.addEventListener("submit", async (event) => {
-  event.preventDefault(); document.querySelectorAll(".field-error").forEach((error) => { error.textContent = ""; }); formMessage.textContent = "";
-  const data = Object.fromEntries(new FormData(reservationForm).entries()); const errors = validateReservation(data);
-  Object.entries(errors).forEach(([name, message]) => setFieldError(name, message));
-  if (Object.keys(errors).length) { formMessage.textContent = "Vérifiez les champs signalés."; formMessage.className = "form-message form-message--error"; document.querySelector(`#${Object.keys(errors)[0]}`)?.focus(); return; }
-  submitButton.disabled = true; submitButton.textContent = "Envoi en cours…"; formMessage.textContent = "Nous vérifions votre demande…"; formMessage.className = "form-message";
-  try { const result = await sendReservation(data); reservationForm.reset(); formMessage.textContent = result.demo ? "Demande validée en mode démonstration. L'API Symfony sera branchée ensuite." : "Votre demande a bien été envoyée."; formMessage.className = "form-message form-message--success"; }
-  catch { formMessage.textContent = "Impossible d'envoyer la demande. Réessayez plus tard."; formMessage.className = "form-message form-message--error"; }
-  finally { submitButton.disabled = false; submitButton.textContent = "Envoyer ma demande"; }
+const setError = (field, message) => {
+  const input = document.querySelector(`#${field}`);
+  const error = document.querySelector(`#${field}-error`);
+  input?.setAttribute("aria-invalid", String(Boolean(message)));
+  if (error) error.textContent = message;
+};
+
+const reservationFields = ["date", "guests"];
+const validateReservationField = (field) => {
+  const input = document.querySelector(`#${field}`);
+  if (!input) return true;
+  if (field === "date") {
+    const valid = Boolean(input.value);
+    setError(field, valid ? "" : "Choisissez une date.");
+    return valid;
+  }
+  const valid =
+    Number.isInteger(Number(input.value)) &&
+    Number(input.value) >= 1 &&
+    Number(input.value) <= 6;
+  setError(field, valid ? "" : "Choisissez le nombre de couverts.");
+  return valid;
+};
+
+reservationFields.forEach((field) => {
+  document
+    .querySelector(`#${field}`)
+    ?.addEventListener("change", () => validateReservationField(field));
 });
-document.querySelector("#login-form")?.addEventListener("submit", (event) => {
+
+document.querySelectorAll(".time-slot").forEach((slot) => {
+  slot.addEventListener("click", () => {
+    document.querySelectorAll(".time-slot").forEach((button) => {
+      button.classList.remove("is-selected");
+      button.setAttribute("aria-pressed", "false");
+    });
+    slot.classList.add("is-selected");
+    slot.setAttribute("aria-pressed", "true");
+    document.querySelector("#time").value = slot.dataset.time;
+    setError("time", "");
+  });
+});
+
+reservationForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  ["date", "time", "guests"].forEach((field) => setError(field, ""));
+  const data = Object.fromEntries(new FormData(reservationForm).entries());
+  const errors = {};
+  if (!data.date) errors.date = "Choisissez une date.";
+  if (!data.time) errors.time = "Choisissez un créneau.";
+  if (
+    !Number.isInteger(Number(data.guests)) ||
+    Number(data.guests) < 1 ||
+    Number(data.guests) > 6
+  )
+    errors.guests = "Choisissez le nombre de couverts.";
+  Object.entries(errors).forEach(([field, message]) =>
+    setError(field, message),
+  );
+  if (Object.keys(errors).length) {
+    formMessage.textContent = "Vérifiez les champs signalés.";
+    formMessage.className = "form-message form-message--error";
+    document.querySelector(`#${Object.keys(errors)[0]}`)?.focus();
+    return;
+  }
+  submitButton.disabled = true;
+  submitButton.textContent = "Envoi en cours…";
+  window.setTimeout(() => {
+    reservationForm.reset();
+    document.querySelectorAll(".time-slot").forEach((button) => {
+      button.classList.remove("is-selected");
+      button.setAttribute("aria-pressed", "false");
+    });
+    formMessage.textContent =
+      "Créneau enregistré en mode démonstration. La connexion et la disponibilité réelle seront reliées à Symfony.";
+    formMessage.className = "form-message form-message--success";
+    submitButton.disabled = false;
+    submitButton.textContent = "Continuer vers la connexion";
+  }, 400);
+});
+
+const isValidEmail = (email) => {
+  const atIndex = email.indexOf("@");
+  const lastDotIndex = email.lastIndexOf(".");
+
+  return (
+    atIndex > 0 &&
+    atIndex === email.lastIndexOf("@") &&
+    lastDotIndex > atIndex + 1 &&
+    lastDotIndex < email.length - 1 &&
+    !/\s/.test(email)
+  );
+};
+const passwordMeetsRequirements = (password) =>
+  password.length >= 8 &&
+  /[a-z]/.test(password) &&
+  /[A-Z]/.test(password) &&
+  /\d/.test(password) &&
+  /[^\w\s]/.test(password);
+const setAccountFieldValidity = (input, valid) =>
+  input?.setAttribute("aria-invalid", String(!valid));
+
+const validateLogin = (form) => {
+  const email = form.elements.email;
+  const password = form.elements.password;
+  const emailValid = isValidEmail(email.value.trim());
+  const passwordValid = password.value.length >= 8;
+  setAccountFieldValidity(email, emailValid);
+  setAccountFieldValidity(password, passwordValid);
+  return emailValid && passwordValid;
+};
+
+const loginForm = document.querySelector("#login-form");
+["email", "password"].forEach((name) =>
+  loginForm?.elements[name].addEventListener("input", () =>
+    validateLogin(loginForm),
+  ),
+);
+
+loginForm?.addEventListener("submit", (event) => {
   event.preventDefault();
   const form = event.currentTarget;
-  const data = Object.fromEntries(new FormData(form).entries());
   const message = document.querySelector("#login-message");
-  if (!data.email || !data.password || String(data.password).length < 8) {
-    message.textContent = "Indiquez un e-mail et un mot de passe d'au moins 8 caractères.";
+  if (!validateLogin(form)) {
+    message.textContent =
+      "Indiquez un e-mail et un mot de passe d'au moins 8 caractères.";
     message.className = "form-message form-message--error";
     return;
   }
-  message.textContent = "Connexion simulée : l'API Symfony sera branchée ensuite.";
+  message.textContent =
+    "Connexion simulée : l’API Symfony sera branchée ensuite.";
   message.className = "form-message form-message--success";
 });
-renderGallery(); renderMenu();
+
+const registrationForm = document.querySelector("#registration-form");
+const validateRegistration = (form) => {
+  const fields = form.elements;
+  const values = {
+    firstName: fields.firstName.value.trim(),
+    lastName: fields.lastName.value.trim(),
+    email: fields.email.value.trim(),
+    password: fields.password.value,
+    confirmPassword: fields.confirmPassword.value,
+  };
+  const valid = {
+    firstName: Boolean(values.firstName),
+    lastName: Boolean(values.lastName),
+    email: isValidEmail(values.email),
+    password: passwordMeetsRequirements(values.password),
+    confirmPassword:
+      Boolean(values.confirmPassword) &&
+      values.password === values.confirmPassword,
+  };
+  Object.entries(valid).forEach(([name, isValid]) =>
+    setAccountFieldValidity(fields[name], isValid),
+  );
+  return Object.values(valid).every(Boolean);
+};
+
+["firstName", "lastName", "email", "password", "confirmPassword"].forEach(
+  (name) => {
+    registrationForm?.elements[name].addEventListener("input", () =>
+      validateRegistration(registrationForm),
+    );
+  },
+);
+
+registrationForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  const message = document.querySelector("#registration-message");
+  if (!validateRegistration(form)) {
+    message.textContent =
+      "Vérifiez vos informations : e-mail valide, mot de passe de 8 caractères avec minuscule, majuscule, chiffre et caractère spécial, puis confirmation identique.";
+    message.className = "form-message form-message--error";
+    return;
+  }
+  form.reset();
+  message.textContent =
+    "Compte simulé créé côté Front. Symfony enregistrera le compte, le mot de passe chiffré et les préférences.";
+  message.className = "form-message form-message--success";
+});
+
+document.querySelectorAll("[data-demo-action]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const message = document.querySelector("#admin-message");
+    if (!message) return;
+    message.textContent =
+      "Cette action est préparée côté interface. Symfony contrôlera ensuite les droits et enregistrera les changements.";
+  });
+});
+
+const editReservationForm = document.querySelector("#edit-reservation-form");
+editReservationForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const message = document.querySelector("#edit-reservation-message");
+  message.textContent =
+    "Modification vérifiée en mode démonstration. Symfony enregistrera ensuite les données après contrôle des droits.";
+  message.className = "form-message form-message--success";
+});
+
+const cancelReservationDialog = document.querySelector(
+  "#cancel-reservation-dialog",
+);
+document
+  .querySelector("#open-cancel-dialog")
+  ?.addEventListener("click", () => cancelReservationDialog?.showModal());
+document
+  .querySelectorAll("[data-close-dialog]")
+  .forEach((button) =>
+    button.addEventListener("click", () => cancelReservationDialog?.close()),
+  );
+document.querySelector("#confirm-cancel")?.addEventListener("click", () => {
+  cancelReservationDialog?.close();
+  const message = document.querySelector("#edit-reservation-message");
+  message.textContent =
+    "Annulation simulée : aucune donnée n’a été supprimée. Symfony assurera l’annulation réelle et sa traçabilité.";
+  message.className = "form-message form-message--success";
+});
+
+const apiBaseUrl = "http://127.0.0.1:8000";
+
+try {
+  const response = await fetch(`${apiBaseUrl}/api/health`);
+
+  if (!response.ok) {
+    throw new Error(`Erreur HTTP : ${response.status}`);
+  }
+
+  const data = await response.json();
+  console.log("API Quai Antique :", data);
+} catch (error) {
+  console.error("Erreur lors de l’appel API :", error);
+}
