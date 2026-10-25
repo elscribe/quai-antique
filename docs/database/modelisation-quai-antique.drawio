@@ -1,5 +1,247 @@
 <?xml version='1.0' encoding='utf-8'?>
-<mxfile host="Electron" agent="Codex" compressed="false" pages="4">
+<mxfile host="Electron" agent="Codex" compressed="false" pages="5">
+  <diagram id="uml-use-cases-quai-antique" name="03 - UML Cas d'utilisation">
+    <mxGraphModel dx="4136" dy="1531" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=22;fontStyle=1;" value="&lt;b&gt;UML - Cas d'utilisation de Quai Antique&lt;/b&gt;" vertex="1">
+          <mxGeometry height="40" width="620" x="500" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="boundary" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#666666;dashed=1;verticalAlign=top;align=center;fontSize=15;spacingTop=10;" value="&lt;b&gt;Application web Quai Antique&lt;/b&gt;" vertex="1">
+          <mxGeometry height="660" width="1030" x="290" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="visitor" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" value="Visiteur" vertex="1">
+          <mxGeometry height="100" width="50" x="-40" y="230" as="geometry" />
+        </mxCell>
+        <mxCell id="client" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" value="Client connecté" vertex="1">
+          <mxGeometry height="100" width="60" x="140" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="admin" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" value="Administrateur" vertex="1">
+          <mxGeometry height="100" width="65" x="1480" y="237.5" as="geometry" />
+        </mxCell>
+        <mxCell id="gallery" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Consulter la galerie" vertex="1">
+          <mxGeometry height="55" width="190" x="370" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="card" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Consulter la carte et les menus" vertex="1">
+          <mxGeometry height="55" width="210" x="400" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="signup" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Créer un compte client" vertex="1">
+          <mxGeometry height="55" width="195" x="320" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="login" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Se connecter" vertex="1">
+          <mxGeometry height="55" width="180" x="320" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="availability" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Vérifier les disponibilités" vertex="1">
+          <mxGeometry height="55" width="215" x="675" y="155" as="geometry" />
+        </mxCell>
+        <mxCell id="prepare" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Préparer une réservation" vertex="1">
+          <mxGeometry height="55" width="210" x="675" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="validate" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Valider une réservation" vertex="1">
+          <mxGeometry height="55" width="205" x="675" y="355" as="geometry" />
+        </mxCell>
+        <mxCell id="ownbookings" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Gérer ses réservations" vertex="1">
+          <mxGeometry height="55" width="200" x="675" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="profile" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Modifier ses données / supprimer son compte" vertex="1">
+          <mxGeometry height="55" width="315" x="620" y="610" as="geometry" />
+        </mxCell>
+        <mxCell id="settings" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Gérer les horaires et la capacité" vertex="1">
+          <mxGeometry height="55" width="235" x="1030" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="managegallery" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Gérer les photos de la galerie" vertex="1">
+          <mxGeometry height="55" width="220" x="1040" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="menumanage" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Gérer les catégories, plats et menus" vertex="1">
+          <mxGeometry height="55" width="270" x="1015" y="385" as="geometry" />
+        </mxCell>
+        <mxCell id="bookingmanage" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" value="Consulter, filtrer et gérer les réservations" vertex="1">
+          <mxGeometry height="55" width="300" x="1000" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="visitor" style="endArrow=none;html=1;rounded=0;" target="gallery">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="visitor" style="endArrow=none;html=1;rounded=0;" target="signup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="visitor" style="endArrow=none;html=1;rounded=0;" target="prepare">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="visitor" style="endArrow=none;html=1;rounded=0;" target="availability">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="client" style="endArrow=none;html=1;rounded=0;" target="login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="client" style="endArrow=none;html=1;rounded=0;" target="validate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="client" style="endArrow=none;html=1;rounded=0;" target="ownbookings">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="client" style="endArrow=none;html=1;rounded=0;" target="profile">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="admin" style="endArrow=none;html=1;rounded=0;" target="login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="admin" style="endArrow=none;html=1;rounded=0;" target="settings">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="admin" style="endArrow=none;html=1;rounded=0;" target="managegallery">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="admin" style="endArrow=none;html=1;rounded=0;" target="menumanage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="admin" style="endArrow=none;html=1;rounded=0;" target="bookingmanage">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="validate" style="dashed=1;endArrow=open;endFill=0;html=1;rounded=0;fontSize=10;" target="login" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="prepare" style="dashed=1;endArrow=open;endFill=0;html=1;rounded=0;fontSize=10;" target="availability" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="all_users" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" value="Utilisateur du site&lt;br/&gt;&lt;i&gt;(tous profils)&lt;/i&gt;" vertex="1">
+          <mxGeometry height="100" width="60" x="-10" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="e_all_users_card" edge="1" parent="1" source="all_users" style="endArrow=none;html=1;rounded=0;" target="card" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="uml-classes-quai-antique" name="04 - UML Classes">
+    <mxGraphModel dx="2416" dy="1459" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=22;fontStyle=1;" value="&lt;b&gt;UML - Diagramme de classes de Quai Antique&lt;/b&gt;" vertex="1">
+          <mxGeometry height="40" width="760" x="420" y="18" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontColor=#666666;" value="Vue métier : bleu = comptes et réservations · jaune = configuration du restaurant · vert = carte et galerie" vertex="1">
+          <mxGeometry height="25" width="940" x="330" y="58" as="geometry" />
+        </mxCell>
+        <mxCell id="zone_booking" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f9ff;strokeColor=#6c8ebf;dashed=1;arcSize=8;align=left;verticalAlign=top;spacingLeft=14;spacingTop=10;fontColor=#4f6f9d;fontStyle=1;fontSize=14;" value="&lt;b&gt;Comptes et réservations&lt;/b&gt;" vertex="1">
+          <mxGeometry height="345" width="940" x="50" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="zone_restaurant" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffdf4;strokeColor=#d6b656;dashed=1;arcSize=8;align=left;verticalAlign=top;spacingLeft=14;spacingTop=10;fontColor=#9b7a14;fontStyle=1;fontSize=14;" value="&lt;b&gt;Configuration du restaurant&lt;/b&gt;" vertex="1">
+          <mxGeometry height="700" width="440" x="1040" y="105" as="geometry" />
+        </mxCell>
+        <mxCell id="zone_catalog" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f7fcf6;strokeColor=#82b366;dashed=1;arcSize=8;align=left;verticalAlign=top;spacingLeft=14;spacingTop=10;fontColor=#5d874b;fontStyle=1;fontSize=14;" value="&lt;b&gt;Carte et galerie&lt;/b&gt;" vertex="1">
+          <mxGeometry height="410" width="940" x="50" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="user" parent="1" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;Utilisateur&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- uuid : string {unique}&lt;br/&gt;- roles : array&amp;lt;string&amp;gt;&lt;br/&gt;- prenom : string&lt;br/&gt;- nom : string&lt;br/&gt;- email : string {unique}&lt;br/&gt;- motDePasseHash : string&lt;br/&gt;- nbConvivesDefaut : int&lt;br/&gt;- allergies : string&lt;br/&gt;- dateCreation : datetime&lt;br/&gt;- dateModification : datetime?" vertex="1">
+          <mxGeometry height="294" width="270" x="350" y="155" as="geometry" />
+        </mxCell>
+        <mxCell id="reservation" parent="1" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;Reservation&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- uuid : string {unique}&lt;br/&gt;- date : Date&lt;br/&gt;- heurePrevue : Time&lt;br/&gt;- nbConvives : int&lt;br/&gt;- allergies : string&lt;br/&gt;- statut : string&lt;br/&gt;- dateCreation : datetime&lt;br/&gt;- dateModification : datetime?" vertex="1">
+          <mxGeometry height="254" width="220" x="740" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="restaurant" parent="1" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;Restaurant&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- uuid : string {unique}&lt;br/&gt;- nom : string&lt;br/&gt;- description : string&lt;br/&gt;- horaireMidi : JSON&lt;br/&gt;- horaireSoir : JSON&lt;br/&gt;- capaciteMax : int&lt;br/&gt;- dateCreation : datetime&lt;br/&gt;- dateModification : datetime?" vertex="1">
+          <mxGeometry height="269" width="260" x="1065" y="145" as="geometry" />
+        </mxCell>
+        <mxCell id="photo" parent="1" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;Photo&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- uuid : string {unique}&lt;br/&gt;- titre : string&lt;br/&gt;- urlImage : string&lt;br/&gt;- dateCreation : datetime&lt;br/&gt;- dateModification : datetime?" vertex="1">
+          <mxGeometry height="174" width="240" x="1110" y="630" as="geometry" />
+        </mxCell>
+        <mxCell id="category" parent="1" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;Categorie&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- uuid : string {unique}&lt;br/&gt;- titre : string&lt;br/&gt;- dateCreation : datetime&lt;br/&gt;- dateModification : datetime?" vertex="1">
+          <mxGeometry height="164" width="200" x="100" y="615" as="geometry" />
+        </mxCell>
+        <mxCell id="dish" parent="1" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;Plat&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- uuid : string {unique}&lt;br/&gt;- titre : string&lt;br/&gt;- description : string&lt;br/&gt;- prix : decimal&lt;br/&gt;- dateCreation : datetime&lt;br/&gt;- dateModification : datetime?" vertex="1">
+          <mxGeometry height="194" width="240" x="400" y="595" as="geometry" />
+        </mxCell>
+        <mxCell id="menu" parent="1" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;Menu&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- uuid : string {unique}&lt;br/&gt;- titre : string&lt;br/&gt;- description : string&lt;br/&gt;- prix : decimal&lt;br/&gt;- dateCreation : datetime&lt;br/&gt;- dateModification : datetime?" vertex="1">
+          <mxGeometry height="184" width="210" x="740" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="e_user_res" edge="1" parent="1" source="user" style="endArrow=none;startArrow=none;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="reservation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_res_service" edge="1" parent="1" source="reservation" style="edgeStyle=none;endArrow=none;startArrow=none;html=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="restaurant" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_rest_photo" edge="1" parent="1" source="restaurant" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startArrow=none;exitX=0.95;exitY=0.5;entryX=1;entryY=0.5;" target="photo">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1465" y="198" />
+              <mxPoint x="1465" y="685" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_cat_dish" edge="1" parent="1" source="category" style="endArrow=none;startArrow=none;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="dish">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_menu_category" edge="1" parent="1" source="category" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startArrow=none;exitX=1;exitY=0;entryX=0.5;entryY=0;" target="menu">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="300" y="555" />
+              <mxPoint x="845" y="555" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label_user_res" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" value="effectue" vertex="1">
+          <mxGeometry height="20" width="70" x="645" y="250" as="geometry" />
+        </mxCell>
+        <mxCell id="label_res_service" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" value="concerne" vertex="1">
+          <mxGeometry height="20" width="65" x="973" y="325" as="geometry" />
+        </mxCell>
+        <mxCell id="label_rest_photo" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" value="publie" vertex="1">
+          <mxGeometry height="20" width="55" x="1388" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="label_cat_dish" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" value="classe" vertex="1">
+          <mxGeometry height="20" width="60" x="320" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="label_menu_category" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" value="inclut" vertex="1">
+          <mxGeometry height="20" width="60" x="555" y="535" as="geometry" />
+        </mxCell>
+        <mxCell id="card_user" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1" vertex="1">
+          <mxGeometry height="20" width="22" x="622" y="275" as="geometry" />
+        </mxCell>
+        <mxCell id="card_res_user" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="0..*" vertex="1">
+          <mxGeometry height="20" width="35" x="712" y="275" as="geometry" />
+        </mxCell>
+        <mxCell id="card_rest_photo" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1" vertex="1">
+          <mxGeometry height="20" width="22" x="1408" y="205" as="geometry" />
+        </mxCell>
+        <mxCell id="card_photo_rest" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="0..*" vertex="1">
+          <mxGeometry height="20" width="35" x="1365" y="675" as="geometry" />
+        </mxCell>
+        <mxCell id="card_cat" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1" vertex="1">
+          <mxGeometry height="20" width="22" x="300" y="665" as="geometry" />
+        </mxCell>
+        <mxCell id="card_dish_cat" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="0..*" vertex="1">
+          <mxGeometry height="20" width="35" x="365" y="665" as="geometry" />
+        </mxCell>
+        <mxCell id="card_category_menu" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1..*" vertex="1">
+          <mxGeometry height="20" width="35" x="305" y="585" as="geometry" />
+        </mxCell>
+        <mxCell id="card_menu_category" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="0..*" vertex="1">
+          <mxGeometry height="20" width="35" x="830" y="575" as="geometry" />
+        </mxCell>
+        <mxCell id="rule_note" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;verticalAlign=top;spacing=8;fontSize=10;fontColor=#444444;" value="&lt;b&gt;Règles métier à retenir&lt;/b&gt;&lt;br/&gt;• une réservation est effectuée par un utilisateur et concerne le restaurant ;&lt;br/&gt;• les horaires du midi et du soir ainsi que la capacité sont réglables dans Restaurant ;&lt;br/&gt;• les créneaux sont proposés toutes les 15 minutes, du mardi au dimanche ; la capacité s’applique à la durée d’un service.&lt;br/&gt;• Le restaurant Quai Antique conserve au moins un menu." vertex="1">
+          <mxGeometry height="90" width="870" x="80" y="790" as="geometry" />
+        </mxCell>
+        <mxCell id="card_res_rest" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="0..*" vertex="1">
+          <mxGeometry height="20" width="35" x="965" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="card_rest_res" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1" vertex="1">
+          <mxGeometry height="20" width="22" x="1038" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="e_rest_menu" edge="1" parent="1" source="restaurant" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startArrow=none;exitX=0;exitY=1;entryX=1;entryY=0;" target="menu" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="label_rest_menu" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" value="propose" vertex="1">
+          <mxGeometry height="20" width="65" x="970" y="485" as="geometry" />
+        </mxCell>
+        <mxCell id="card_rest_menu" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" value="1" vertex="1">
+          <mxGeometry height="20" width="22" x="1040" y="425" as="geometry" />
+        </mxCell>
+        <mxCell id="card_menu_rest" parent="1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" value="1..*" vertex="1">
+          <mxGeometry height="20" width="35" x="950" y="565" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
   <diagram id="mcd-quai-antique" name="01 - MCD Merise">
     <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
       <root>
@@ -11,179 +253,157 @@
         <mxCell id="subtitle" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontColor=#666666;" value="Entités = rectangles bleus · Associations = losanges jaunes · Chaque cardinalité est placée près de l'entité qu'elle qualifie." vertex="1">
           <mxGeometry height="25" width="1020" x="290" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="role" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;ROLE&lt;/b&gt;&lt;hr/&gt;# id_role&lt;br/&gt;libelle" vertex="1">
-          <mxGeometry height="100" width="180" x="40" y="145" as="geometry" />
+        <mxCell id="user" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;UTILISATEUR&lt;/b&gt;&lt;hr/&gt;# id_utilisateur&lt;br/&gt;# uuid&lt;br/&gt;prenom&lt;br/&gt;nom&lt;br/&gt;email&lt;br/&gt;mot_de_passe_hash&lt;br/&gt;roles&lt;br/&gt;nb_convives_defaut&lt;br/&gt;allergies&lt;br/&gt;date_creation&lt;br/&gt;date_modification" vertex="1">
+          <mxGeometry height="284" width="220" x="22" y="105" as="geometry" />
         </mxCell>
-        <mxCell id="user" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;UTILISATEUR&lt;/b&gt;&lt;hr/&gt;# id_utilisateur&lt;br/&gt;prenom&lt;br/&gt;nom&lt;br/&gt;email&lt;br/&gt;mot_de_passe_hash&lt;br/&gt;nb_convives_defaut&lt;br/&gt;allergies" vertex="1">
-          <mxGeometry height="220" width="220" x="385" y="115" as="geometry" />
+        <mxCell id="reservation" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;RESERVATION&lt;/b&gt;&lt;hr/&gt;# id_reservation&lt;br/&gt;# uuid&lt;br/&gt;date_reservation&lt;br/&gt;heure_prevue&lt;br/&gt;nb_convives&lt;br/&gt;allergies&lt;br/&gt;statut&lt;br/&gt;date_creation&lt;br/&gt;date_modification" vertex="1">
+          <mxGeometry height="254" width="220" x="480" y="118" as="geometry" />
         </mxCell>
-        <mxCell id="reservation" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;RESERVATION&lt;/b&gt;&lt;hr/&gt;# id_reservation&lt;br/&gt;date_reservation&lt;br/&gt;heure_prevue&lt;br/&gt;nb_convives&lt;br/&gt;allergies&lt;br/&gt;statut" vertex="1">
-          <mxGeometry height="190" width="220" x="770" y="135" as="geometry" />
+        <mxCell id="restaurant" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;RESTAURANT&lt;/b&gt;&lt;hr/&gt;# id_restaurant&lt;br/&gt;# uuid&lt;br/&gt;nom&lt;br/&gt;description&lt;br/&gt;horaire_midi&lt;br/&gt;horaire_soir&lt;br/&gt;capacite_max&lt;br/&gt;date_creation&lt;br/&gt;date_modification" vertex="1">
+          <mxGeometry height="274" width="230" x="920" y="118" as="geometry" />
         </mxCell>
-        <mxCell id="service" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;SERVICE&lt;/b&gt;&lt;hr/&gt;# id_service&lt;br/&gt;jour_semaine&lt;br/&gt;type_service&lt;br/&gt;heure_ouverture&lt;br/&gt;heure_fermeture" vertex="1">
-          <mxGeometry height="170" width="210" x="1170" y="125" as="geometry" />
+        <mxCell id="photo" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;PHOTO&lt;/b&gt;&lt;hr/&gt;# id_photo&lt;br/&gt;# uuid&lt;br/&gt;titre&lt;br/&gt;url_image&lt;br/&gt;date_creation&lt;br/&gt;date_modification" vertex="1">
+          <mxGeometry height="174" width="165" x="1360" y="118" as="geometry" />
         </mxCell>
-        <mxCell id="restaurant" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;RESTAURANT&lt;/b&gt;&lt;hr/&gt;# id_restaurant&lt;br/&gt;nom" vertex="1">
-          <mxGeometry height="110" width="230" x="1060" y="440" as="geometry" />
+        <mxCell id="category" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;CATEGORIE&lt;/b&gt;&lt;hr/&gt;# id_categorie&lt;br/&gt;# uuid&lt;br/&gt;titre&lt;br/&gt;date_creation&lt;br/&gt;date_modification" vertex="1">
+          <mxGeometry height="164" width="190" x="840" y="450" as="geometry" />
         </mxCell>
-        <mxCell id="param" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=7;fontSize=11;" value="&lt;b&gt;PARAMETRE_RESTAURANT&lt;/b&gt;&lt;hr/&gt;# id_parametre&lt;br/&gt;capacite_max" vertex="1">
-          <mxGeometry height="105" width="145" x="1410" y="445" as="geometry" />
+        <mxCell id="dish" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;PLAT&lt;/b&gt;&lt;hr/&gt;# id_plat&lt;br/&gt;# uuid&lt;br/&gt;titre&lt;br/&gt;description&lt;br/&gt;prix&lt;br/&gt;date_creation&lt;br/&gt;date_modification" vertex="1">
+          <mxGeometry height="199" width="200" x="257.5" y="440" as="geometry" />
         </mxCell>
-        <mxCell id="photo" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;PHOTO&lt;/b&gt;&lt;hr/&gt;# id_photo&lt;br/&gt;titre&lt;br/&gt;url_image" vertex="1">
-          <mxGeometry height="110" width="165" x="1390" y="650" as="geometry" />
-        </mxCell>
-        <mxCell id="category" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;CATEGORIE&lt;/b&gt;&lt;hr/&gt;# id_categorie&lt;br/&gt;titre" vertex="1">
-          <mxGeometry height="100" width="190" x="50" y="590" as="geometry" />
-        </mxCell>
-        <mxCell id="dish" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;PLAT&lt;/b&gt;&lt;hr/&gt;# id_plat&lt;br/&gt;titre&lt;br/&gt;description&lt;br/&gt;prix" vertex="1">
-          <mxGeometry height="135" width="200" x="415" y="405" as="geometry" />
-        </mxCell>
-        <mxCell id="menu" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;MENU&lt;/b&gt;&lt;hr/&gt;# id_menu&lt;br/&gt;titre&lt;br/&gt;description&lt;br/&gt;prix" vertex="1">
-          <mxGeometry height="135" width="200" x="742" y="450" as="geometry" />
-        </mxCell>
-        <mxCell id="a_role_user" parent="1" style="shape=rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=11;" value="ATTRIBUER" vertex="1">
-          <mxGeometry height="75" width="85" x="265" y="158" as="geometry" />
+        <mxCell id="menu" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" value="&lt;b&gt;MENU&lt;/b&gt;&lt;hr/&gt;# id_menu&lt;br/&gt;# uuid&lt;br/&gt;titre&lt;br/&gt;description&lt;br/&gt;prix&lt;br/&gt;date_creation&lt;br/&gt;date_modification" vertex="1">
+          <mxGeometry height="199" width="200" x="1360" y="521" as="geometry" />
         </mxCell>
         <mxCell id="a_user_res" parent="1" style="shape=rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=11;" value="EFFECTUER" vertex="1">
-          <mxGeometry height="75" width="95" x="650" y="190" as="geometry" />
+          <mxGeometry height="75" width="95" x="310" y="105" as="geometry" />
         </mxCell>
-        <mxCell id="a_res_service" parent="1" style="shape=rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=11;" value="ACCUEILLIR" vertex="1">
-          <mxGeometry height="75" width="95" x="1035" y="190" as="geometry" />
-        </mxCell>
-        <mxCell id="a_rest_service" parent="1" style="shape=rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=11;" value="PROPOSER" vertex="1">
-          <mxGeometry height="70" width="90" x="1210" y="335" as="geometry" />
-        </mxCell>
-        <mxCell id="a_rest_param" parent="1" style="shape=rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=10;" value="CONFIGURER" vertex="1">
-          <mxGeometry height="70" width="75" x="1325" y="462" as="geometry" />
+        <mxCell id="a_res_service" parent="1" style="shape=rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=11;" value="CONCERNER" vertex="1">
+          <mxGeometry height="75" width="95" x="770" y="167.5" as="geometry" />
         </mxCell>
         <mxCell id="a_rest_photo" parent="1" style="shape=rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=11;" value="PUBLIER" vertex="1">
-          <mxGeometry height="70" width="90" x="1190" y="640" as="geometry" />
+          <mxGeometry height="70" width="90" x="1210" y="107.5" as="geometry" />
         </mxCell>
-        <mxCell id="a_rest_menu" parent="1" style="shape=rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=10;" value="PROPOSER&lt;br/&gt;LA CARTE" vertex="1">
-          <mxGeometry height="75" width="85" x="963.5" y="574" as="geometry" />
+        <mxCell id="a_rest_menu" parent="1" style="shape=rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=10;" value="PROPOSER" vertex="1">
+          <mxGeometry height="75" width="85" x="1200" y="420" as="geometry" />
         </mxCell>
         <mxCell id="a_cat_dish" parent="1" style="shape=rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=11;" value="CLASSER" vertex="1">
-          <mxGeometry height="70" width="90" x="211" y="475" as="geometry" />
+          <mxGeometry height="70" width="90" x="600" y="505" as="geometry" />
         </mxCell>
         <mxCell id="a_menu_dish" parent="1" style="shape=rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;fontSize=10;" value="PROPOSER" vertex="1">
-          <mxGeometry height="70" width="95" x="470" y="680" as="geometry" />
+          <mxGeometry height="70" width="95" x="1090" y="670" as="geometry" />
         </mxCell>
-        <mxCell id="e_role_assoc" edge="1" parent="1" source="role" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="a_role_user">
+        <mxCell id="e_user_assoc" edge="1" parent="1" source="user" style="endArrow=none;startArrow=none;html=1;rounded=0;entryX=0.249;entryY=0.726;entryDx=0;entryDy=0;entryPerimeter=0;" target="a_user_res">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e_assoc_user" edge="1" parent="1" source="a_role_user" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="user">
+        <mxCell id="7ISzAjiBDSF3hTqW0-Lt-3" connectable="0" parent="e_user_assoc" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="0,n" vertex="1">
+          <mxGeometry relative="1" x="-0.0316" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_assoc_res" edge="1" parent="1" source="a_user_res" style="endArrow=none;startArrow=none;html=1;rounded=0;exitX=0.789;exitY=0.726;exitDx=0;exitDy=0;exitPerimeter=0;" target="reservation">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e_user_assoc" edge="1" parent="1" source="user" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="a_user_res">
+        <mxCell id="7ISzAjiBDSF3hTqW0-Lt-5" connectable="0" parent="e_assoc_res" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="1,1" vertex="1">
+          <mxGeometry relative="1" x="0.0598" y="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_rest_assoc_photo" edge="1" parent="1" source="restaurant" style="endArrow=none;startArrow=none;html=1;rounded=0;entryX=0.177;entryY=0.688;entryDx=0;entryDy=0;entryPerimeter=0;" target="a_rest_photo">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e_assoc_res" edge="1" parent="1" source="a_user_res" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="reservation">
+        <mxCell id="lFr8PKWs5VmlworGgKK5-1" connectable="0" parent="e_rest_assoc_photo" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="0,n" vertex="1">
+          <mxGeometry relative="1" x="-0.1356" y="-2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_assoc_photo" edge="1" parent="1" source="a_rest_photo" style="endArrow=none;startArrow=none;html=1;rounded=0;exitX=0.783;exitY=0.743;exitDx=0;exitDy=0;exitPerimeter=0;" target="photo">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e_res_assoc" edge="1" parent="1" source="reservation" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="a_res_service">
+        <mxCell id="7ISzAjiBDSF3hTqW0-Lt-8" connectable="0" parent="e_assoc_photo" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="1,1" vertex="1">
+          <mxGeometry relative="1" x="-0.0147" y="-1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_rest_assoc_menu" edge="1" parent="1" source="restaurant" style="endArrow=none;startArrow=none;html=1;rounded=0;entryX=0.387;entryY=0.159;entryDx=0;entryDy=0;entryPerimeter=0;" target="a_rest_menu">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1230" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lFr8PKWs5VmlworGgKK5-2" connectable="0" parent="e_rest_assoc_menu" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="1,n" vertex="1">
+          <mxGeometry relative="1" x="-0.0435" y="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_assoc_menu_rest" edge="1" parent="1" source="a_rest_menu" style="endArrow=none;startArrow=none;html=1;rounded=0;exitX=0.78;exitY=0.735;exitDx=0;exitDy=0;exitPerimeter=0;" target="menu">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e_assoc_service" edge="1" parent="1" source="a_res_service" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="service">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e_service_assoc" edge="1" parent="1" source="service" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="a_rest_service">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e_assoc_rest_service" edge="1" parent="1" source="a_rest_service" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="restaurant">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e_rest_assoc_param" edge="1" parent="1" source="restaurant" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="a_rest_param">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e_assoc_param" edge="1" parent="1" source="a_rest_param" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="param">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e_rest_assoc_photo" edge="1" parent="1" source="restaurant" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="a_rest_photo">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e_assoc_photo" edge="1" parent="1" source="a_rest_photo" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="photo">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e_rest_assoc_menu" edge="1" parent="1" source="restaurant" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="a_rest_menu">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e_assoc_menu_rest" edge="1" parent="1" source="a_rest_menu" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="menu">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="lFr8PKWs5VmlworGgKK5-3" connectable="0" parent="e_assoc_menu_rest" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="1,1" vertex="1">
+          <mxGeometry relative="1" x="0.3697" y="-2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="e_cat_assoc" edge="1" parent="1" source="category" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="a_cat_dish">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
+        <mxCell id="lFr8PKWs5VmlworGgKK5-6" connectable="0" parent="e_cat_assoc" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="0,n" vertex="1">
+          <mxGeometry relative="1" x="0.0791" y="-3" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
         <mxCell id="e_assoc_dish" edge="1" parent="1" source="a_cat_dish" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="dish">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e_dish_assoc_menu" edge="1" parent="1" source="category" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="a_menu_dish">
+        <mxCell id="lFr8PKWs5VmlworGgKK5-7" connectable="0" parent="e_assoc_dish" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="1,1" vertex="1">
+          <mxGeometry relative="1" x="0.0227" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_dish_assoc_menu" edge="1" parent="1" source="category" style="endArrow=none;startArrow=none;html=1;rounded=0;entryX=0.23;entryY=0.248;entryDx=0;entryDy=0;entryPerimeter=0;" target="a_menu_dish">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e_assoc_menu_dish" edge="1" parent="1" source="a_menu_dish" style="endArrow=none;startArrow=none;html=1;rounded=0;" target="menu">
+        <mxCell id="lFr8PKWs5VmlworGgKK5-5" connectable="0" parent="e_dish_assoc_menu" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="0,n" vertex="1">
+          <mxGeometry relative="1" x="-0.474" y="-2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e_assoc_menu_dish" edge="1" parent="1" source="a_menu_dish" style="endArrow=none;startArrow=none;html=1;rounded=0;exitX=0.931;exitY=0.438;exitDx=0;exitDy=0;exitPerimeter=0;" target="menu">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="c_role" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="0,n" vertex="1">
-          <mxGeometry height="20" width="32" x="220" y="176" as="geometry" />
+        <mxCell id="lFr8PKWs5VmlworGgKK5-4" connectable="0" parent="e_assoc_menu_dish" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="1,n" vertex="1">
+          <mxGeometry relative="1" x="-0.2741" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="c_user_role" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1,1" vertex="1">
-          <mxGeometry height="20" width="32" x="352" y="176" as="geometry" />
+        <mxCell id="rules" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;verticalAlign=top;spacing=8;fontSize=10;fontColor=#444444;" value="&lt;b&gt;Règles de gestion&lt;/b&gt;&lt;br/&gt;• Une réservation est effectuée par un seul utilisateur et concerne un seul restaurant.&lt;br/&gt;• Les horaires réglables du midi et du soir sont conservés dans RESTAURANT ; les jours ouverts sont fixes (mardi à dimanche).&lt;br/&gt;• Les créneaux sont espacés de 15 minutes et le nombre maximal de convives ne doit pas être dépassé pendant un service.&lt;br/&gt;• Le restaurant Quai Antique conserve au moins un menu : la suppression du dernier menu est interdite." vertex="1">
+          <mxGeometry height="120" width="1240" x="55" y="805" as="geometry" />
         </mxCell>
-        <mxCell id="c_user_res" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="0,n" vertex="1">
-          <mxGeometry height="20" width="32" x="605" y="227" as="geometry" />
+        <mxCell id="e_res_assoc" edge="1" parent="1" source="reservation" style="endArrow=none;startArrow=none;html=1;rounded=0;entryX=0.23;entryY=0.735;entryDx=0;entryDy=0;entryPerimeter=0;" target="a_res_service">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="700" y="230" as="sourcePoint" />
+            <mxPoint x="775.105" y="242.495" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="c_res_user" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1,1" vertex="1">
-          <mxGeometry height="20" width="32" x="742" y="227" as="geometry" />
+        <mxCell id="7ISzAjiBDSF3hTqW0-Lt-6" connectable="0" parent="e_res_assoc" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="1,1" vertex="1">
+          <mxGeometry relative="1" x="-0.2176" y="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="c_res_service" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1,1" vertex="1">
-          <mxGeometry height="20" width="32" x="990" y="222" as="geometry" />
+        <mxCell id="e_assoc_service" edge="1" parent="1" source="a_res_service" style="endArrow=none;startArrow=none;html=1;rounded=0;exitX=0.732;exitY=0.777;exitDx=0;exitDy=0;exitPerimeter=0;" target="restaurant">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="838.305" y="233.42499999999998" as="sourcePoint" />
+            <mxPoint x="920" y="276.5827313466278" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="c_service_res" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="0,n" vertex="1">
-          <mxGeometry height="20" width="32" x="1135" y="222" as="geometry" />
-        </mxCell>
-        <mxCell id="c_service_rest" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1,1" vertex="1">
-          <mxGeometry height="20" width="32" x="1255" y="300" as="geometry" />
-        </mxCell>
-        <mxCell id="c_rest_service" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1,n" vertex="1">
-          <mxGeometry height="20" width="32" x="1220" y="414" as="geometry" />
-        </mxCell>
-        <mxCell id="c_rest_param" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1,1" vertex="1">
-          <mxGeometry height="20" width="32" x="1290" y="480" as="geometry" />
-        </mxCell>
-        <mxCell id="c_param_rest" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1,1" vertex="1">
-          <mxGeometry height="20" width="32" x="1380" y="480" as="geometry" />
-        </mxCell>
-        <mxCell id="c_rest_photo" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="0,n" vertex="1">
-          <mxGeometry height="20" width="32" x="1150" y="554" as="geometry" />
-        </mxCell>
-        <mxCell id="c_photo_rest" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1,1" vertex="1">
-          <mxGeometry height="20" width="32" x="1350" y="680" as="geometry" />
-        </mxCell>
-        <mxCell id="c_rest_menu" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="0,n" vertex="1">
-          <mxGeometry height="20" width="32" x="1028" y="475" as="geometry" />
-        </mxCell>
-        <mxCell id="c_menu_rest" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1,1" vertex="1">
-          <mxGeometry height="20" width="32" x="990" y="610" as="geometry" />
-        </mxCell>
-        <mxCell id="c_category_dish" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="0,n" vertex="1">
-          <mxGeometry height="20" width="32" x="242" y="636" as="geometry" />
-        </mxCell>
-        <mxCell id="c_dish_category" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="1,1" vertex="1">
-          <mxGeometry height="20" width="32" x="380" y="636" as="geometry" />
-        </mxCell>
-        <mxCell id="c_dish_menu" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="0,n" vertex="1">
-          <mxGeometry height="20" width="32" x="240" y="700" as="geometry" />
-        </mxCell>
-        <mxCell id="c_menu_dish" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" value="0,n" vertex="1">
-          <mxGeometry height="20" width="32" x="752" y="700" as="geometry" />
-        </mxCell>
-        <mxCell id="rules" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;verticalAlign=top;spacing=8;fontSize=10;fontColor=#444444;" value="&lt;b&gt;Règles de gestion&lt;/b&gt;&lt;br/&gt;• Une réservation est effectuée par un seul utilisateur et concerne un seul service.&lt;br/&gt;• Un menu associe les catégories correspondant à ses choix possibles.&lt;br/&gt;• Les créneaux proposés sont espacés de 15 minutes et la capacité maximale ne doit pas être dépassée." vertex="1">
-          <mxGeometry height="75" width="1040" x="55" y="805" as="geometry" />
+        <mxCell id="7ISzAjiBDSF3hTqW0-Lt-7" connectable="0" parent="e_assoc_service" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;" value="0,n" vertex="1">
+          <mxGeometry relative="1" x="-0.079" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
   <diagram id="mld-quai-antique" name="02 - MLD Relationnel">
-    <mxGraphModel dx="1718" dy="2756" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -193,56 +413,38 @@
         <mxCell id="legend" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontColor=#666666;" value="PK : clé primaire - FK : clé étrangère - UK : contrainte d'unicité" vertex="1">
           <mxGeometry height="25" width="580" x="510" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="role" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;ROLE&lt;/b&gt;&lt;hr/&gt;PK id_role : INT&lt;br/&gt;libelle : VARCHAR(30)" vertex="1">
-          <mxGeometry height="95" width="240" x="40" y="125" as="geometry" />
+        <mxCell id="user" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;UTILISATEUR&lt;/b&gt;&lt;hr/&gt;PK id_utilisateur : INT&lt;br/&gt;uuid : CHAR(36) UK&lt;br/&gt;roles : JSON&lt;br/&gt;prenom : VARCHAR(80)&lt;br/&gt;nom : VARCHAR(80)&lt;br/&gt;email : VARCHAR(255) UK&lt;br/&gt;mot_de_passe_hash : VARCHAR(255)&lt;br/&gt;nb_convives_defaut : SMALLINT&lt;br/&gt;allergies : TEXT&lt;br/&gt;date_creation : DATETIME&lt;br/&gt;date_modification : DATETIME NULL" vertex="1">
+          <mxGeometry height="289" width="260" x="60" y="140" as="geometry" />
         </mxCell>
-        <mxCell id="user" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;UTILISATEUR&lt;/b&gt;&lt;hr/&gt;PK id_utilisateur : INT&lt;br/&gt;FK id_role : INT&lt;br/&gt;prenom : VARCHAR(80)&lt;br/&gt;nom : VARCHAR(80)&lt;br/&gt;email : VARCHAR(255) UK&lt;br/&gt;mot_de_passe_hash : VARCHAR(255)&lt;br/&gt;nb_convives_defaut : SMALLINT&lt;br/&gt;allergies : TEXT" vertex="1">
-          <mxGeometry height="225" width="260" x="290" y="240" as="geometry" />
+        <mxCell id="reservation" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;RESERVATION&lt;/b&gt;&lt;hr/&gt;PK id_reservation : INT&lt;br/&gt;uuid : CHAR(36) UK&lt;br/&gt;FK id_utilisateur : INT&lt;br/&gt;FK id_restaurant : INT&lt;br/&gt;date_reservation : DATE&lt;br/&gt;heure_prevue : TIME&lt;br/&gt;nb_convives : SMALLINT&lt;br/&gt;allergies : TEXT&lt;br/&gt;statut : VARCHAR(20)&lt;br/&gt;date_creation : DATETIME&lt;br/&gt;date_modification : DATETIME NULL" vertex="1">
+          <mxGeometry height="279" width="280" x="540" y="127.5" as="geometry" />
         </mxCell>
-        <mxCell id="reservation" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;RESERVATION&lt;/b&gt;&lt;hr/&gt;PK id_reservation : INT&lt;br/&gt;FK id_utilisateur : INT&lt;br/&gt;FK id_service : INT&lt;br/&gt;date_reservation : DATE&lt;br/&gt;heure_prevue : TIME&lt;br/&gt;nb_convives : SMALLINT&lt;br/&gt;allergies : TEXT&lt;br/&gt;statut : VARCHAR(20)" vertex="1">
-          <mxGeometry height="215" width="265" x="610" y="343" as="geometry" />
+        <mxCell id="category" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;CATEGORIE&lt;/b&gt;&lt;hr/&gt;PK id_categorie : INT&lt;br/&gt;uuid : CHAR(36) UK&lt;br/&gt;titre : VARCHAR(100)&lt;br/&gt;date_creation : DATETIME&lt;br/&gt;date_modification : DATETIME NULL" vertex="1">
+          <mxGeometry height="159" width="240" x="40" y="500" as="geometry" />
         </mxCell>
-        <mxCell id="service" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;SERVICE&lt;/b&gt;&lt;hr/&gt;PK id_service : INT&lt;br/&gt;FK id_restaurant : INT&lt;br/&gt;jour_semaine : VARCHAR(10)&lt;br/&gt;type_service : VARCHAR(10)&lt;br/&gt;heure_ouverture : TIME&lt;br/&gt;heure_fermeture : TIME" vertex="1">
-          <mxGeometry height="190" width="260" x="690" y="90" as="geometry" />
+        <mxCell id="dish" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;PLAT&lt;/b&gt;&lt;hr/&gt;PK id_plat : INT&lt;br/&gt;uuid : CHAR(36) UK&lt;br/&gt;FK id_categorie : INT&lt;br/&gt;titre : VARCHAR(150)&lt;br/&gt;description : TEXT&lt;br/&gt;prix : DECIMAL(6,2)&lt;br/&gt;date_creation : DATETIME&lt;br/&gt;date_modification : DATETIME NULL" vertex="1">
+          <mxGeometry height="214" width="250" x="150" y="797.5" as="geometry" />
         </mxCell>
-        <mxCell id="param" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;PARAMETRE_RESTAURANT&lt;/b&gt;&lt;hr/&gt;PK id_parametre : INT&lt;br/&gt;FK id_restaurant : INT UK&lt;br/&gt;capacite_max : SMALLINT" vertex="1">
-          <mxGeometry height="105" width="270" x="1050" y="680" as="geometry" />
+        <mxCell id="menu" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;MENU&lt;/b&gt;&lt;hr/&gt;PK id_menu : INT&lt;br/&gt;uuid : CHAR(36) UK&lt;br/&gt;FK id_restaurant : INT&lt;br/&gt;titre : VARCHAR(150)&lt;br/&gt;description : TEXT&lt;br/&gt;prix : DECIMAL(6,2)&lt;br/&gt;date_creation : DATETIME&lt;br/&gt;date_modification : DATETIME NULL" vertex="1">
+          <mxGeometry height="194" width="250" x="660" y="620" as="geometry" />
         </mxCell>
-        <mxCell id="category" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;CATEGORIE&lt;/b&gt;&lt;hr/&gt;PK id_categorie : INT&lt;br/&gt;titre : VARCHAR(100)" vertex="1">
-          <mxGeometry height="95" width="240" x="40" y="500" as="geometry" />
-        </mxCell>
-        <mxCell id="dish" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;PLAT&lt;/b&gt;&lt;hr/&gt;PK id_plat : INT&lt;br/&gt;FK id_categorie : INT&lt;br/&gt;titre : VARCHAR(150)&lt;br/&gt;description : TEXT&lt;br/&gt;prix : DECIMAL(6,2)" vertex="1">
-          <mxGeometry height="150" width="250" x="260" y="680" as="geometry" />
-        </mxCell>
-        <mxCell id="menu" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;MENU&lt;/b&gt;&lt;hr/&gt;PK id_menu : INT&lt;br/&gt;FK id_restaurant : INT&lt;br/&gt;titre : VARCHAR(150)&lt;br/&gt;description : TEXT&lt;br/&gt;prix : DECIMAL(6,2)" vertex="1">
-          <mxGeometry height="130" width="250" x="660" y="620" as="geometry" />
-        </mxCell>
-        <mxCell id="photo" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;PHOTO&lt;/b&gt;&lt;hr/&gt;PK id_photo : INT&lt;br/&gt;FK id_restaurant : INT&lt;br/&gt;titre : VARCHAR(150)&lt;br/&gt;url_image : VARCHAR(255)" vertex="1">
-          <mxGeometry height="105" width="270" x="1300" y="820" as="geometry" />
-        </mxCell>
-        <mxCell id="e1" edge="1" parent="1" source="user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=11;" target="role" value="FK id_role">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="photo" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;PHOTO&lt;/b&gt;&lt;hr/&gt;PK id_photo : INT&lt;br/&gt;uuid : CHAR(36) UK&lt;br/&gt;FK id_restaurant : INT&lt;br/&gt;titre : VARCHAR(150)&lt;br/&gt;url_image : VARCHAR(255)&lt;br/&gt;date_creation : DATETIME&lt;br/&gt;date_modification : DATETIME NULL" vertex="1">
+          <mxGeometry height="169" width="270" x="1300" y="820" as="geometry" />
         </mxCell>
         <mxCell id="e2" edge="1" parent="1" source="reservation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=11;" target="user" value="FK id_utilisateur">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e3" edge="1" parent="1" source="reservation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=11;" target="service" value="FK id_service">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e4" edge="1" parent="1" source="service" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=11;" target="restaurant" value="FK id_restaurant">
+        <mxCell id="e3" edge="1" parent="1" source="reservation" style="endArrow=block;endFill=1;html=1;fontSize=11;edgeStyle=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="restaurant" value="FK id_restaurant">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="e5" edge="1" parent="1" source="dish" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=11;" target="category" value="FK id_categorie">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="menu_categorie" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;MENU_CATEGORIE&lt;/b&gt;&lt;hr/&gt;PK, FK id_menu : INT&lt;br/&gt;PK, FK id_categorie : INT" vertex="1">
-          <mxGeometry height="105" width="290" x="830" y="920" as="geometry" />
+        <mxCell id="menu_categorie" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;MENU_CATEGORIE&lt;/b&gt;&lt;hr/&gt;PK id_menu_categorie : INT&lt;br/&gt;FK id_menu : INT&lt;br/&gt;FK id_categorie : INT&lt;br/&gt;UK (id_menu, id_categorie)" vertex="1">
+          <mxGeometry height="127" width="290" x="830" y="920" as="geometry" />
         </mxCell>
-        <mxCell id="restaurant" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;RESTAURANT&lt;/b&gt;&lt;hr/&gt;PK id_restaurant : INT&lt;br/&gt;nom : VARCHAR(150)" vertex="1">
-          <mxGeometry height="95" width="270" x="1200" y="140" as="geometry" />
-        </mxCell>
-        <mxCell id="e_restaurant_param" edge="1" parent="1" source="param" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" target="restaurant" value="FK id_restaurant">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="restaurant" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=7;" value="&lt;b&gt;RESTAURANT&lt;/b&gt;&lt;hr/&gt;PK id_restaurant : INT&lt;br/&gt;uuid : CHAR(36) UK&lt;br/&gt;nom : VARCHAR(150)&lt;br/&gt;description : LONGTEXT NULL&lt;br/&gt;horaire_midi : JSON&lt;br/&gt;horaire_soir : JSON&lt;br/&gt;capacite_max : SMALLINT&lt;br/&gt;date_creation : DATETIME&lt;br/&gt;date_modification : DATETIME NULL" vertex="1">
+          <mxGeometry height="254" width="330" x="1080" y="140" as="geometry" />
         </mxCell>
         <mxCell id="e_restaurant_photo" edge="1" parent="1" source="photo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;exitX=0.5;exitY=0;entryX=0.8;entryY=1;" target="restaurant" value="FK id_restaurant">
           <mxGeometry relative="1" as="geometry" />
@@ -256,271 +458,85 @@
         <mxCell id="e_menu_categorie_category" edge="1" parent="1" source="menu_categorie" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;exitX=0.15;exitY=1;entryX=1;entryY=0.5;" target="category" value="FK id_categorie">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-      </root>
-    </mxGraphModel>
-  </diagram>
-  <diagram id="uml-use-cases-quai-antique" name="03 - UML Cas d'utilisation">
-    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
-      <root>
-        <mxCell id="0" />
-        <mxCell id="1" parent="0" />
-        <mxCell id="title" value="&lt;b&gt;UML - Cas d'utilisation de Quai Antique&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fontSize=22;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="500" y="20" width="620" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="boundary" value="&lt;b&gt;Application web Quai Antique&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#666666;dashed=1;verticalAlign=top;align=center;fontSize=15;spacingTop=10;" vertex="1" parent="1">
-          <mxGeometry x="290" y="100" width="1030" height="660" as="geometry" />
-        </mxCell>
-        <mxCell id="visitor" value="Visiteur" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
-          <mxGeometry x="100" y="220" width="50" height="100" as="geometry" />
-        </mxCell>
-        <mxCell id="client" value="Client connecté" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
-          <mxGeometry x="100" y="500" width="60" height="100" as="geometry" />
-        </mxCell>
-        <mxCell id="admin" value="Administrateur" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;" vertex="1" parent="1">
-          <mxGeometry x="1430" y="360" width="65" height="100" as="geometry" />
-        </mxCell>
-        <mxCell id="gallery" value="Consulter la galerie" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="370" y="150" width="190" height="55" as="geometry" />
-        </mxCell>
-        <mxCell id="card" value="Consulter la carte et les menus" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="370" y="240" width="210" height="55" as="geometry" />
-        </mxCell>
-        <mxCell id="signup" value="Créer un compte client" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="370" y="330" width="195" height="55" as="geometry" />
-        </mxCell>
-        <mxCell id="login" value="Se connecter" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="370" y="440" width="180" height="55" as="geometry" />
-        </mxCell>
-        <mxCell id="availability" value="Vérifier les disponibilités" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
-          <mxGeometry x="675" y="155" width="215" height="55" as="geometry" />
-        </mxCell>
-        <mxCell id="prepare" value="Préparer une réservation" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
-          <mxGeometry x="675" y="255" width="210" height="55" as="geometry" />
-        </mxCell>
-        <mxCell id="validate" value="Valider une réservation" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
-          <mxGeometry x="675" y="355" width="205" height="55" as="geometry" />
-        </mxCell>
-        <mxCell id="ownbookings" value="Gérer ses réservations" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
-          <mxGeometry x="675" y="490" width="200" height="55" as="geometry" />
-        </mxCell>
-        <mxCell id="profile" value="Modifier ses données / supprimer son compte" style="ellipse;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
-          <mxGeometry x="620" y="610" width="315" height="55" as="geometry" />
-        </mxCell>
-        <mxCell id="settings" value="Gérer les horaires et la capacité" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
-          <mxGeometry x="1030" y="150" width="235" height="55" as="geometry" />
-        </mxCell>
-        <mxCell id="managegallery" value="Gérer les photos de la galerie" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
-          <mxGeometry x="1040" y="260" width="220" height="55" as="geometry" />
-        </mxCell>
-        <mxCell id="menumanage" value="Gérer les catégories, plats et menus" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
-          <mxGeometry x="1015" y="385" width="270" height="55" as="geometry" />
-        </mxCell>
-        <mxCell id="bookingmanage" value="Consulter, filtrer et gérer les réservations" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
-          <mxGeometry x="1000" y="520" width="300" height="55" as="geometry" />
-        </mxCell>
-        <mxCell id="e1" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="visitor" target="gallery">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e2" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="visitor" target="card">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e3" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="visitor" target="signup">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e4" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="visitor" target="prepare">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e5" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="visitor" target="availability">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e6" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="client" target="login">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e7" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="client" target="validate">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e8" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="client" target="ownbookings">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e9" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="client" target="profile">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e10" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="admin" target="login">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e11" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="admin" target="settings">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e12" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="admin" target="managegallery">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e13" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="admin" target="menumanage">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e14" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1" source="admin" target="bookingmanage">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e15" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;endArrow=open;endFill=0;html=1;rounded=0;fontSize=10;" edge="1" parent="1" source="validate" target="login">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e16" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="dashed=1;endArrow=open;endFill=0;html=1;rounded=0;fontSize=10;" edge="1" parent="1" source="prepare" target="availability">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="note_menu_minimum" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;verticalAlign=middle;spacing=8;fontSize=12;" value="&lt;b&gt;Règles métier (contrôlées par l’application)&lt;/b&gt; · Le Quai Antique conserve au moins un menu et chaque menu au moins une catégorie. Les clés étrangères seules ne garantissent pas ces minimums." vertex="1">
+          <mxGeometry height="60" width="680" x="50" y="1100" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="uml-classes-quai-antique" name="04 - UML Classes">
-    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+  <diagram id="mpd-quai-antique" name="05 - MPD Physique MySQL">
+    <mxGraphModel dx="1920" dy="1159" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1000" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="title" value="&lt;b&gt;UML - Diagramme de classes de Quai Antique&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;fontSize=22;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="420" y="18" width="760" height="40" as="geometry" />
+        <mxCell id="mpd_title" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=22;fontStyle=1;" value="&lt;b&gt;MPD physique MySQL - Application Quai Antique&lt;/b&gt;" vertex="1">
+          <mxGeometry height="40" width="800" x="400" y="18" as="geometry" />
         </mxCell>
-        <mxCell id="subtitle" value="Vue métier : bleu = comptes et réservations · jaune = configuration du restaurant · vert = carte et galerie" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontColor=#666666;" vertex="1" parent="1">
-          <mxGeometry x="330" y="58" width="940" height="25" as="geometry" />
+        <mxCell id="mpd_legend" parent="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontColor=#555555;" value="PK : clé primaire · FK : clé étrangère · UK : unique · NULL : valeur facultative · JSON : horaires ouverture/fermeture" vertex="1">
+          <mxGeometry height="28" width="1260" x="170" y="60" as="geometry" />
         </mxCell>
-        <mxCell id="zone_booking" value="&lt;b&gt;Comptes et réservations&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f9ff;strokeColor=#6c8ebf;dashed=1;arcSize=8;align=left;verticalAlign=top;spacingLeft=14;spacingTop=10;fontColor=#4f6f9d;fontStyle=1;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="50" y="105" width="940" height="315" as="geometry" />
+        <mxCell id="user" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=11;" value="&lt;b&gt;UTILISATEUR&lt;/b&gt;&lt;hr/&gt;PK id_utilisateur : INT AUTO_INCREMENT&lt;br/&gt;uuid : CHAR(36) NOT NULL UK&lt;br/&gt;roles : JSON NOT NULL&lt;br/&gt;prenom : VARCHAR(80) NOT NULL&lt;br/&gt;nom : VARCHAR(80) NOT NULL&lt;br/&gt;email : VARCHAR(255) NOT NULL UK&lt;br/&gt;mot_de_passe_hash : VARCHAR(255) NOT NULL&lt;br/&gt;nb_convives_defaut : SMALLINT UNSIGNED NULL&lt;br/&gt;allergies : TEXT NULL&lt;br/&gt;date_creation : DATETIME NOT NULL&lt;br/&gt;date_modification : DATETIME NULL" vertex="1">
+          <mxGeometry height="299" width="280" x="30" y="115" as="geometry" />
         </mxCell>
-        <mxCell id="zone_restaurant" value="&lt;b&gt;Configuration du restaurant&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffdf4;strokeColor=#d6b656;dashed=1;arcSize=8;align=left;verticalAlign=top;spacingLeft=14;spacingTop=10;fontColor=#9b7a14;fontStyle=1;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="1040" y="105" width="440" height="670" as="geometry" />
+        <mxCell id="reservation" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=11;" value="&lt;b&gt;RESERVATION&lt;/b&gt;&lt;hr/&gt;PK id_reservation : INT AUTO_INCREMENT&lt;br/&gt;uuid : CHAR(36) NOT NULL UK&lt;br/&gt;FK id_utilisateur : INT NOT NULL&lt;br/&gt;FK id_restaurant : INT NOT NULL&lt;br/&gt;date_reservation : DATE NOT NULL&lt;br/&gt;heure_prevue : TIME NOT NULL&lt;br/&gt;nb_convives : SMALLINT UNSIGNED NOT NULL&lt;br/&gt;allergies : TEXT NULL&lt;br/&gt;statut : VARCHAR(20) NOT NULL&lt;br/&gt;date_creation : DATETIME NOT NULL&lt;br/&gt;date_modification : DATETIME NULL" vertex="1">
+          <mxGeometry height="289" width="300" x="560" y="120" as="geometry" />
         </mxCell>
-        <mxCell id="zone_catalog" value="&lt;b&gt;Carte et galerie&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f7fcf6;strokeColor=#82b366;dashed=1;arcSize=8;align=left;verticalAlign=top;spacingLeft=14;spacingTop=10;fontColor=#5d874b;fontStyle=1;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="50" y="480" width="940" height="295" as="geometry" />
+        <mxCell id="restaurant" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=11;" value="&lt;b&gt;RESTAURANT&lt;/b&gt;&lt;hr/&gt;PK id_restaurant : INT AUTO_INCREMENT&lt;br/&gt;uuid : CHAR(36) NOT NULL UK&lt;br/&gt;nom : VARCHAR(150) NOT NULL&lt;br/&gt;description : LONGTEXT NULL&lt;br/&gt;horaire_midi : JSON NOT NULL&lt;br/&gt;horaire_soir : JSON NOT NULL&lt;br/&gt;capacite_max : SMALLINT UNSIGNED NOT NULL&lt;br/&gt;date_creation : DATETIME NOT NULL&lt;br/&gt;date_modification : DATETIME NULL" vertex="1">
+          <mxGeometry height="259" width="320" x="1080" y="120" as="geometry" />
         </mxCell>
-        <mxCell id="role" value="&lt;b&gt;&amp;lt;&amp;lt;enumeration&amp;gt;&amp;gt;&lt;br/&gt;Role&lt;/b&gt;&lt;hr/&gt;CLIENT&lt;br/&gt;ADMINISTRATEUR" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=42;fillColor=#f5f5f5;strokeColor=#666666;align=left;verticalAlign=top;spacing=8;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="100" y="215" width="180" height="120" as="geometry" />
+        <mxCell id="category" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=11;" value="&lt;b&gt;CATEGORIE&lt;/b&gt;&lt;hr/&gt;PK id_categorie : INT AUTO_INCREMENT&lt;br/&gt;uuid : CHAR(36) NOT NULL UK&lt;br/&gt;titre : VARCHAR(100) NOT NULL&lt;br/&gt;date_creation : DATETIME NOT NULL&lt;br/&gt;date_modification : DATETIME NULL" vertex="1">
+          <mxGeometry height="159" width="210" x="40" y="480" as="geometry" />
         </mxCell>
-        <mxCell id="user" value="&lt;b&gt;Utilisateur&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- prenom : string&lt;br/&gt;- nom : string&lt;br/&gt;- email : string {unique}&lt;br/&gt;- motDePasseHash : string&lt;br/&gt;- nbConvivesDefaut : int&lt;br/&gt;- allergies : string&lt;br/&gt;- role : Role" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="350" y="155" width="270" height="230" as="geometry" />
+        <mxCell id="dish" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=11;" value="&lt;b&gt;PLAT&lt;/b&gt;&lt;hr/&gt;PK id_plat : INT AUTO_INCREMENT&lt;br/&gt;uuid : CHAR(36) NOT NULL UK&lt;br/&gt;FK id_categorie : INT NOT NULL&lt;br/&gt;titre : VARCHAR(150) NOT NULL&lt;br/&gt;description : TEXT NOT NULL&lt;br/&gt;prix : DECIMAL(6,2) NOT NULL&lt;br/&gt;date_creation : DATETIME NOT NULL&lt;br/&gt;date_modification : DATETIME NULL" vertex="1">
+          <mxGeometry height="209" width="280" x="480" y="480" as="geometry" />
         </mxCell>
-        <mxCell id="reservation" value="&lt;b&gt;Reservation&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- date : Date&lt;br/&gt;- heurePrevue : Time&lt;br/&gt;- nbConvives : int&lt;br/&gt;- allergies : string&lt;br/&gt;- statut : string" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacing=8;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="740" y="180" width="220" height="190" as="geometry" />
+        <mxCell id="menu" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=11;" value="&lt;b&gt;MENU&lt;/b&gt;&lt;hr/&gt;PK id_menu : INT AUTO_INCREMENT&lt;br/&gt;uuid : CHAR(36) NOT NULL UK&lt;br/&gt;FK id_restaurant : INT NOT NULL&lt;br/&gt;titre : VARCHAR(150) NOT NULL&lt;br/&gt;description : TEXT NOT NULL&lt;br/&gt;prix : DECIMAL(6,2) NOT NULL&lt;br/&gt;date_creation : DATETIME NOT NULL&lt;br/&gt;date_modification : DATETIME NULL" vertex="1">
+          <mxGeometry height="209" width="280" x="880" y="480" as="geometry" />
         </mxCell>
-        <mxCell id="restaurant" value="&lt;b&gt;Restaurant&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- nom : string" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacing=8;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="1065" y="145" width="230" height="105" as="geometry" />
+        <mxCell id="photo" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=11;" value="&lt;b&gt;PHOTO&lt;/b&gt;&lt;hr/&gt;PK id_photo : INT AUTO_INCREMENT&lt;br/&gt;uuid : CHAR(36) NOT NULL UK&lt;br/&gt;FK id_restaurant : INT NOT NULL&lt;br/&gt;titre : VARCHAR(150) NOT NULL&lt;br/&gt;url_image : VARCHAR(255) NOT NULL&lt;br/&gt;date_creation : DATETIME NOT NULL&lt;br/&gt;date_modification : DATETIME NULL" vertex="1">
+          <mxGeometry height="189" width="280" x="1280" y="480" as="geometry" />
         </mxCell>
-        <mxCell id="service" value="&lt;b&gt;Service&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- jourSemaine : string&lt;br/&gt;- typeService : string&lt;br/&gt;- heureOuverture : Time&lt;br/&gt;- heureFermeture : Time" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacing=8;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="1065" y="325" width="230" height="170" as="geometry" />
+        <mxCell id="menu_categorie" parent="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=11;" value="&lt;b&gt;MENU_CATEGORIE&lt;/b&gt;&lt;hr/&gt;PK id_menu_categorie : INT AUTO_INCREMENT&lt;br/&gt;FK id_menu : INT NOT NULL&lt;br/&gt;FK id_categorie : INT NOT NULL&lt;br/&gt;UNIQUE (id_menu, id_categorie)" vertex="1">
+          <mxGeometry height="122" width="280" x="560" y="740" as="geometry" />
         </mxCell>
-        <mxCell id="param" value="&lt;b&gt;ParametreRestaurant&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- capaciteMax : int" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacing=8;fontSize=11;" vertex="1" parent="1">
-          <mxGeometry x="1305" y="345" width="150" height="110" as="geometry" />
-        </mxCell>
-        <mxCell id="photo" value="&lt;b&gt;Photo&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- titre : string&lt;br/&gt;- urlImage : string" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="1110" y="630" width="240" height="110" as="geometry" />
-        </mxCell>
-        <mxCell id="category" value="&lt;b&gt;Categorie&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- titre : string" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="100" y="615" width="200" height="100" as="geometry" />
-        </mxCell>
-        <mxCell id="dish" value="&lt;b&gt;Plat&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- titre : string&lt;br/&gt;- description : string&lt;br/&gt;- prix : decimal" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="400" y="595" width="240" height="130" as="geometry" />
-        </mxCell>
-        <mxCell id="menu" value="&lt;b&gt;Menu&lt;/b&gt;&lt;hr/&gt;- id : int&lt;br/&gt;- titre : string&lt;br/&gt;- description : string&lt;br/&gt;- prix : decimal" style="swimlane;html=1;whiteSpace=wrap;horizontal=1;startSize=30;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacing=8;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="740" y="600" width="210" height="120" as="geometry" />
-        </mxCell>
-        <mxCell id="e_role_user" style="endArrow=open;endFill=0;dashed=1;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="role" target="user">
+        <mxCell id="fk_res_user" edge="1" parent="1" source="reservation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=10;" target="user" value="FK id_utilisateur">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e_user_res" style="endArrow=none;startArrow=none;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="user" target="reservation">
+        <mxCell id="fk_res_restaurant" edge="1" parent="1" source="reservation" style="edgeStyle=none;html=1;endArrow=block;endFill=1;fontSize=10;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="restaurant" value="FK id_restaurant">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e_res_service" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startArrow=none;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="reservation" target="service">
+        <mxCell id="fk_dish_category" edge="1" parent="1" source="dish" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=10;" target="category" value="FK id_categorie">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1020" y="275" />
-              <mxPoint x="1020" y="410" />
+              <mxPoint x="420" y="560" />
+              <mxPoint x="420" y="560" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="e_rest_service" style="endArrow=none;startArrow=none;html=1;rounded=0;exitX=0.3;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="restaurant" target="service">
+        <mxCell id="fk_menu_restaurant" edge="1" parent="1" source="menu" style="edgeStyle=none;html=1;endArrow=block;endFill=1;fontSize=10;exitX=1;exitY=0.15;entryX=0.35;entryY=1;" target="restaurant" value="FK id_restaurant">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e_rest_param" style="endArrow=none;startArrow=none;html=1;rounded=0;exitX=0.8;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="restaurant" target="param">
+        <mxCell id="fk_photo_restaurant" edge="1" parent="1" source="photo" style="edgeStyle=none;html=1;endArrow=block;endFill=1;fontSize=10;exitX=0.5;exitY=0;entryX=0.85;entryY=1;" target="restaurant" value="FK id_restaurant">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e_rest_photo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startArrow=none;exitX=0.95;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="restaurant" target="photo">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="1465" y="198" />
-              <mxPoint x="1465" y="685" />
-            </Array>
+        <mxCell id="fk_mc_menu" edge="1" parent="1" source="menu_categorie" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=1;fontSize=10;" target="menu" value="FK id_menu">
+          <mxGeometry relative="1" x="-0.1961" as="geometry">
+            <mxPoint x="760" y="791" as="sourcePoint" />
+            <mxPoint x="1050" y="790" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="e_cat_dish" style="endArrow=none;startArrow=none;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="category" target="dish">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="fk_mc_category" edge="1" parent="1" source="menu_categorie" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;fontSize=10;exitX=0;exitY=0.5;entryX=0.475;entryY=0.983;entryDx=0;entryDy=0;entryPerimeter=0;" target="category" value="FK id_categorie">
+          <mxGeometry relative="1" x="0.0462" as="geometry">
+            <Array as="points">
+              <mxPoint x="430" y="781" />
+              <mxPoint x="430" y="810" />
+              <mxPoint x="139.8" y="810" />
+            </Array>
+            <mxPoint x="70" y="740" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="e_menu_dish" style="endArrow=none;startArrow=none;html=1;rounded=0;exitX=0;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" source="menu" target="dish">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="label_role" value="utilise" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="285" y="257" width="60" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="label_user_res" value="effectue" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="645" y="250" width="70" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="label_res_service" value="concerne" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="973" y="325" width="65" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="label_rest_service" value="propose" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1065" y="270" width="65" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="label_rest_param" value="configure" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1268" y="275" width="70" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="label_rest_photo" value="publie" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1388" y="450" width="55" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="label_cat_dish" value="classe" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="320" y="650" width="60" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="label_menu_dish" value="compose" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="650" y="650" width="70" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="card_user" value="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="622" y="275" width="22" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="card_res_user" value="0..*" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="712" y="275" width="35" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="card_res" value="0..*" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="965" y="255" width="35" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="card_service_res" value="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1038" y="392" width="22" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="card_rest_service" value="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1092" y="247" width="22" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="card_service_rest" value="1..*" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1092" y="304" width="35" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="card_rest_param" value="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1255" y="247" width="22" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="card_param_rest" value="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1322" y="320" width="22" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="card_rest_photo" value="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1408" y="205" width="22" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="card_photo_rest" value="0..*" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1365" y="675" width="35" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="card_cat" value="1" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="300" y="665" width="22" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="card_dish_cat" value="0..*" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="365" y="665" width="35" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="card_menu" value="0..*" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="705" y="665" width="35" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="card_dish_menu" value="0..*" style="text;html=1;align=center;verticalAlign=middle;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
-          <mxGeometry x="640" y="665" width="35" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="rule_note" value="&lt;b&gt;Règles métier à retenir&lt;/b&gt;&lt;br/&gt;• une réservation appartient à un utilisateur et à un service ;&lt;br/&gt;• les créneaux sont proposés toutes les 15 minutes ;&lt;br/&gt;• le total des convives ne dépasse pas la capacité maximale." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;verticalAlign=top;spacing=8;fontSize=10;fontColor=#444444;" vertex="1" parent="1">
-          <mxGeometry x="80" y="740" width="870" height="70" as="geometry" />
+        <mxCell id="mpd_rules" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#999999;align=left;verticalAlign=top;spacing=8;fontSize=10;fontColor=#444444;" value="&lt;b&gt;Lecture et adaptations au MPD du cours&lt;/b&gt;&lt;br/&gt;• Les rôles sont stockés en JSON dans UTILISATEUR, comme dans le MPD Studi ; le visiteur non inscrit n’a pas de compte.&lt;br/&gt;• Les horaires JSON contiennent ouverture et fermeture du midi/soir ; chaque service dure 2 h. Les jours (mardi à dimanche) sont fixes.&lt;br/&gt;• La réservation référence directement le restaurant ; la capacité maximale s’applique au total des convives d’un service.&lt;br/&gt;• Modèle adapté au MLD Quai Antique : PLAT appartient à une seule CATEGORIE, MENU_CATEGORIE suit le MPD Studi avec son identifiant propre et ses deux clés étrangères.&lt;br/&gt;• Les UUID et les dates de création/modification des entités métier suivent le MPD Studi. Le lien Restaurant–Owner n’est pas requis par le cahier des charges actuel.&lt;br/&gt;• Le Quai Antique conserve au moins un menu et chaque menu au moins une catégorie; l’application doit garantir ces règles, bloquer la suppression du dernier menu et créer un menu initial." vertex="1">
+          <mxGeometry height="132" width="1450" x="30" y="890" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
