@@ -3,7 +3,8 @@
 :root { --dark:#292222; --gold:#906427; --surface:#faf8f5; --soft:#f7f5f3; --ink:#1f1f1f; --line:#d1ccc7; --white:#fff; }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
-body { margin:0; background:var(--surface); color:var(--ink); font-family:'Hind Madurai',Arial,sans-serif; font-size:16px; line-height:1.5; }
+body { display:flex; min-height:100vh; flex-direction:column; margin:0; background:var(--surface); color:var(--ink); font-family:'Hind Madurai',Arial,sans-serif; font-size:16px; line-height:1.5; }
+main { flex:1; }
 img { display:block; max-width:100%; }
 a { color:inherit; }
 .skip-link { position:absolute; top:-5rem; left:1rem; z-index:20; padding:.7rem 1rem; background:var(--white); color:var(--dark); }
