@@ -3,23 +3,6 @@ footerStyles.rel = "stylesheet";
 footerStyles.href = "footer.css?v=figma-footer-3";
 document.head.append(footerStyles);
 
-const publicFooterMarkup = `<footer class="site-footer"><div class="footer-brand"><strong>Le Quai Antique</strong><p>Chambéry</p><p>Cuisine gastronomique savoyarde.</p></div><div class="footer-section"><strong>Plan du site</strong><a href="index.html">Accueil</a><a href="galerie.html">Notre galerie</a><a href="carte.html">La carte &amp; menus</a><a href="reservation.html">Réserver une table</a><a href="contact.html">Contact &amp; accès</a></div><div class="footer-section"><strong>Contact &amp; accès</strong><p>14 Quai de la Rive Gauche<br>73000 Chambéry<br>04 79 12 34 56</p></div><div class="footer-section"><strong>Mentions</strong><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgu-cgv.html">CGU / CGV</a></div></footer>`;
-
-document.querySelectorAll(".site-footer").forEach((footer) => {
-  if (!footer.classList.contains("admin-footer"))
-    footer.outerHTML = publicFooterMarkup;
-});
-
-const legalDestinations = {
-  "Mentions légales": "mentions-legales.html",
-  Confidentialité: "confidentialite.html",
-  "CGU / CGV": "cgu-cgv.html",
-};
-document.querySelectorAll(".site-footer a").forEach((link) => {
-  const destination = legalDestinations[link.textContent.trim()];
-  if (destination) link.setAttribute("href", destination);
-});
-
 const galleryActions = document.querySelector("#gallery-list");
 if (galleryActions) {
   galleryActions.insertAdjacentHTML(
