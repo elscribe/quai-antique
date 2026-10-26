@@ -51,7 +51,15 @@ JavaScript et préparation de l'appel API `POST /api/reservations`.
 
 Le parcours fonctionne en mode démonstration tant que l'API Symfony n'est pas
 branchée. La base de données, l'authentification, la validation définitive et
-l'enregistrement des réservations appartiennent au projet Back.
+l'enregistrement des réservations appartiennent au projet Back. Le Back Symfony
+est en cours : le provider de sécurité cible l'entité `Utilisateur`; le champ
+d'empreinte du jeton API est migré; l'inscription, le login et
+l'authentification par jeton sont implémentés. Le profil client et les
+permissions client/administrateur sont également en place. Postman CLI a validé
+16 requêtes et 23 assertions; PHPUnit passe 5 tests et 29 assertions sur SQLite
+isolé. Le détail figure dans `docs/security/rapport-tests-postman.md`. Le
+provisionnement du premier compte administrateur restera à effectuer par
+l'exploitant avant le déploiement.
 
 Le rapport pédagogique et les scénarios de test sont dans
 `RAPPORT-FRONT-ORAL.md`.
