@@ -4,13 +4,15 @@ namespace App\Controller\Api;
 
 use App\Entity\Categorie;
 use App\Repository\CategorieRepository;
+use App\Util\UuidGenerator;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class CategorieController
+final class CategorieController extends AbstractController
 {
     #[Route('/api/categories', name: 'api_categories_index', methods: ['GET'])]
     public function index(CategorieRepository $categorieRepository): JsonResponse
@@ -38,9 +40,18 @@ final class CategorieController
             );
         }
 
+        $titre = trim($titre);
+
+        if (!$this->hasValidTitleLength($titre)) {
+            return new JsonResponse(
+                ['error' => 'Le titre ne peut pas dépasser 100 caractères.'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
         $categorie = new Categorie();
-        $categorie->setUuid($this->createUuid());
-        $categorie->setTitre(trim($titre));
+        $categorie->setUuid(UuidGenerator::generate());
+        $categorie->setTitre($titre);
 
         $entityManager->persist($categorie);
         $entityManager->flush();
@@ -92,7 +103,16 @@ final class CategorieController
             );
         }
 
-        $categorie->setTitre(trim($titre));
+        $titre = trim($titre);
+
+        if (!$this->hasValidTitleLength($titre)) {
+            return new JsonResponse(
+                ['error' => 'Le titre ne peut pas dépasser 100 caractères.'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $categorie->setTitre($titre);
         $categorie->setDateModification(new \DateTimeImmutable());
 
         $entityManager->flush();
@@ -137,17 +157,11 @@ final class CategorieController
         ];
     }
 
-    private function createUuid(): string
+    private function hasValidTitleLength(string $titre): bool
     {
-        $bytes = random_bytes(16);
-        $bytes[6] = chr((ord($bytes[6]) & 0x0f) | 0x40);
-        $bytes[8] = chr((ord($bytes[8]) & 0x3f) | 0x80);
-        $hex = bin2hex($bytes);
+        $length = iconv_strlen($titre, 'UTF-8');
 
-        return substr($hex, 0, 8) . '-' .
-            substr($hex, 8, 4) . '-' .
-            substr($hex, 12, 4) . '-' .
-            substr($hex, 16, 4) . '-' .
-            substr($hex, 20, 12);
+        return $length !== false && $length <= 100;
     }
+
 }
