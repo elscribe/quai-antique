@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Dto\Api\CategorieInput;
 use App\Entity\Categorie;
 use App\Repository\CategorieRepository;
 use App\Util\UuidGenerator;
@@ -11,42 +12,41 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
+use Symfony\Component\Serializer\SerializerInterface;
 
 final class CategorieController extends AbstractController
 {
+    private const ITEM_ROUTE = '/api/categories/{uuid}';
+    private const CATEGORY_NOT_FOUND = 'Catégorie introuvable.';
+
     #[Route('/api/categories', name: 'api_categories_index', methods: ['GET'])]
-    public function index(CategorieRepository $categorieRepository): JsonResponse
-    {
+    public function index(
+        CategorieRepository $categorieRepository,
+        SerializerInterface $serializer
+    ): JsonResponse {
         $categories = $categorieRepository->findBy([], ['titre' => 'ASC']);
 
-        $data = array_map(
-            static fn (Categorie $categorie): array => self::serializeCategory($categorie),
-            $categories
+        return $this->serializedJsonResponse(
+            $serializer,
+            ['data' => $categories],
+            ['groups' => ['categorie:read']]
         );
-
-        return new JsonResponse(['data' => $data]);
     }
 
     #[Route('/api/categories', name: 'api_categories_create', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
-    {
-        $payload = $request->toArray();
-        $titre = $payload['titre'] ?? null;
+    public function create(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        SerializerInterface $serializer,
+        UrlGeneratorInterface $urlGenerator
+    ): JsonResponse {
+        $titre = $this->readTitle($request, $serializer);
 
-        if (!is_string($titre) || trim($titre) === '') {
-            return new JsonResponse(
-                ['error' => 'Le titre est obligatoire.'],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
-
-        $titre = trim($titre);
-
-        if (!$this->hasValidTitleLength($titre)) {
-            return new JsonResponse(
-                ['error' => 'Le titre ne peut pas dépasser 100 caractères.'],
-                Response::HTTP_BAD_REQUEST
-            );
+        if ($titre instanceof JsonResponse) {
+            return $titre;
         }
 
         $categorie = new Categorie();
@@ -55,61 +55,64 @@ final class CategorieController extends AbstractController
 
         $entityManager->persist($categorie);
         $entityManager->flush();
+        $location = $urlGenerator->generate(
+            'api_categories_show',
+            ['uuid' => $categorie->getUuid()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
 
-        return new JsonResponse(
-            ['data' => self::serializeCategory($categorie)],
-            Response::HTTP_CREATED
+        return $this->serializedJsonResponse(
+            $serializer,
+            ['data' => $categorie],
+            ['groups' => ['categorie:read']],
+            Response::HTTP_CREATED,
+            ['Location' => $location]
         );
     }
 
-    #[Route('/api/categories/{uuid}', name: 'api_categories_show', methods: ['GET'])]
-    public function show(string $uuid, CategorieRepository $categorieRepository): JsonResponse
-    {
-        $categorie = $categorieRepository->findOneBy(['uuid' => $uuid]);
-
-        if ($categorie === null) {
-            return new JsonResponse(
-                ['error' => 'Catégorie introuvable.'],
-                Response::HTTP_NOT_FOUND
-            );
-        }
-
-        return new JsonResponse(['data' => self::serializeCategory($categorie)]);
-    }
-
-    #[Route('/api/categories/{uuid}', name: 'api_categories_update', methods: ['PUT'])]
-    public function update(
+    #[Route(self::ITEM_ROUTE, name: 'api_categories_show', methods: ['GET'])]
+    public function show(
         string $uuid,
-        Request $request,
         CategorieRepository $categorieRepository,
-        EntityManagerInterface $entityManager
+        SerializerInterface $serializer
     ): JsonResponse {
         $categorie = $categorieRepository->findOneBy(['uuid' => $uuid]);
 
         if ($categorie === null) {
             return new JsonResponse(
-                ['error' => 'Catégorie introuvable.'],
+                ['error' => self::CATEGORY_NOT_FOUND],
                 Response::HTTP_NOT_FOUND
             );
         }
 
-        $payload = $request->toArray();
-        $titre = $payload['titre'] ?? null;
+        return $this->serializedJsonResponse(
+            $serializer,
+            ['data' => $categorie],
+            ['groups' => ['categorie:read']]
+        );
+    }
 
-        if (!is_string($titre) || trim($titre) === '') {
+    #[Route(self::ITEM_ROUTE, name: 'api_categories_update', methods: ['PUT'])]
+    public function update(
+        string $uuid,
+        Request $request,
+        CategorieRepository $categorieRepository,
+        EntityManagerInterface $entityManager,
+        SerializerInterface $serializer
+    ): JsonResponse {
+        $categorie = $categorieRepository->findOneBy(['uuid' => $uuid]);
+
+        if ($categorie === null) {
             return new JsonResponse(
-                ['error' => 'Le titre est obligatoire.'],
-                Response::HTTP_BAD_REQUEST
+                ['error' => self::CATEGORY_NOT_FOUND],
+                Response::HTTP_NOT_FOUND
             );
         }
 
-        $titre = trim($titre);
+        $titre = $this->readTitle($request, $serializer);
 
-        if (!$this->hasValidTitleLength($titre)) {
-            return new JsonResponse(
-                ['error' => 'Le titre ne peut pas dépasser 100 caractères.'],
-                Response::HTTP_BAD_REQUEST
-            );
+        if ($titre instanceof JsonResponse) {
+            return $titre;
         }
 
         $categorie->setTitre($titre);
@@ -117,10 +120,14 @@ final class CategorieController extends AbstractController
 
         $entityManager->flush();
 
-        return new JsonResponse(['data' => self::serializeCategory($categorie)]);
+        return $this->serializedJsonResponse(
+            $serializer,
+            ['data' => $categorie],
+            ['groups' => ['categorie:read']]
+        );
     }
 
-    #[Route('/api/categories/{uuid}', name: 'api_categories_delete', methods: ['DELETE'])]
+    #[Route(self::ITEM_ROUTE, name: 'api_categories_delete', methods: ['DELETE'])]
     public function delete(
         string $uuid,
         CategorieRepository $categorieRepository,
@@ -130,12 +137,15 @@ final class CategorieController extends AbstractController
 
         if ($categorie === null) {
             return new JsonResponse(
-                ['error' => 'Catégorie introuvable.'],
+                ['error' => self::CATEGORY_NOT_FOUND],
                 Response::HTTP_NOT_FOUND
             );
         }
 
-        if ($categorie->getPlats()->count() > 0 || $categorie->getMenuCategories()->count() > 0) {
+        if (
+            $categorie->getPlats()->count() > 0
+            || $categorie->getMenuCategories()->count() > 0
+        ) {
             return new JsonResponse(
                 ['error' => 'Cette catégorie ne peut pas être supprimée car elle est utilisée par des plats ou des menus.'],
                 Response::HTTP_CONFLICT
@@ -148,13 +158,39 @@ final class CategorieController extends AbstractController
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
 
-    /** @return array{uuid: ?string, titre: ?string} */
-    private static function serializeCategory(Categorie $categorie): array
+    private function readTitle(Request $request, SerializerInterface $serializer): string|JsonResponse
     {
-        return [
-            'uuid' => $categorie->getUuid(),
-            'titre' => $categorie->getTitre(),
-        ];
+        try {
+            $input = $serializer->deserialize($request->getContent(), CategorieInput::class, 'json');
+        } catch (NotEncodableValueException|NotNormalizableValueException) {
+            return new JsonResponse(
+                ['error' => 'Le corps de la requête doit être un objet JSON valide.'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        return $this->validateTitle($input->titre);
+    }
+
+    private function validateTitle(mixed $titre): string|JsonResponse
+    {
+        if (!is_string($titre) || trim($titre) === '') {
+            return new JsonResponse(
+                ['error' => 'Le titre est obligatoire.'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $titre = trim($titre);
+
+        if (!$this->hasValidTitleLength($titre)) {
+            return new JsonResponse(
+                ['error' => 'Le titre ne peut pas dépasser 100 caractères.'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        return $titre;
     }
 
     private function hasValidTitleLength(string $titre): bool
@@ -164,4 +200,19 @@ final class CategorieController extends AbstractController
         return $length !== false && $length <= 100;
     }
 
+    /** @param array<string, mixed> $context */
+    private function serializedJsonResponse(
+        SerializerInterface $serializer,
+        mixed $data,
+        array $context = [],
+        int $statusCode = Response::HTTP_OK,
+        array $headers = []
+    ): JsonResponse {
+        return new JsonResponse(
+            $serializer->serialize($data, 'json', $context),
+            $statusCode,
+            $headers,
+            true
+        );
+    }
 }

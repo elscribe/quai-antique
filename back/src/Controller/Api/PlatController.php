@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Dto\Api\PlatInput;
 use App\Entity\Plat;
 use App\Repository\CategorieRepository;
 use App\Repository\PlatRepository;
@@ -12,29 +13,37 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
+use Symfony\Component\Serializer\SerializerInterface;
 
 final class PlatController extends AbstractController
 {
+    private const ITEM_ROUTE = '/api/plats/{uuid}';
+    private const PLAT_NOT_FOUND = 'Plat introuvable.';
+
     #[Route('/api/plats', name: 'api_plats_index', methods: ['GET'])]
-    public function index(PlatRepository $platRepository): JsonResponse
+    public function index(PlatRepository $platRepository, SerializerInterface $serializer): JsonResponse
     {
         $plats = $platRepository->findBy([], ['titre' => 'ASC']);
 
-        $data = array_map(
-            static fn (Plat $plat): array => self::serializePlat($plat),
-            $plats
+        return $this->serializedJsonResponse(
+            $serializer,
+            ['data' => $plats],
+            ['groups' => ['plat:read']]
         );
-
-        return new JsonResponse(['data' => $data]);
     }
 
     #[Route('/api/plats', name: 'api_plats_create', methods: ['POST'])]
     public function create(
         Request $request,
         CategorieRepository $categorieRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        SerializerInterface $serializer,
+        UrlGeneratorInterface $urlGenerator
     ): JsonResponse {
-        $input = $this->readInput($request, $categorieRepository);
+        $input = $this->readInput($request, $categorieRepository, $serializer);
 
         if ($input instanceof JsonResponse) {
             return $input;
@@ -50,45 +59,63 @@ final class PlatController extends AbstractController
         $entityManager->persist($plat);
         $entityManager->flush();
 
-        return new JsonResponse(
-            ['data' => self::serializePlat($plat)],
-            Response::HTTP_CREATED
+        $location = $urlGenerator->generate(
+            'api_plats_show',
+            ['uuid' => $plat->getUuid()],
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        return $this->serializedJsonResponse(
+            $serializer,
+            ['data' => $plat],
+            ['groups' => ['plat:read']],
+            Response::HTTP_CREATED,
+            ['Location' => $location]
         );
     }
 
-    #[Route('/api/plats/{uuid}', name: 'api_plats_show', methods: ['GET'])]
-    public function show(string $uuid, PlatRepository $platRepository): JsonResponse
+    #[Route(self::ITEM_ROUTE, name: 'api_plats_show', methods: ['GET'])]
+    public function show(
+        string $uuid,
+        PlatRepository $platRepository,
+        SerializerInterface $serializer
+    ): JsonResponse
     {
         $plat = $platRepository->findOneBy(['uuid' => $uuid]);
 
         if ($plat === null) {
             return new JsonResponse(
-                ['error' => 'Plat introuvable.'],
+                ['error' => self::PLAT_NOT_FOUND],
                 Response::HTTP_NOT_FOUND
             );
         }
 
-        return new JsonResponse(['data' => self::serializePlat($plat)]);
+        return $this->serializedJsonResponse(
+            $serializer,
+            ['data' => $plat],
+            ['groups' => ['plat:read']]
+        );
     }
 
-    #[Route('/api/plats/{uuid}', name: 'api_plats_update', methods: ['PUT'])]
+    #[Route(self::ITEM_ROUTE, name: 'api_plats_update', methods: ['PUT'])]
     public function update(
         string $uuid,
         Request $request,
         PlatRepository $platRepository,
         CategorieRepository $categorieRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        SerializerInterface $serializer
     ): JsonResponse {
         $plat = $platRepository->findOneBy(['uuid' => $uuid]);
 
         if ($plat === null) {
             return new JsonResponse(
-                ['error' => 'Plat introuvable.'],
+                ['error' => self::PLAT_NOT_FOUND],
                 Response::HTTP_NOT_FOUND
             );
         }
 
-        $input = $this->readInput($request, $categorieRepository);
+        $input = $this->readInput($request, $categorieRepository, $serializer);
 
         if ($input instanceof JsonResponse) {
             return $input;
@@ -102,10 +129,14 @@ final class PlatController extends AbstractController
 
         $entityManager->flush();
 
-        return new JsonResponse(['data' => self::serializePlat($plat)]);
+        return $this->serializedJsonResponse(
+            $serializer,
+            ['data' => $plat],
+            ['groups' => ['plat:read']]
+        );
     }
 
-    #[Route('/api/plats/{uuid}', name: 'api_plats_delete', methods: ['DELETE'])]
+    #[Route(self::ITEM_ROUTE, name: 'api_plats_delete', methods: ['DELETE'])]
     public function delete(
         string $uuid,
         PlatRepository $platRepository,
@@ -115,7 +146,7 @@ final class PlatController extends AbstractController
 
         if ($plat === null) {
             return new JsonResponse(
-                ['error' => 'Plat introuvable.'],
+                ['error' => self::PLAT_NOT_FOUND],
                 Response::HTTP_NOT_FOUND
             );
         }
@@ -127,13 +158,25 @@ final class PlatController extends AbstractController
     }
 
     /** @return array{titre: string, description: string, prix: string, categorie: \App\Entity\Categorie}|JsonResponse */
-    private function readInput(Request $request, CategorieRepository $categorieRepository): array|JsonResponse
+    private function readInput(
+        Request $request,
+        CategorieRepository $categorieRepository,
+        SerializerInterface $serializer
+    ): array|JsonResponse
     {
-        $payload = $request->toArray();
-        $titre = $payload['titre'] ?? null;
-        $description = $payload['description'] ?? null;
-        $prix = $payload['prix'] ?? null;
-        $categorieUuid = $payload['categorie_uuid'] ?? null;
+        try {
+            $input = $serializer->deserialize($request->getContent(), PlatInput::class, 'json');
+        } catch (NotEncodableValueException|NotNormalizableValueException) {
+            return new JsonResponse(
+                ['error' => 'Le corps de la requête doit être un objet JSON valide.'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $titre = $input->titre;
+        $description = $input->description;
+        $prix = $input->prix;
+        $categorieUuid = $input->categorieUuid;
 
         if (!is_string($titre) || trim($titre) === '') {
             return new JsonResponse(
@@ -199,18 +242,19 @@ final class PlatController extends AbstractController
         return preg_match('/^(?:0|[1-9]\d{0,3})(?:\.\d{1,2})?$/D', (string) $price) === 1;
     }
 
-    /** @return array<string, mixed> */
-    private static function serializePlat(Plat $plat): array
-    {
-        return [
-            'uuid' => $plat->getUuid(),
-            'titre' => $plat->getTitre(),
-            'description' => $plat->getDescription(),
-            'prix' => $plat->getPrix(),
-            'categorie' => [
-                'uuid' => $plat->getCategorie()?->getUuid(),
-                'titre' => $plat->getCategorie()?->getTitre(),
-            ],
-        ];
+    /** @param array<string, mixed> $context */
+    private function serializedJsonResponse(
+        SerializerInterface $serializer,
+        mixed $data,
+        array $context = [],
+        int $statusCode = Response::HTTP_OK,
+        array $headers = []
+    ): JsonResponse {
+        return new JsonResponse(
+            $serializer->serialize($data, 'json', $context),
+            $statusCode,
+            $headers,
+            true
+        );
     }
 }

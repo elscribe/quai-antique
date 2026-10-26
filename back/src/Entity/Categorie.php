@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
 class Categorie
@@ -17,9 +18,11 @@ class Categorie
     private ?int $id = null;
 
     #[ORM\Column(type: Types::GUID, unique: true)]
+    #[Groups(['categorie:read', 'plat:read'])]
     private ?string $uuid = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['categorie:read', 'plat:read'])]
     private ?string $titre = null;
 
     #[ORM\Column]
