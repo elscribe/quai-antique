@@ -4,7 +4,7 @@ Mise à jour : 28 octobre 2026.
 
 ## Ce que démarre la stack
 
-- `web` : Nginx sert les fichiers du Front et transmet `/api` à Symfony. Le port hôte par défaut est `82`.
+- `web` : Nginx sert les fichiers du Front et transmet `/api` à Symfony. Le port hôte par défaut est `82`, publié sur `127.0.0.1` seulement.
 - `api` : PHP-FPM 8.5, Symfony 7.4, dépendances de développement incluses pour les tests et les fixtures.
 - `database` : MySQL 8.4.13, accessible seulement depuis le réseau Docker. Les données utilisent un volume nommé distinct de la base MySQL déjà utilisée localement sur le port `3307`.
 - `uploads_data` : volume partagé ; PHP peut écrire dans `public/uploads`, Nginx peut lire les images publiées.
@@ -45,7 +45,7 @@ docker compose --env-file .env.docker exec api php bin/console doctrine:migratio
 docker compose --env-file .env.docker exec -e APP_ENV=test -e DATABASE_URL=sqlite:///:memory: api php bin/phpunit -c phpunit.dist.xml --colors=never
 ```
 
-La suite PHPUnit force SQLite en mémoire afin de ne jamais purger la base MySQL Docker. Le contrôle du 28/10 a obtenu 40 tests et 334 assertions réussis.
+La suite PHPUnit force SQLite en mémoire afin de ne jamais purger la base MySQL Docker. Après l’actualisation de PHPUnit et l’ajout d’un contrôle d’upload à la limite de 3 MiB, le contrôle du 28/10 a obtenu **41 tests et 344 assertions réussis dans le conteneur Docker**.
 
 Le propriétaire a également vérifié dans le navigateur l’accueil, la Carte et la Galerie sur la stack parallèle au port `8086`. Après son accord, cette stack a été basculée sur `82`. Les appels Front vers l’API utilisent alors la même origine ; `http://127.0.0.1:82/api/health` répond 200.
 
@@ -59,4 +59,6 @@ Cette commande arrête les conteneurs et conserve les volumes. `docker compose d
 
 ## Ce qui reste pour la production
 
-Avant publication, créer une configuration de production séparée : désactiver le mode debug, exclure MakerBundle/PHPUnit et les autres outils de développement, injecter les secrets depuis l’hébergeur, terminer HTTPS, vérifier les en-têtes de sécurité, puis définir sauvegarde/restauration pour MySQL et les fichiers uploadés. Le déploiement lui-même n’a pas été réalisé.
+La stack de ce guide est réservée au développement et aux validations locales. L’audit priorisé, les observations techniques et les gates de mise en production sont consignés dans [production-readiness.md](production-readiness.md). Le conteneur local règle PHP à `upload_max_filesize=4M` et `post_max_size=5M`, et Nginx accepte 5m ; le plafond applicatif demeure 3 MiB. Le proxy de l’hébergeur devra appliquer une limite compatible.
+
+Le déploiement lui-même n’a pas été réalisé. Ne pas exposer cette configuration locale comme une installation de production.

@@ -2,7 +2,7 @@ services:
   web:
     build: .
     ports:
-      - "${WEB_PORT:-82}:80"
+      - "127.0.0.1:${WEB_PORT:-82}:80"
     volumes:
       - uploads_data:/var/www/app/public/uploads:ro
     depends_on:

@@ -107,4 +107,40 @@ final class SettingsAndGalleryApiTest extends ApiTestCase
         self::assertResponseStatusCodeSame(204);
         self::assertFileDoesNotExist($uploadedFile);
     }
+
+    public function testAdministratorCanUploadImageAtThreeMebibytes(): void
+    {
+        $this->createRestaurant();
+        $token = $this->createTestUser('admin@example.test', ['ROLE_ADMIN'], 'admin-token');
+        $path = tempnam(sys_get_temp_dir(), 'quai-photo-limit-');
+        $png = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a0R0AAAAASUVORK5CYII=', true);
+        self::assertIsString($png);
+        file_put_contents($path, $png.str_repeat("\0", 3 * 1024 * 1024 - strlen($png)));
+        $uploadedFile = null;
+
+        try {
+            $upload = new \Symfony\Component\HttpFoundation\File\UploadedFile($path, 'photo-limite.png', 'image/png', null, true);
+            self::assertSame(3 * 1024 * 1024, $upload->getSize());
+            self::assertTrue($upload->isValid());
+            self::assertSame('image/png', $upload->getMimeType());
+            self::assertSame('image/png', getimagesize($path)['mime']);
+            $this->client->request('POST', '/api/photos/upload', parameters: ['titre' => 'Photo à la limite'], files: ['image' => $upload], server: ['HTTP_X_AUTH_TOKEN' => $token]);
+            self::assertResponseStatusCodeSame(201);
+            $photo = json_decode($this->client->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR)['data'];
+            $uploadedFile = static::getContainer()->getParameter('kernel.project_dir').'/public'.$photo['url_image'];
+            self::assertFileExists($uploadedFile);
+            self::assertSame(3 * 1024 * 1024, filesize($uploadedFile));
+
+            $this->client->request('DELETE', '/api/photos/'.$photo['uuid'], server: ['HTTP_X_AUTH_TOKEN' => $token]);
+            self::assertResponseStatusCodeSame(204);
+            self::assertFileDoesNotExist($uploadedFile);
+        } finally {
+            if (is_file($path)) {
+                unlink($path);
+            }
+            if (is_string($uploadedFile) && is_file($uploadedFile)) {
+                unlink($uploadedFile);
+            }
+        }
+    }
 }
