@@ -7,9 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur
+class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -17,27 +20,34 @@ class Utilisateur
     private ?int $id = null;
 
     #[ORM\Column(type: Types::GUID, unique: true)]
+    #[Groups(['utilisateur:profile'])]
     private ?string $uuid = null;
 
     #[ORM\Column]
+    #[Groups(['utilisateur:profile'])]
     private array $roles = [];
 
     #[ORM\Column(length: 80)]
+    #[Groups(['utilisateur:profile'])]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 80)]
+    #[Groups(['utilisateur:profile'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255, unique: true)]
+    #[Groups(['utilisateur:profile'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     private ?string $motDePasseHash = null;
 
     #[ORM\Column(type: Types::SMALLINT, nullable: true, options: ['unsigned' => true])]
+    #[Groups(['utilisateur:profile'])]
     private ?int $nbConvivesDefaut = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups(['utilisateur:profile'])]
     private ?string $allergies = null;
 
     #[ORM\Column]
@@ -51,6 +61,9 @@ class Utilisateur
      */
     #[ORM\OneToMany(targetEntity: Reservation::class, mappedBy: 'utilisateur')]
     private Collection $reservations;
+
+    #[ORM\Column(length: 64, nullable: true, unique: true)]
+    private ?string $apiTokenHash = null;
 
     public function __construct()
     {
@@ -77,7 +90,10 @@ class Utilisateur
 
     public function getRoles(): array
     {
-        return $this->roles;
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_values(array_unique($roles));
     }
 
     public function setRoles(array $roles): static
@@ -133,6 +149,25 @@ class Utilisateur
         $this->motDePasseHash = $motDePasseHash;
 
         return $this;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        if ($this->email === null) {
+            throw new \LogicException('L’adresse e-mail doit être définie pour authentifier cet utilisateur.');
+        }
+
+        return $this->email;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->getMotDePasseHash();
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Aucun mot de passe en clair n’est conservé dans cette entité.
     }
 
     public function getNbConvivesDefaut(): ?int
@@ -209,6 +244,18 @@ class Utilisateur
                 $reservation->setUtilisateur(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getApiTokenHash(): ?string
+    {
+        return $this->apiTokenHash;
+    }
+
+    public function setApiTokenHash(?string $apiTokenHash): static
+    {
+        $this->apiTokenHash = $apiTokenHash;
 
         return $this;
     }
