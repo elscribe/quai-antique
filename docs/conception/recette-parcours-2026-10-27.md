@@ -1,6 +1,6 @@
 # Checklist de recette des parcours — Quai Antique
 
-Mise à jour : 28 octobre 2026. Cette checklist reprend le document `parcours-utilisateur.md`. Elle sert à vérifier l'application comme un visiteur, un client ou l'administrateur, puis à consigner les écarts. Les tests PHPUnit valident principalement l'API ; ils ne prouvent pas à eux seuls le fonctionnement de chaque page du navigateur. Les parcours ont été exercés dans une base isolée ; cette checklist ne constitue pas un compte-rendu de déploiement.
+Mise à jour : 28 octobre 2026. Cette checklist reprend le document `parcours-utilisateur.md`. Elle sert à vérifier l'application comme un visiteur, un client ou l'administrateur, puis à consigner les écarts. Les tests PHPUnit valident principalement l'API ; ils ne prouvent pas à eux seuls le fonctionnement de chaque page du navigateur. Les parcours ont été exercés dans une base isolée ; cette checklist ne constitue pas un compte-rendu de déploiement. Le 28/10, le propriétaire du projet a revu le site et accepté la recette Front comme suffisante ; aucun nouveau passage global Front n'est prévu. Les points ci-dessous signalés comme non attestés restent des limites précises de preuve, pas des tâches bloquant cette acceptation.
 
 ## Visiteur
 
