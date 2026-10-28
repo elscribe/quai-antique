@@ -41,6 +41,12 @@ final class ApiDocumentationTest extends WebTestCase
                 self::assertNotEmpty($operation['summary'] ?? null, $path.' requires a summary.');
                 self::assertNotEmpty($operation['responses'] ?? [], $path.' requires responses.');
                 self::assertArrayNotHasKey('default', $operation['responses']);
+                foreach (['200', '201'] as $successStatus) {
+                    if (isset($operation['responses'][$successStatus])) {
+                        self::assertArrayHasKey('application/json', $operation['responses'][$successStatus]['content'] ?? [], $path.' '.$successStatus.' requires a JSON response content type.');
+                        self::assertArrayHasKey('schema', $operation['responses'][$successStatus]['content']['application/json'], $path.' '.$successStatus.' requires a documented response schema.');
+                    }
+                }
             }
         }
         self::assertGreaterThanOrEqual(20, $operationCount);

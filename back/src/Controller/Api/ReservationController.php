@@ -24,7 +24,7 @@ final class ReservationController extends AbstractController
         new OA\Parameter(name: 'date', in: 'query', required: true, schema: new OA\Schema(type: 'string', format: 'date')),
         new OA\Parameter(name: 'guests', in: 'query', required: true, schema: new OA\Schema(type: 'integer', minimum: 1)),
     ], responses: [
-        new OA\Response(response: 200, description: 'Créneaux et nombre de places restantes.'),
+        new OA\Response(response: 200, description: 'Créneaux et nombre de places restantes.', content: new OA\JsonContent(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/AvailabilitySlot'))])),
         new OA\Response(response: 400, description: 'Date ou nombre de convives invalide.'),
         new OA\Response(response: 404, description: 'Restaurant non configuré.'),
     ])]
@@ -47,7 +47,7 @@ final class ReservationController extends AbstractController
     #[OA\Get(path: '/api/reservations', summary: 'Lister ses réservations ou toutes les réservations pour un administrateur', parameters: [
         new OA\Parameter(name: 'date', in: 'query', required: false, schema: new OA\Schema(type: 'string', format: 'date')),
     ], responses: [
-        new OA\Response(response: 200, description: 'Réservations accessibles au compte.'),
+        new OA\Response(response: 200, description: 'Réservations accessibles au compte.', content: new OA\JsonContent(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/ReservationResponse'))])),
         new OA\Response(response: 400, description: 'Date invalide.'),
         new OA\Response(response: 401, description: 'Authentification requise.'),
     ])]
@@ -75,7 +75,7 @@ final class ReservationController extends AbstractController
             new OA\Property(property: 'allergies', type: 'string', nullable: true),
         ])
     ), responses: [
-        new OA\Response(response: 201, description: 'Réservation créée.'),
+        new OA\Response(response: 201, description: 'Réservation créée.', headers: [new OA\Header(header: 'Location', description: 'URL absolue de la réservation créée.', schema: new OA\Schema(type: 'string', format: 'uri'))], content: new OA\JsonContent(properties: [new OA\Property(property: 'data', ref: '#/components/schemas/ReservationResponse')])),
         new OA\Response(response: 400, description: 'Réservation invalide.'),
         new OA\Response(response: 401, description: 'Authentification requise.'),
         new OA\Response(response: 409, description: 'Places insuffisantes.'),
@@ -124,7 +124,7 @@ final class ReservationController extends AbstractController
     #[OA\Get(path: '/api/reservations/{uuid}', summary: 'Consulter une réservation autorisée', parameters: [
         new OA\Parameter(name: 'uuid', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid')),
     ], responses: [
-        new OA\Response(response: 200, description: 'Réservation accessible.'),
+        new OA\Response(response: 200, description: 'Réservation accessible.', content: new OA\JsonContent(properties: [new OA\Property(property: 'data', ref: '#/components/schemas/ReservationResponse')])),
         new OA\Response(response: 401, description: 'Authentification requise.'),
         new OA\Response(response: 404, description: 'Réservation introuvable ou non accessible.'),
     ])]
@@ -147,7 +147,7 @@ final class ReservationController extends AbstractController
             new OA\Property(property: 'nb_convives', type: 'integer'),
             new OA\Property(property: 'allergies', type: 'string', nullable: true),
         ])), responses: [
-        new OA\Response(response: 200, description: 'Réservation modifiée.'),
+        new OA\Response(response: 200, description: 'Réservation modifiée.', content: new OA\JsonContent(properties: [new OA\Property(property: 'data', ref: '#/components/schemas/ReservationResponse')])),
         new OA\Response(response: 400, description: 'Données invalides.'),
         new OA\Response(response: 401, description: 'Authentification requise.'),
         new OA\Response(response: 404, description: 'Réservation introuvable ou non accessible.'),
