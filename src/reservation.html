@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Quai Antique — Réservation</title>
-    <link rel="stylesheet" href="styles.css?v=front-footer-1" />
+    <link rel="stylesheet" href="styles.css?v=front-multipage-5" />
   </head>
   <body>
     <a class="skip-link" href="#contenu">Aller au contenu</a>
@@ -25,7 +25,7 @@
       >
         <a href="index.html">Accueil</a><a href="carte.html">Carte</a
         ><a href="galerie.html">Galerie</a
-        ><a href="connexion.html">Connexion</a>
+        ><a data-session-nav href="connexion.html">Connexion</a>
       </nav>
     </header>
     <main class="reservation-page" id="contenu">
@@ -38,20 +38,15 @@
         <div class="reservation-basics">
           <label
             >Nombre de couverts
-            <select
+            <input
               id="guests"
               name="guests"
+              type="number"
+              min="1"
+              max="65535"
               required
               aria-describedby="guests-error"
-            >
-              <option value="">Choisir</option>
-              <option value="1">1 personne</option>
-              <option value="2">2 personnes</option>
-              <option value="3">3 personnes</option>
-              <option value="4">4 personnes</option>
-              <option value="5">5 personnes</option>
-              <option value="6">6 personnes</option>
-            </select>
+            />
             <small id="guests-error" class="field-error"></small>
           </label>
           <label
@@ -67,100 +62,9 @@
           </label>
         </div>
         <fieldset class="time-slots">
-          <legend>Service du midi</legend>
-          <div>
-            <button
-              type="button"
-              class="time-slot"
-              aria-pressed="false"
-              data-time="12:00"
-            >
-              12:00</button
-            ><button
-              type="button"
-              class="time-slot"
-              aria-pressed="false"
-              data-time="12:15"
-            >
-              12:15</button
-            ><button
-              type="button"
-              class="time-slot"
-              aria-pressed="false"
-              data-time="12:30"
-            >
-              12:30</button
-            ><button
-              type="button"
-              class="time-slot"
-              aria-pressed="false"
-              data-time="12:45"
-            >
-              12:45</button
-            ><button
-              type="button"
-              class="time-slot"
-              aria-pressed="false"
-              data-time="13:00"
-            >
-              13:00</button
-            ><button
-              type="button"
-              class="time-slot"
-              aria-pressed="false"
-              data-time="13:15"
-            >
-              13:15
-            </button>
-          </div>
-        </fieldset>
-        <fieldset class="time-slots">
-          <legend>Service du soir</legend>
-          <div>
-            <button
-              type="button"
-              class="time-slot"
-              aria-pressed="false"
-              data-time="19:00"
-            >
-              19:00</button
-            ><button
-              type="button"
-              class="time-slot"
-              aria-pressed="false"
-              data-time="19:15"
-            >
-              19:15</button
-            ><button
-              type="button"
-              class="time-slot"
-              aria-pressed="false"
-              data-time="19:30"
-            >
-              19:30</button
-            ><button
-              type="button"
-              class="time-slot"
-              aria-pressed="false"
-              data-time="19:45"
-            >
-              19:45</button
-            ><button
-              type="button"
-              class="time-slot"
-              aria-pressed="false"
-              data-time="20:00"
-            >
-              20:00</button
-            ><button
-              type="button"
-              class="time-slot"
-              aria-pressed="false"
-              data-time="20:15"
-            >
-              20:15
-            </button>
-          </div>
+          <legend>Créneaux disponibles</legend>
+          <p id="availability-status" role="status">Choisissez une date et le nombre de couverts.</p>
+          <div id="availability-slots"></div>
         </fieldset>
         <input
           id="time"
@@ -186,53 +90,41 @@
             Végétarien</label
           >
         </fieldset>
-        <label class="reservation-note"
-          >Précision complémentaire<textarea
-            id="message"
-            name="message"
-            rows="3"
-            placeholder="Une demande particulière ?"
-          ></textarea>
-        </label>
+        <label>Autres allergies ou précisions<textarea name="autres_allergies" maxlength="5000"></textarea></label>
         <p id="form-message" class="form-message" role="status"></p>
         <button id="reservation-submit" class="button" type="submit">
-          Continuer vers la connexion
+          Confirmer la réservation
         </button>
       </form>
-      <p class="reservation-caption">
-        La disponibilité réelle et la finalisation de la réservation seront
-        reliées à Symfony.
-      </p>
+      <p class="reservation-caption">Pour confirmer votre réservation, <a href="connexion.html?redirect=reservation.html">connectez-vous ou créez un compte</a>.</p>
     </main>
-    <footer class="site-footer">
-      <div class="footer-brand">
+    <footer class="site-footer site-footer--reservation">
+      <div>
         <strong>Le Quai Antique</strong>
-        <p>Chambéry</p>
+        <p>Cuisine gastronomique savoyarde par le Chef Arnaud Michant.</p>
+      </div>
+      <div>
+        <strong>Plan du site</strong><a href="index.html">Accueil</a
+        ><a href="galerie.html">Notre galerie</a
+        ><a href="carte.html">La carte &amp; menus</a
+        ><a href="reservation.html">Réserver une table</a
+        ><a href="contact.html">Contact &amp; accès</a>
+      </div>
+      <div>
+        <strong>Contact &amp; accès</strong>
         <p>
-          Une cuisine savoyarde de saison, inspirée par les produits du terroir
-          et imaginée par le Chef Arnaud Michant. Un lieu chaleureux pour
-          savourer les spécialités de la région, au cœur de Chambéry.
+          14 Quai de la Rive Gauche<br />73000 Chambéry<br />04 79 12 34 56<br />contact@lequaiantique.fr
         </p>
       </div>
-      <div class="footer-section">
-        <strong>Plan du site</strong>
-        <a href="index.html">Accueil</a>
-        <a href="galerie.html">Notre galerie</a>
-        <a href="carte.html">La carte &amp; menus</a>
-        <a href="reservation.html">Réserver une table</a>
-        <a href="contact.html">Contact &amp; accès</a>
+      <div>
+        <strong>Mentions</strong
+        ><a href="mentions-legales.html">Mentions légales</a
+        ><a href="confidentialite.html">Confidentialité</a
+        ><a href="cgu-cgv.html">CGU / CGV</a>
       </div>
-      <div class="footer-section">
-        <strong>Contact &amp; accès</strong>
-        <p>14 Quai de la Rive Gauche<br />73000 Chambéry<br />04 79 12 34 56</p>
-      </div>
-      <div class="footer-section">
-        <strong>Mentions</strong>
-        <a href="mentions-legales.html">Mentions légales</a>
-        <a href="confidentialite.html">Confidentialité</a>
-        <a href="cgu-cgv.html">CGU / CGV</a>
-      </div>
+      <p class="footer-legal">© 2026 Le Quai Antique. Tous droits réservés.</p>
     </footer>
-    <script type="module" src="main.js?v=front-footer-4"></script>
+    <script type="module" src="main.js?v=front-session-nav-1"></script>
+    <script type="module" src="reservation-api.js?v=session-nav-1"></script>
   </body>
 </html>

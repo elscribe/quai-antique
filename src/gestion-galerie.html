@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Quai Antique — Gestion galerie</title>
-    <link rel="stylesheet" href="styles.css?v=front-footer-1" />
+    <link rel="stylesheet" href="styles.css?v=front-multipage-4" />
   </head>
   <body class="admin-body">
     <a class="skip-link" href="#contenu">Aller au contenu</a>
@@ -13,85 +13,64 @@
       <p>ESPACE ADMIN</p>
       <nav>
         <a href="administration.html">Tableau de bord</a
-        ><a href="modifier-reservation.html">Réservations</a
+        ><a href="administration.html#reservations">Réservations</a
         ><a aria-current="page" href="gestion-galerie.html">Galerie d'images</a
         ><a href="gestion-carte.html">Carte &amp; menus</a>
       </nav>
-      <div>
-        <strong>Arnaud Michant</strong><span>Administrateur</span
-        ><a href="connexion.html">Déconnexion</a>
+      <div class="admin-sidebar__account">
+        <strong>Compte</strong>
+        <span class="admin-sidebar__account-name" id="admin-account-name">Vérification de session…</span>
+        <button class="admin-sidebar__logout" id="admin-logout" type="button" hidden>Déconnexion</button>
+        <span class="admin-sidebar__session-status" id="admin-session-status" role="status"></span>
       </div>
     </aside>
     <header class="site-header site-header--admin">
-      <a class="brand" href="index.html">Quai Antique</a><span>Admin</span
-      ><a href="administration.html">←</a>
+      <a class="brand" href="index.html">Quai Antique</a>
+      <span>Admin</span>
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="main-navigation"
+      >
+        Menu
+      </button>
+      <nav
+        id="main-navigation"
+        class="main-nav"
+        aria-label="Navigation principale"
+      >
+        <a href="administration.html">Tableau de bord</a
+        ><a href="administration.html#reservations">Réservations</a
+        ><a href="gestion-carte.html">Carte &amp; menus</a>
+      </nav>
     </header>
     <main class="admin-dashboard admin-management" id="contenu">
       <div class="admin-management__heading">
-        <div>
-          <p class="eyebrow">ADMINISTRATION</p>
-          <h1>Gérer la galerie</h1>
-          <p class="admin-intro">12 photos publiées.</p>
-        </div>
-        <button class="button" type="button" data-demo-action>
-          Ajouter une photo
-        </button>
+        <h1>Gérer la galerie</h1>
+        <a class="button button--outline" href="administration.html">← Tableau de bord</a>
       </div>
-      <section class="admin-panel admin-action-list">
-        <article>
-          <div>
-            <h2>Rissoles salées</h2>
-            <p>Photo publiée dans la galerie.</p>
-          </div>
-          <button class="button button--outline" type="button" data-demo-action>
-            Modifier</button
-          ><button
-            class="button button--outline"
-            type="button"
-            data-demo-action
-          >
-            Supprimer
-          </button>
-        </article>
-        <article>
-          <div>
-            <h2>Féra du lac</h2>
-            <p>Photo publiée dans la galerie.</p>
-          </div>
-          <button class="button button--outline" type="button" data-demo-action>
-            Modifier</button
-          ><button
-            class="button button--outline"
-            type="button"
-            data-demo-action
-          >
-            Supprimer
-          </button>
-        </article>
-        <article>
-          <div>
-            <h2>Fondue savoyarde</h2>
-            <p>Photo publiée dans la galerie.</p>
-          </div>
-          <button class="button button--outline" type="button" data-demo-action>
-            Modifier</button
-          ><button
-            class="button button--outline"
-            type="button"
-            data-demo-action
-          >
-            Supprimer
-          </button>
-        </article>
-      </section>
-      <output id="login-message" class="form-message"></output></p>
+      <p id="galerie-admin-status" role="status"></p>
+      <p id="admin-login-prompt" hidden><a href="connexion.html">Connexion administrateur</a></p>
+      <div id="galerie-admin" hidden>
+        <section class="admin-panel"><h2>Ajouter une photo</h2>
+          <form id="photo-upload" class="account-form">
+            <label>Titre<input name="titre" maxlength="150" required /></label>
+            <label>Image JPEG, PNG ou WebP (3 Mo maximum)<input name="image" type="file" accept="image/jpeg,image/png,image/webp" required /></label>
+            <button class="button" type="submit">Ajouter la photo</button>
+          </form>
+        </section>
+        <section class="admin-panel"><h2>Photos publiées</h2><div id="photos-admin"></div></section>
+      </div>
     </main>
     <footer class="admin-footer">
       <a href="administration.html">Tableau de bord</a
-      ><a href="modifier-reservation.html">Réservations</a
+      ><a href="administration.html#reservations">Réservations</a
       ><a href="gestion-galerie.html">Galerie d'images</a
       ><a href="gestion-carte.html">Carte &amp; menus</a>
     </footer>
-    <script type="module" src="main.js?v=front-footer-4"></script>
+    <script type="module" src="main.js?v=front-session-nav-1"></script>
+    <script type="module" src="admin-galerie.js"></script>
+    <script type="module" src="admin-session.js?v=account-session-3"></script>
   </body>
 </html>

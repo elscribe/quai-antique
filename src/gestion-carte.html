@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Quai Antique — Gestion carte</title>
-    <link rel="stylesheet" href="styles.css?v=front-footer-1" />
+    <link rel="stylesheet" href="styles.css?v=front-multipage-4" />
   </head>
   <body class="admin-body">
     <a class="skip-link" href="#contenu">Aller au contenu</a>
@@ -13,85 +13,81 @@
       <p>ESPACE ADMIN</p>
       <nav>
         <a href="administration.html">Tableau de bord</a
-        ><a href="modifier-reservation.html">Réservations</a
+        ><a href="administration.html#reservations">Réservations</a
         ><a href="gestion-galerie.html">Galerie d'images</a
         ><a aria-current="page" href="gestion-carte.html">Carte &amp; menus</a>
       </nav>
-      <div>
-        <strong>Arnaud Michant</strong><span>Administrateur</span
-        ><a href="connexion.html">Déconnexion</a>
+      <div class="admin-sidebar__account">
+        <strong>Compte</strong>
+        <span class="admin-sidebar__account-name" id="admin-account-name">Vérification de session…</span>
+        <button class="admin-sidebar__logout" id="admin-logout" type="button" hidden>Déconnexion</button>
+        <span class="admin-sidebar__session-status" id="admin-session-status" role="status"></span>
       </div>
     </aside>
     <header class="site-header site-header--admin">
-      <a class="brand" href="index.html">Quai Antique</a><span>Admin</span
-      ><a href="administration.html">←</a>
+      <a class="brand" href="index.html">Quai Antique</a>
+      <span>Admin</span>
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="main-navigation"
+      >
+        Menu
+      </button>
+      <nav
+        id="main-navigation"
+        class="main-nav"
+        aria-label="Navigation principale"
+      >
+        <a href="administration.html">Tableau de bord</a
+        ><a href="administration.html#reservations">Réservations</a
+        ><a href="gestion-galerie.html">Galerie</a>
+      </nav>
     </header>
     <main class="admin-dashboard admin-management" id="contenu">
       <div class="admin-management__heading">
-        <div>
-          <p class="eyebrow">ADMINISTRATION</p>
-          <h1>Gérer la carte &amp; les menus</h1>
-          <p class="admin-intro">17 plats · 3 menus.</p>
-        </div>
-        <button class="button" type="button" data-demo-action>
-          Ajouter un plat
-        </button>
+        <h1>Gérer la carte et les menus</h1>
+        <a class="button button--outline" href="administration.html">← Tableau de bord</a>
       </div>
-      <section class="admin-panel admin-action-list">
-        <article>
-          <div>
-            <h2>Velouté de courge des Bauges</h2>
-            <p>Entrée · 10 €</p>
-          </div>
-          <button class="button button--outline" type="button" data-demo-action>
-            Modifier</button
-          ><button
-            class="button button--outline"
-            type="button"
-            data-demo-action
-          >
-            Supprimer
-          </button>
-        </article>
-        <article>
-          <div>
-            <h2>Diots de Savoie</h2>
-            <p>Plat · 25 €</p>
-          </div>
-          <button class="button button--outline" type="button" data-demo-action>
-            Modifier</button
-          ><button
-            class="button button--outline"
-            type="button"
-            data-demo-action
-          >
-            Supprimer
-          </button>
-        </article>
-        <article>
-          <div>
-            <h2>Gâteau de Savoie</h2>
-            <p>Dessert · 9 €</p>
-          </div>
-          <button class="button button--outline" type="button" data-demo-action>
-            Modifier</button
-          ><button
-            class="button button--outline"
-            type="button"
-            data-demo-action
-          >
-            Supprimer
-          </button>
-        </article>
-      </section>
-      <output id="login-message" class="form-message"></output></p>
+      <p id="catalogue-admin-status" role="status"></p>
+      <p id="admin-login-prompt" hidden><a href="connexion.html">Connexion administrateur</a></p>
+      <div id="catalogue-admin" hidden>
+        <section class="admin-panel"><h2>Catégories</h2>
+          <form id="categorie-form" class="account-form"><input name="uuid" type="hidden" />
+            <label>Titre<input name="titre" maxlength="100" required /></label>
+            <button class="button" type="submit">Enregistrer la catégorie</button>
+            <button class="button button--outline" type="reset">Nouvelle catégorie</button>
+          </form><div id="categories-admin"></div>
+        </section>
+        <section class="admin-panel"><h2>Plats</h2>
+          <form id="plat-form" class="account-form"><input name="uuid" type="hidden" />
+            <label>Titre<input name="titre" maxlength="150" required /></label>
+            <label>Description<textarea name="description" maxlength="5000" required></textarea></label>
+            <label>Prix en euros<input name="prix" type="number" min="0" max="9999.99" step="0.01" required /></label>
+            <label>Catégorie<select name="categorie_uuid" required></select></label>
+            <button class="button" type="submit">Enregistrer le plat</button><button class="button button--outline" type="reset">Nouveau plat</button>
+          </form><div id="plats-admin"></div>
+        </section>
+        <section class="admin-panel"><h2>Menus</h2>
+          <form id="menu-form" class="account-form"><input name="uuid" type="hidden" />
+            <label>Titre<input name="titre" maxlength="150" required /></label>
+            <label>Description des choix<textarea name="description" maxlength="5000" required></textarea></label>
+            <label>Prix en euros<input name="prix" type="number" min="0" max="9999.99" step="0.01" required /></label>
+            <label>Catégories proposées (au moins une)<select name="categories" multiple size="5" required></select></label>
+            <button class="button" type="submit">Enregistrer le menu</button><button class="button button--outline" type="reset">Nouveau menu</button>
+          </form><div id="menus-admin"></div>
+        </section>
+      </div>
     </main>
     <footer class="admin-footer">
       <a href="administration.html">Tableau de bord</a
-      ><a href="modifier-reservation.html">Réservations</a
+      ><a href="administration.html#reservations">Réservations</a
       ><a href="gestion-galerie.html">Galerie d'images</a
       ><a href="gestion-carte.html">Carte &amp; menus</a>
     </footer>
-    <script type="module" src="main.js?v=front-footer-4"></script>
+    <script type="module" src="main.js?v=front-session-nav-1"></script>
+    <script type="module" src="admin-catalogue.js"></script>
+    <script type="module" src="admin-session.js?v=account-session-3"></script>
   </body>
 </html>

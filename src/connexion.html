@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Quai Antique — Connexion</title>
-    <link rel="stylesheet" href="styles.css?v=front-footer-1" />
+    <link rel="stylesheet" href="styles.css?v=front-multipage-4" />
   </head>
   <body>
     <a class="skip-link" href="#contenu">Aller au contenu</a>
@@ -25,7 +25,7 @@
       >
         <a href="index.html">Accueil</a><a href="carte.html">Carte</a
         ><a href="galerie.html">Galerie</a
-        ><a aria-current="page" href="connexion.html">Connexion</a>
+        ><a aria-current="page" data-session-nav href="connexion.html">Connexion</a>
       </nav>
     </header>
     <main class="account-page" id="contenu">
@@ -60,16 +60,15 @@
                 required
             /></label>
             <div class="account-options">
-              <label
-                ><input type="checkbox" name="remember" /> Se souvenir de
-                moi</label
-              ><a href="contact.html">Mot de passe oublié ?</a>
+              <a href="contact.html">Mot de passe oublié ?</a>
             </div>
             <button class="button" type="submit">
               Valider et se connecter
             </button>
-            <output id="login-message" class="form-message"></output></p>
+            <output id="login-message" class="form-message" aria-live="polite"></output>
           </form>
+          <button id="logout-button" class="button button--outline" type="button" hidden>Se déconnecter de cette session</button>
+          <p id="account-links" hidden><a href="espace-client.html">Accéder à mon espace client</a> · <a id="admin-link" href="administration.html" hidden>Accéder à l’administration</a></p>
           <p class="account-switch">
             Vous n'avez pas encore de compte ?<br /><a href="#create-account"
               >Créer un compte</a
@@ -127,10 +126,10 @@
             </p>
             <label
               >Nombre de couverts par défaut<select name="defaultGuests">
-                <option>1 personne</option>
-                <option selected>2 personnes</option>
-                <option>3 personnes</option>
-                <option>4 personnes</option>
+                <option value="1">1 personne</option>
+                <option value="2" selected>2 personnes</option>
+                <option value="3">3 personnes</option>
+                <option value="4">4 personnes</option>
               </select></label
             >
             <fieldset class="allergy-options">
@@ -149,42 +148,45 @@
                 />
                 Fruits à coque</label
               >
+              <label>Autres allergies ou régimes<input name="otherAllergies" maxlength="5000" /></label>
             </fieldset>
             <button class="button" type="submit">Créer mon compte</button>
-            <output id="registration-message" class="form-message"></output></p>
+            <output id="registration-message" class="form-message" aria-live="polite"></output>
           </form>
         </section>
       </div>
     </main>
     <footer class="site-footer">
-      <div class="footer-brand">
+      <div>
         <strong>Le Quai Antique</strong>
         <p>Chambéry</p>
         <p>
-          Une cuisine savoyarde de saison, inspirée par les produits du terroir
-          et imaginée par le Chef Arnaud Michant. Un lieu chaleureux pour
-          savourer les spécialités de la région, au cœur de Chambéry.
+          Cuisine gastronomique inspirée par le terroir savoyard et orchestrée
+          avec passion par le Chef Arnaud Michant.
         </p>
       </div>
-      <div class="footer-section">
-        <strong>Plan du site</strong>
-        <a href="index.html">Accueil</a>
-        <a href="galerie.html">Notre galerie</a>
-        <a href="carte.html">La carte &amp; menus</a>
-        <a href="reservation.html">Réserver une table</a>
-        <a href="contact.html">Contact &amp; accès</a>
+      <div>
+        <strong>Plan du site</strong><a href="index.html">Accueil</a
+        ><a href="galerie.html">Notre galerie</a
+        ><a href="carte.html">La carte &amp; menus</a
+        ><a href="reservation.html">Réserver une table</a
+        ><a href="contact.html">Contact &amp; accès</a>
       </div>
-      <div class="footer-section">
+      <div>
         <strong>Contact &amp; accès</strong>
-        <p>14 Quai de la Rive Gauche<br />73000 Chambéry<br />04 79 12 34 56</p>
+        <p>
+          14 Quai de la Rive Gauche<br />73000 Chambéry<br />04 79 12 34 56<br />contact@lequaiantique.fr
+        </p>
       </div>
-      <div class="footer-section">
-        <strong>Mentions</strong>
-        <a href="mentions-legales.html">Mentions légales</a>
-        <a href="confidentialite.html">Confidentialité</a>
-        <a href="cgu-cgv.html">CGU / CGV</a>
+      <div>
+        <strong>Mentions</strong
+        ><a href="mentions-legales.html">Mentions légales</a
+        ><a href="confidentialite.html">Confidentialité</a
+        ><a href="cgu-cgv.html">CGU / CGV</a>
       </div>
+      <p class="footer-legal">© 2026 Le Quai Antique. Tous droits réservés.</p>
     </footer>
-    <script type="module" src="main.js?v=front-footer-4"></script>
+    <script type="module" src="main.js?v=front-session-nav-1"></script>
+    <script type="module" src="connexion-api.js?v=session-roles-1"></script>
   </body>
 </html>
