@@ -1,5 +1,5 @@
 .git
-.DS_Store
+**/.DS_Store
 # Keep the safe Symfony fallback; exclude machine-specific and environment-specific files.
 .env
 .env.*

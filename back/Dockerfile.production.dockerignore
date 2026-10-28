@@ -1,0 +1,13 @@
+.git
+**/.DS_Store
+.env
+.env.*
+!.env.dist
+vendor
+var
+public/uploads
+public/bundles
+**/tests
+bin/phpunit
+**/phpunit.dist.xml
+**/.phpunit.cache

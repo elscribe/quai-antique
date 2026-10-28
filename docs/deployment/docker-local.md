@@ -9,6 +9,8 @@ Mise à jour : 28 octobre 2026.
 - `database` : MySQL 8.4.13, accessible seulement depuis le réseau Docker. Les données utilisent un volume nommé distinct de la base MySQL déjà utilisée localement sur le port `3307`.
 - `uploads_data` : volume partagé ; PHP peut écrire dans `public/uploads`, Nginx peut lire les images publiées.
 
+Le nom Compose du développement est explicitement `quai-antique`, identique à celui de la stack locale actuelle afin de conserver ses volumes existants. Le profil distinct `compose.production.yaml` porte le nom `quai-antique-prod-preview`, donc ses conteneurs, son réseau et ses volumes restent isolés quand les commandes sont lancées sans `-p`. Un `-p` explicite remplace ces noms et doit rester distinct entre les environnements.
+
 La stack est un environnement de développement et de validation locale (`APP_ENV=dev`, `APP_DEBUG=1`). Elle n’est pas le profil de production et ne contient aucun secret de production.
 
 ## Préparer l’environnement local
