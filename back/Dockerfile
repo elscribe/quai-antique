@@ -15,6 +15,7 @@ COPY composer.json composer.lock ./
 RUN composer install --no-interaction --prefer-dist --no-progress --no-scripts
 
 COPY . .
+COPY docker/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 RUN composer dump-autoload --no-interaction --no-scripts \
     && mkdir -p var/cache var/log public/uploads \
     && chown -R www-data:www-data var public/uploads
