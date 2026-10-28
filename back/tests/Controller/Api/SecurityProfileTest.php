@@ -30,10 +30,11 @@ final class SecurityProfileTest extends ApiTestCase
 
     public function testRegistrationHashesPasswordAndReturnsOneTimeApiToken(): void
     {
+        $headers = $this->registrationHeaders();
         $this->client->request(
             'POST',
             '/api/registration',
-            server: ['CONTENT_TYPE' => 'application/json'],
+            server: $headers,
             content: json_encode([
                 'prenom' => 'Camille',
                 'nom' => 'Martin',
@@ -61,10 +62,11 @@ final class SecurityProfileTest extends ApiTestCase
 
     public function testRegistrationRejectsInvalidPayloadAndDuplicateEmail(): void
     {
+        $headers = $this->registrationHeaders();
         $this->client->request(
             'POST',
             '/api/registration',
-            server: ['CONTENT_TYPE' => 'application/json'],
+            server: $headers,
             content: '{invalid-json'
         );
         self::assertResponseStatusCodeSame(400);
@@ -72,7 +74,7 @@ final class SecurityProfileTest extends ApiTestCase
         $this->client->request(
             'POST',
             '/api/registration',
-            server: ['CONTENT_TYPE' => 'application/json'],
+            server: $headers,
             content: json_encode([
                 'prenom' => 'Camille',
                 'nom' => 'Martin',
@@ -88,11 +90,25 @@ final class SecurityProfileTest extends ApiTestCase
             'email' => 'duplicate@example.test',
             'password' => 'MotDePasse-123!',
         ], JSON_THROW_ON_ERROR);
-        $this->client->request('POST', '/api/registration', server: ['CONTENT_TYPE' => 'application/json'], content: $payload);
+        $this->client->request('POST', '/api/registration', server: $headers, content: $payload);
         self::assertResponseStatusCodeSame(201);
 
-        $this->client->request('POST', '/api/registration', server: ['CONTENT_TYPE' => 'application/json'], content: $payload);
+        $this->client->request('POST', '/api/registration', server: $headers, content: $payload);
         self::assertResponseStatusCodeSame(409);
+    }
+
+    public function testRegistrationRateLimiterRejectsTheSixthAttemptFromSameIp(): void
+    {
+        $headers = $this->registrationHeaders();
+
+        for ($attempt = 1; $attempt <= 5; ++$attempt) {
+            $this->client->request('POST', '/api/registration', server: $headers, content: '{invalid-json');
+            self::assertResponseStatusCodeSame(400);
+        }
+
+        $this->client->request('POST', '/api/registration', server: $headers, content: '{invalid-json');
+        self::assertResponseStatusCodeSame(429);
+        self::assertGreaterThan(0, (int) $this->client->getResponse()->headers->get('Retry-After'));
     }
 
     public function testLoginRejectsWrongPasswordAndRotatesTheApiToken(): void
@@ -197,12 +213,13 @@ final class SecurityProfileTest extends ApiTestCase
 
     public function testWeakPasswordAndOversizedNamesAreRejectedAtRegistration(): void
     {
+        $headers = $this->registrationHeaders();
         $body = ['prenom' => 'Alice', 'nom' => 'Martin', 'email' => 'weak@example.test', 'password' => 'abc'];
-        $this->client->request('POST', '/api/registration', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode($body, JSON_THROW_ON_ERROR));
+        $this->client->request('POST', '/api/registration', server: $headers, content: json_encode($body, JSON_THROW_ON_ERROR));
         self::assertResponseStatusCodeSame(400);
         $body['password'] = 'Mot-De-Passe-123!';
         $body['prenom'] = str_repeat('A', 81);
-        $this->client->request('POST', '/api/registration', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode($body, JSON_THROW_ON_ERROR));
+        $this->client->request('POST', '/api/registration', server: $headers, content: json_encode($body, JSON_THROW_ON_ERROR));
         self::assertResponseStatusCodeSame(400);
     }
 
@@ -302,5 +319,14 @@ final class SecurityProfileTest extends ApiTestCase
         self::assertInstanceOf(Utilisateur::class, $utilisateur);
 
         return $utilisateur;
+    }
+
+    /** @return array{CONTENT_TYPE: string, REMOTE_ADDR: string} */
+    private function registrationHeaders(): array
+    {
+        return [
+            'CONTENT_TYPE' => 'application/json',
+            'REMOTE_ADDR' => '2001:db8::'.bin2hex(random_bytes(8)),
+        ];
     }
 }

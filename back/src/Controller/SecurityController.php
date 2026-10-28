@@ -12,12 +12,14 @@ use App\Util\UuidGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OpenApi\Attributes as OA;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -57,6 +59,7 @@ final class SecurityController
             ),
             new OA\Response(response: 400, description: 'JSON invalide ou champs obligatoires invalides.'),
             new OA\Response(response: 409, description: 'Cette adresse e-mail est déjà utilisée.'),
+            new OA\Response(response: 429, description: 'Trop de tentatives d’inscription depuis cette adresse IP.'),
         ]
     )]
     #[Route('/registration', name: 'registration', methods: ['POST'])]
@@ -65,8 +68,20 @@ final class SecurityController
         EntityManagerInterface $entityManager,
         SerializerInterface $serializer,
         UtilisateurRepository $utilisateurRepository,
-        UserPasswordHasherInterface $passwordHasher
+        UserPasswordHasherInterface $passwordHasher,
+        #[Autowire(service: 'limiter.registration')] RateLimiterFactory $registrationLimiter
     ): JsonResponse {
+        $rateLimit = $registrationLimiter->create($request->getClientIp() ?? 'unknown')->consume();
+        if (!$rateLimit->isAccepted()) {
+            $retryAfter = max(1, $rateLimit->getRetryAfter()->getTimestamp() - time());
+
+            return new JsonResponse(
+                ['error' => 'Trop de tentatives d’inscription. Réessayez plus tard.'],
+                Response::HTTP_TOO_MANY_REQUESTS,
+                ['Retry-After' => (string) $retryAfter]
+            );
+        }
+
         try {
             $input = $serializer->deserialize(
                 $request->getContent(),
