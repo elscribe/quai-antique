@@ -1,0 +1,61 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    ports:
+      - "127.0.0.1:${WEB_PORT:-8086}:80"
+    volumes:
+      - uploads_data:/var/www/app/public/uploads:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/api/health || exit 1"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./back
+      dockerfile: Dockerfile.production
+    environment:
+      APP_ENV: prod
+      APP_DEBUG: "0"
+      APP_SECRET: ${APP_SECRET:?Define APP_SECRET in .env.production}
+      DATABASE_URL: ${DATABASE_URL:?Define DATABASE_URL in .env.production}
+      CORS_ALLOW_ORIGIN: ${CORS_ALLOW_ORIGIN:?Define CORS_ALLOW_ORIGIN in .env.production}
+      DEFAULT_URI: ${DEFAULT_URI:?Define DEFAULT_URI in .env.production}
+    volumes:
+      - uploads_data:/var/www/app/public/uploads
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "php", "-r", "$$s=@fsockopen('127.0.0.1', 9000); exit($$s ? 0 : 1);"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  database:
+    image: mysql:8.4.13
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?Define MYSQL_DATABASE in .env.production}
+      MYSQL_USER: ${MYSQL_USER:?Define MYSQL_USER in .env.production}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Define MYSQL_PASSWORD in .env.production}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Define MYSQL_ROOT_PASSWORD in .env.production}
+    volumes:
+      - database_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  database_data:
+  uploads_data:
