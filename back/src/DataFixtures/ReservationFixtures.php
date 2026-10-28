@@ -23,13 +23,13 @@ final class ReservationFixtures extends Fixture implements DependentFixtureInter
         $faker = Factory::create('fr_FR');
         $faker->seed(20261026);
 
-        $dateReservation = DateTime::createFromImmutable(new DateTimeImmutable('+7 days'));
-        $dateReservation->setTime(0, 0);
+        $dateHeureReservation = new DateTimeImmutable('next Tuesday 19:30');
+        $dateReservation = DateTime::createFromImmutable($dateHeureReservation->setTime(0, 0));
 
         $reservation = (new Reservation())
             ->setUuid(UuidGenerator::generate())
             ->setDateReservation($dateReservation)
-            ->setHeurePrevue(DateTime::createFromImmutable(new DateTimeImmutable('+7 days 19:30')))
+            ->setHeurePrevue(DateTime::createFromImmutable($dateHeureReservation))
             ->setNbConvives(2)
             ->setAllergies($faker->boolean(20) ? 'Noix' : null)
             ->setStatut('confirmee')
