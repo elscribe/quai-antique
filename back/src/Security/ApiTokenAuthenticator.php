@@ -38,7 +38,8 @@ final class ApiTokenAuthenticator extends AbstractAuthenticator implements Authe
             'apiTokenHash' => hash('sha256', $apiToken),
         ]);
 
-        if ($utilisateur === null) {
+        if ($utilisateur === null || $utilisateur->getApiTokenExpiresAt() === null
+            || $utilisateur->getApiTokenExpiresAt() <= new \DateTimeImmutable()) {
             throw new CustomUserMessageAuthenticationException('Jeton API invalide.');
         }
 

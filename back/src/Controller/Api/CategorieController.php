@@ -7,6 +7,7 @@ use App\Entity\Categorie;
 use App\Repository\CategorieRepository;
 use App\Util\UuidGenerator;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,6 +23,31 @@ final class CategorieController extends AbstractController
     private const ITEM_ROUTE = '/api/categories/{uuid}';
     private const CATEGORY_NOT_FOUND = 'Catégorie introuvable.';
 
+    #[OA\Get(
+        path: '/api/categories',
+        summary: 'Lister les catégories de la carte',
+        security: [],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Liste des catégories triées par titre.',
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(
+                            property: 'data',
+                            type: 'array',
+                            items: new OA\Items(
+                                properties: [
+                                    new OA\Property(property: 'uuid', type: 'string', format: 'uuid'),
+                                    new OA\Property(property: 'titre', type: 'string', example: 'Entrées'),
+                                ]
+                            )
+                        ),
+                    ]
+                )
+            ),
+        ]
+    )]
     #[Route('/api/categories', name: 'api_categories_index', methods: ['GET'])]
     public function index(
         CategorieRepository $categorieRepository,
@@ -36,6 +62,44 @@ final class CategorieController extends AbstractController
         );
     }
 
+    #[OA\Post(
+        path: '/api/categories',
+        summary: 'Créer une catégorie',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                required: ['titre'],
+                properties: [new OA\Property(property: 'titre', type: 'string', example: 'Entrées')]
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'Catégorie créée.',
+                headers: [
+                    'Location' => new OA\Header(
+                        header: 'Location',
+                        description: 'URL de la catégorie créée.',
+                        schema: new OA\Schema(type: 'string', format: 'uri')
+                    ),
+                ],
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(
+                            property: 'data',
+                            properties: [
+                                new OA\Property(property: 'uuid', type: 'string', format: 'uuid'),
+                                new OA\Property(property: 'titre', type: 'string', example: 'Entrées'),
+                            ]
+                        ),
+                    ]
+                )
+            ),
+            new OA\Response(response: 400, description: 'JSON invalide ou titre absent/invalide.'),
+            new OA\Response(response: 401, description: 'Jeton API absent ou invalide.'),
+            new OA\Response(response: 403, description: 'Le rôle ROLE_ADMIN est requis.'),
+        ]
+    )]
     #[Route('/api/categories', name: 'api_categories_create', methods: ['POST'])]
     public function create(
         Request $request,
@@ -70,6 +134,27 @@ final class CategorieController extends AbstractController
         );
     }
 
+    #[OA\Get(
+        path: '/api/categories/{uuid}',
+        summary: 'Afficher une catégorie',
+        security: [],
+        parameters: [new OA\Parameter(
+            name: 'uuid',
+            in: 'path',
+            required: true,
+            description: 'UUID de la catégorie.',
+            schema: new OA\Schema(type: 'string', format: 'uuid')
+        )],
+        responses: [
+            new OA\Response(response: 200, description: 'Catégorie trouvée.', content: new OA\JsonContent(
+                properties: [new OA\Property(property: 'data', properties: [
+                    new OA\Property(property: 'uuid', type: 'string', format: 'uuid'),
+                    new OA\Property(property: 'titre', type: 'string', example: 'Entrées'),
+                ])]
+            )),
+            new OA\Response(response: 404, description: 'Catégorie introuvable.'),
+        ]
+    )]
     #[Route(self::ITEM_ROUTE, name: 'api_categories_show', methods: ['GET'])]
     public function show(
         string $uuid,
@@ -92,6 +177,27 @@ final class CategorieController extends AbstractController
         );
     }
 
+    #[OA\Put(
+        path: '/api/categories/{uuid}',
+        summary: 'Modifier le titre d’une catégorie',
+        parameters: [new OA\Parameter(name: 'uuid', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid'))],
+        requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+            required: ['titre'],
+            properties: [new OA\Property(property: 'titre', type: 'string', example: 'Entrées')]
+        )),
+        responses: [
+            new OA\Response(response: 200, description: 'Catégorie modifiée.', content: new OA\JsonContent(
+                properties: [new OA\Property(property: 'data', properties: [
+                    new OA\Property(property: 'uuid', type: 'string', format: 'uuid'),
+                    new OA\Property(property: 'titre', type: 'string', example: 'Entrées'),
+                ])]
+            )),
+            new OA\Response(response: 400, description: 'JSON invalide ou titre absent/invalide.'),
+            new OA\Response(response: 401, description: 'Jeton API absent ou invalide.'),
+            new OA\Response(response: 403, description: 'Le rôle ROLE_ADMIN est requis.'),
+            new OA\Response(response: 404, description: 'Catégorie introuvable.'),
+        ]
+    )]
     #[Route(self::ITEM_ROUTE, name: 'api_categories_update', methods: ['PUT'])]
     public function update(
         string $uuid,
@@ -127,6 +233,18 @@ final class CategorieController extends AbstractController
         );
     }
 
+    #[OA\Delete(
+        path: '/api/categories/{uuid}',
+        summary: 'Supprimer une catégorie inutilisée',
+        parameters: [new OA\Parameter(name: 'uuid', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid'))],
+        responses: [
+            new OA\Response(response: 204, description: 'Catégorie supprimée sans corps de réponse.'),
+            new OA\Response(response: 401, description: 'Jeton API absent ou invalide.'),
+            new OA\Response(response: 403, description: 'Le rôle ROLE_ADMIN est requis.'),
+            new OA\Response(response: 404, description: 'Catégorie introuvable.'),
+            new OA\Response(response: 409, description: 'La catégorie est utilisée par des plats ou des menus.'),
+        ]
+    )]
     #[Route(self::ITEM_ROUTE, name: 'api_categories_delete', methods: ['DELETE'])]
     public function delete(
         string $uuid,

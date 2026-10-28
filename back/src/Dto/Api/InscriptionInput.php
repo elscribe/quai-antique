@@ -11,4 +11,8 @@ final class InscriptionInput
     public ?string $email = null;
 
     public ?string $password = null;
+
+    public ?int $nbConvivesDefaut = null;
+
+    public ?string $allergies = null;
 }
