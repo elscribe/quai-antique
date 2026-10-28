@@ -11,6 +11,7 @@ coverage/
 !.env.example
 !.env.docker.example
 !.env.production.example
+!back/.env.dist
 
 *.log
 .cache/
