@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PlatRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: PlatRepository::class)]
 class Plat
@@ -15,15 +16,19 @@ class Plat
     private ?int $id = null;
 
     #[ORM\Column(type: Types::GUID, unique: true)]
+    #[Groups(['plat:read'])]
     private ?string $uuid = null;
 
     #[ORM\Column(length: 150)]
+    #[Groups(['plat:read'])]
     private ?string $titre = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['plat:read'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 6, scale: 2)]
+    #[Groups(['plat:read'])]
     private ?string $prix = null;
 
     #[ORM\Column]
@@ -34,6 +39,7 @@ class Plat
 
     #[ORM\ManyToOne(inversedBy: 'plats')]
     #[ORM\JoinColumn(name: 'id_categorie', nullable: false)]
+    #[Groups(['plat:read'])]
     private ?Categorie $categorie = null;
 
     public function __construct()
