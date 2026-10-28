@@ -1,7 +1,58 @@
 services:
   web:
     build: .
-    container_name: quai-antique
     ports:
-      - "82:80"
+      - "${WEB_PORT:-82}:80"
+    volumes:
+      - uploads_data:/var/www/app/public/uploads:ro
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q -O /dev/null http://127.0.0.1/api/health || exit 1"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
     restart: unless-stopped
+
+  api:
+    build:
+      context: ./back
+      dockerfile: Dockerfile
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: "1"
+      APP_SECRET: ${APP_SECRET:?Define APP_SECRET in .env.docker}
+      DATABASE_URL: ${DATABASE_URL:?Define DATABASE_URL in .env.docker}
+      CORS_ALLOW_ORIGIN: ${CORS_ALLOW_ORIGIN:?Define CORS_ALLOW_ORIGIN in .env.docker}
+    volumes:
+      - uploads_data:/var/www/app/public/uploads
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "php", "-r", "$$s=@fsockopen('127.0.0.1', 9000); exit($$s ? 0 : 1);"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+  database:
+    image: mysql:8.4.13
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?Define MYSQL_DATABASE in .env.docker}
+      MYSQL_USER: ${MYSQL_USER:?Define MYSQL_USER in .env.docker}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Define MYSQL_PASSWORD in .env.docker}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Define MYSQL_ROOT_PASSWORD in .env.docker}
+    volumes:
+      - database_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  database_data:
+  uploads_data:

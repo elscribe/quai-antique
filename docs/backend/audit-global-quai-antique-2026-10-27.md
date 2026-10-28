@@ -8,7 +8,7 @@ Mise à jour : 28 octobre 2026. Cet audit décrit le dépôt après intégration
 - **API et sécurité : validées par tests automatisés.** PHPUnit : 40 tests et 334 assertions réussis. Les routes, contrôleurs, validation, autorisations, authentification, documentation, fixtures et principaux parcours API sont couverts.
 - **Front connecté : implémenté et contrôlé.** Les pages publiques, l’espace client et l’administration consomment l’API. Le dernier test statique des modules JavaScript passe. La navigation du rôle et les redirections sont intégrées.
 - **Recette Front : acceptée par le propriétaire du projet le 28/10 après revue du site ; aucun nouveau parcours global n’est requis.** Les parcours visiteur, client et administrateur ont été joués dans l’instance isolée, y compris ajout/suppression de photo et suppression d’une réservation côté admin. Voir [la checklist de recette](../conception/recette-parcours-2026-10-27.md). La suppression de réservation côté client et la confirmation UI de suppression de compte ne sont pas attestées dans le navigateur ; les API et les tests automatisés couvrent ces opérations. Cette limite de preuve n’annule pas l’acceptation générale de la recette Front.
-- **Docker : le build du conteneur Front Nginx réussit.** Ce Dockerfile ne lance pas Symfony, et la configuration Nginx ne reverse-proxy pas `/api`. Le stack Docker complet n’est donc pas prêt à exécuter Front + API + MySQL ensemble.
+- **Docker local complet : validé le 28/10.** La stack lance Front/Nginx, Symfony/PHP-FPM et un MySQL Docker isolé sur le port Front historique 82. Nginx route `/api` vers Symfony ; les uploads utilisent un volume partagé et restent accessibles après redémarrage. La configuration, les migrations, le schéma Doctrine, les précontrôles CORS, les routes de santé/catalogue et les 40 tests PHPUnit (334 assertions, SQLite en mémoire) ont été vérifiés. Le propriétaire a contrôlé visuellement l’accueil, la Carte et la Galerie sur la stack de test avant le basculement. Voir [le guide Docker local](../deployment/docker-local.md). Cet environnement est en `APP_ENV=dev` et n’est pas une configuration de production.
 - **SonarQube : audit final non effectué.** Les alertes IDE précédentes sont des recommandations de maintenabilité ; elles ne constituent ni une validation ni un audit de sécurité.
 
 Ces résultats attestent les contrôles effectivement exécutés. Ils ne garantissent ni une note donnée, ni une conformité juridique, ni une certification de sécurité.
@@ -41,11 +41,11 @@ La grille n’impose pas un nombre exact de captures ; les preuves doivent démo
 
 ## Blocages avant déploiement et Docker complet
 
-1. Compléter le compose de production/démo avec Symfony et une base, des healthchecks, secrets d’environnement et volume persistant pour les images.
-2. Ajouter et tester le reverse proxy HTTPS de `/api` et `/uploads`; le Nginx courant ne traite que les fichiers Front.
-3. Confirmer l’URL publique avec `src/api-config.js`, la configuration CORS, cookies/jetons, HTTPS, en-têtes de sécurité, exposition Swagger, sauvegarde/restauration et stratégie de migrations.
+1. Préparer une image/configuration de production distincte : `APP_ENV=prod`, `APP_DEBUG=0`, dépendances sans outils de développement et secrets injectés par l’hébergeur.
+2. Définir le terminaison HTTPS et les en-têtes de sécurité, puis vérifier les routes `/api` et `/uploads` derrière le domaine public.
+3. Définir la sauvegarde/restauration des volumes MySQL et uploads, ainsi que l’exécution contrôlée des migrations au déploiement.
 4. Vérifier les coordonnées et mentions légales réelles avant publication.
-5. Rejouer les deux actions UI client encore non attestées et exécuter un audit SonarQube complet.
+5. Exécuter un audit SonarQube complet et compléter les preuves DP séparément ; les deux actions UI client non attestées restent des limites de preuve, pas un blocage de la recette Front acceptée.
 
 ## Historique Git à la date de cette note
 
