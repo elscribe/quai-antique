@@ -21,6 +21,9 @@ security:
                 check_path: api_login
                 username_path: email
                 password_path: password
+            login_throttling:
+                max_attempts: 5
+                interval: '15 minutes'
             custom_authenticators:
                 - App\Security\ApiTokenAuthenticator
             entry_point: App\Security\ApiTokenAuthenticator
@@ -36,8 +39,11 @@ security:
     access_control:
         - { path: ^/api/registration$, roles: PUBLIC_ACCESS }
         - { path: ^/api/login$, roles: PUBLIC_ACCESS }
-        - { path: ^/api/(categories|plats|menus)(/|$), roles: PUBLIC_ACCESS, methods: [GET] }
-        - { path: ^/api/(categories|plats)(/|$), roles: ROLE_ADMIN, methods: [POST, PUT, PATCH, DELETE] }
+        - { path: ^/api/health$, roles: PUBLIC_ACCESS }
+        - { path: '^/api/doc(?:\.json)?$', roles: PUBLIC_ACCESS }
+        - { path: ^/api/availability$, roles: PUBLIC_ACCESS, methods: [GET] }
+        - { path: ^/api/(categories|plats|menus|photos|restaurant)(/|$), roles: PUBLIC_ACCESS, methods: [GET] }
+        - { path: ^/api/(categories|plats|menus|photos|restaurant)(/|$), roles: ROLE_ADMIN, methods: [POST, PUT, PATCH, DELETE] }
         - { path: ^/api, roles: ROLE_USER }
 
 when@test:

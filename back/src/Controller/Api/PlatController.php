@@ -8,6 +8,7 @@ use App\Repository\CategorieRepository;
 use App\Repository\PlatRepository;
 use App\Util\UuidGenerator;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +24,31 @@ final class PlatController extends AbstractController
     private const ITEM_ROUTE = '/api/plats/{uuid}';
     private const PLAT_NOT_FOUND = 'Plat introuvable.';
 
+    #[OA\Get(
+        path: '/api/plats',
+        summary: 'Lister les plats de la carte',
+        security: [],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Liste des plats avec leur catégorie.',
+                content: new OA\JsonContent(properties: [
+                    new OA\Property(property: 'data', type: 'array', items: new OA\Items(
+                        properties: [
+                            new OA\Property(property: 'uuid', type: 'string', format: 'uuid'),
+                            new OA\Property(property: 'titre', type: 'string', example: 'Diots de Savoie'),
+                            new OA\Property(property: 'description', type: 'string'),
+                            new OA\Property(property: 'prix', type: 'string', example: '25.00'),
+                            new OA\Property(property: 'categorie', properties: [
+                                new OA\Property(property: 'uuid', type: 'string', format: 'uuid'),
+                                new OA\Property(property: 'titre', type: 'string', example: 'Plats'),
+                            ]),
+                        ]
+                    )),
+                ])
+            ),
+        ]
+    )]
     #[Route('/api/plats', name: 'api_plats_index', methods: ['GET'])]
     public function index(PlatRepository $platRepository, SerializerInterface $serializer): JsonResponse
     {
@@ -35,6 +61,46 @@ final class PlatController extends AbstractController
         );
     }
 
+    #[OA\Post(
+        path: '/api/plats',
+        summary: 'Créer un plat dans une catégorie existante',
+        requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+            required: ['titre', 'description', 'prix', 'categorie_uuid'],
+            properties: [
+                new OA\Property(property: 'titre', type: 'string', example: 'Diots de Savoie'),
+                new OA\Property(property: 'description', type: 'string', example: 'Crozets au sarrasin et oignons confits.'),
+                new OA\Property(property: 'prix', oneOf: [new OA\Schema(type: 'number'), new OA\Schema(type: 'string')], example: 25.00),
+                new OA\Property(property: 'categorie_uuid', type: 'string', format: 'uuid'),
+            ]
+        )),
+        responses: [
+            new OA\Response(
+                response: 201,
+                description: 'Plat créé.',
+                headers: ['Location' => new OA\Header(
+                    header: 'Location',
+                    description: 'URL du plat créé.',
+                    schema: new OA\Schema(type: 'string', format: 'uri')
+                )],
+                content: new OA\JsonContent(properties: [
+                    new OA\Property(property: 'data', properties: [
+                        new OA\Property(property: 'uuid', type: 'string', format: 'uuid'),
+                        new OA\Property(property: 'titre', type: 'string'),
+                        new OA\Property(property: 'description', type: 'string'),
+                        new OA\Property(property: 'prix', type: 'string', example: '25.00'),
+                        new OA\Property(property: 'categorie', properties: [
+                            new OA\Property(property: 'uuid', type: 'string', format: 'uuid'),
+                            new OA\Property(property: 'titre', type: 'string', example: 'Plats'),
+                        ]),
+                    ]),
+                ])
+            ),
+            new OA\Response(response: 400, description: 'JSON invalide ou champs absents/invalides.'),
+            new OA\Response(response: 401, description: 'Jeton API absent ou invalide.'),
+            new OA\Response(response: 403, description: 'Le rôle ROLE_ADMIN est requis.'),
+            new OA\Response(response: 422, description: 'La catégorie indiquée est introuvable.'),
+        ]
+    )]
     #[Route('/api/plats', name: 'api_plats_create', methods: ['POST'])]
     public function create(
         Request $request,
@@ -74,6 +140,27 @@ final class PlatController extends AbstractController
         );
     }
 
+    #[OA\Get(
+        path: '/api/plats/{uuid}',
+        summary: 'Afficher un plat',
+        security: [],
+        parameters: [new OA\Parameter(name: 'uuid', in: 'path', required: true, description: 'UUID du plat.', schema: new OA\Schema(type: 'string', format: 'uuid'))],
+        responses: [
+            new OA\Response(response: 200, description: 'Plat trouvé.', content: new OA\JsonContent(properties: [
+                new OA\Property(property: 'data', properties: [
+                    new OA\Property(property: 'uuid', type: 'string', format: 'uuid'),
+                    new OA\Property(property: 'titre', type: 'string'),
+                    new OA\Property(property: 'description', type: 'string'),
+                    new OA\Property(property: 'prix', type: 'string', example: '25.00'),
+                    new OA\Property(property: 'categorie', properties: [
+                        new OA\Property(property: 'uuid', type: 'string', format: 'uuid'),
+                        new OA\Property(property: 'titre', type: 'string', example: 'Plats'),
+                    ]),
+                ]),
+            ])),
+            new OA\Response(response: 404, description: 'Plat introuvable.'),
+        ]
+    )]
     #[Route(self::ITEM_ROUTE, name: 'api_plats_show', methods: ['GET'])]
     public function show(
         string $uuid,
@@ -97,6 +184,39 @@ final class PlatController extends AbstractController
         );
     }
 
+    #[OA\Put(
+        path: '/api/plats/{uuid}',
+        summary: 'Modifier un plat',
+        parameters: [new OA\Parameter(name: 'uuid', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid'))],
+        requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(
+            required: ['titre', 'description', 'prix', 'categorie_uuid'],
+            properties: [
+                new OA\Property(property: 'titre', type: 'string', example: 'Diots de Savoie'),
+                new OA\Property(property: 'description', type: 'string'),
+                new OA\Property(property: 'prix', oneOf: [new OA\Schema(type: 'number'), new OA\Schema(type: 'string')], example: 25.00),
+                new OA\Property(property: 'categorie_uuid', type: 'string', format: 'uuid'),
+            ]
+        )),
+        responses: [
+            new OA\Response(response: 200, description: 'Plat modifié.', content: new OA\JsonContent(properties: [
+                new OA\Property(property: 'data', properties: [
+                    new OA\Property(property: 'uuid', type: 'string', format: 'uuid'),
+                    new OA\Property(property: 'titre', type: 'string'),
+                    new OA\Property(property: 'description', type: 'string'),
+                    new OA\Property(property: 'prix', type: 'string', example: '25.00'),
+                    new OA\Property(property: 'categorie', properties: [
+                        new OA\Property(property: 'uuid', type: 'string', format: 'uuid'),
+                        new OA\Property(property: 'titre', type: 'string', example: 'Plats'),
+                    ]),
+                ]),
+            ])),
+            new OA\Response(response: 400, description: 'JSON invalide ou champs absents/invalides.'),
+            new OA\Response(response: 401, description: 'Jeton API absent ou invalide.'),
+            new OA\Response(response: 403, description: 'Le rôle ROLE_ADMIN est requis.'),
+            new OA\Response(response: 404, description: 'Plat introuvable.'),
+            new OA\Response(response: 422, description: 'La catégorie indiquée est introuvable.'),
+        ]
+    )]
     #[Route(self::ITEM_ROUTE, name: 'api_plats_update', methods: ['PUT'])]
     public function update(
         string $uuid,
@@ -136,6 +256,17 @@ final class PlatController extends AbstractController
         );
     }
 
+    #[OA\Delete(
+        path: '/api/plats/{uuid}',
+        summary: 'Supprimer un plat',
+        parameters: [new OA\Parameter(name: 'uuid', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid'))],
+        responses: [
+            new OA\Response(response: 204, description: 'Plat supprimé sans corps de réponse.'),
+            new OA\Response(response: 401, description: 'Jeton API absent ou invalide.'),
+            new OA\Response(response: 403, description: 'Le rôle ROLE_ADMIN est requis.'),
+            new OA\Response(response: 404, description: 'Plat introuvable.'),
+        ]
+    )]
     #[Route(self::ITEM_ROUTE, name: 'api_plats_delete', methods: ['DELETE'])]
     public function delete(
         string $uuid,

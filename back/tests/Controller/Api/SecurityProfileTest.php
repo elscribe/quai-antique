@@ -3,34 +3,14 @@
 namespace App\Tests\Controller\Api;
 
 use App\Entity\Utilisateur;
-use App\Util\UuidGenerator;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Tools\SchemaTool;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-final class SecurityProfileTest extends WebTestCase
+final class SecurityProfileTest extends ApiTestCase
 {
-    private KernelBrowser $client;
-
-    private EntityManagerInterface $entityManager;
-
-    protected function setUp(): void
-    {
-        $this->client = static::createClient();
-        $this->entityManager = static::getContainer()->get(EntityManagerInterface::class);
-        $schemaTool = new SchemaTool($this->entityManager);
-        $metadata = $this->entityManager->getMetadataFactory()->getAllMetadata();
-        if ($this->entityManager->getConnection()->createSchemaManager()->listTableNames() !== []) {
-            $schemaTool->dropSchema($metadata);
-        }
-        $schemaTool->createSchema($metadata);
-    }
-
     public function testAuthenticatedUserCanReadOnlyTheirSafeProfile(): void
     {
-        $token = $this->createUser();
+        $token = $this->createTestUser();
         $this->client->request('GET', '/api/account/me', server: ['HTTP_X_AUTH_TOKEN' => $token]);
 
         self::assertResponseIsSuccessful();
@@ -48,9 +28,112 @@ final class SecurityProfileTest extends WebTestCase
         self::assertResponseStatusCodeSame(401);
     }
 
+    public function testRegistrationHashesPasswordAndReturnsOneTimeApiToken(): void
+    {
+        $this->client->request(
+            'POST',
+            '/api/registration',
+            server: ['CONTENT_TYPE' => 'application/json'],
+            content: json_encode([
+                'prenom' => 'Camille',
+                'nom' => 'Martin',
+                'email' => 'camille@example.test',
+                'password' => 'MotDePasse-123!',
+            ], JSON_THROW_ON_ERROR)
+        );
+
+        self::assertResponseStatusCodeSame(201);
+        $body = json_decode($this->client->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR);
+        self::assertSame('camille@example.test', $body['data']['email']);
+        self::assertSame(['ROLE_USER'], $body['data']['roles']);
+        self::assertMatchesRegularExpression('/^[a-f0-9]{64}$/', $body['apiToken']);
+        self::assertArrayNotHasKey('password', $body['data']);
+        self::assertArrayNotHasKey('motDePasseHash', $body['data']);
+
+        $utilisateur = $this->entityManager->getRepository(Utilisateur::class)->findOneBy([
+            'email' => 'camille@example.test',
+        ]);
+        self::assertInstanceOf(Utilisateur::class, $utilisateur);
+        self::assertNotSame('MotDePasse-123!', $utilisateur->getMotDePasseHash());
+        self::assertSame(hash('sha256', $body['apiToken']), $utilisateur->getApiTokenHash());
+        self::assertNotSame($body['apiToken'], $utilisateur->getApiTokenHash());
+    }
+
+    public function testRegistrationRejectsInvalidPayloadAndDuplicateEmail(): void
+    {
+        $this->client->request(
+            'POST',
+            '/api/registration',
+            server: ['CONTENT_TYPE' => 'application/json'],
+            content: '{invalid-json'
+        );
+        self::assertResponseStatusCodeSame(400);
+
+        $this->client->request(
+            'POST',
+            '/api/registration',
+            server: ['CONTENT_TYPE' => 'application/json'],
+            content: json_encode([
+                'prenom' => 'Camille',
+                'nom' => 'Martin',
+                'email' => 'not-an-email',
+                'password' => 'secret',
+            ], JSON_THROW_ON_ERROR)
+        );
+        self::assertResponseStatusCodeSame(400);
+
+        $payload = json_encode([
+            'prenom' => 'Camille',
+            'nom' => 'Martin',
+            'email' => 'duplicate@example.test',
+            'password' => 'MotDePasse-123!',
+        ], JSON_THROW_ON_ERROR);
+        $this->client->request('POST', '/api/registration', server: ['CONTENT_TYPE' => 'application/json'], content: $payload);
+        self::assertResponseStatusCodeSame(201);
+
+        $this->client->request('POST', '/api/registration', server: ['CONTENT_TYPE' => 'application/json'], content: $payload);
+        self::assertResponseStatusCodeSame(409);
+    }
+
+    public function testLoginRejectsWrongPasswordAndRotatesTheApiToken(): void
+    {
+        $oldToken = $this->createTestUser();
+
+        $this->client->request(
+            'POST',
+            '/api/login',
+            server: ['CONTENT_TYPE' => 'application/json'],
+            content: json_encode([
+                'email' => 'client@example.test',
+                'password' => 'wrong-password',
+            ], JSON_THROW_ON_ERROR)
+        );
+        self::assertResponseStatusCodeSame(401);
+
+        $this->client->request(
+            'POST',
+            '/api/login',
+            server: ['CONTENT_TYPE' => 'application/json'],
+            content: json_encode([
+                'email' => 'client@example.test',
+                'password' => 'Mot-De-Passe-Initial-123!',
+            ], JSON_THROW_ON_ERROR)
+        );
+        self::assertResponseIsSuccessful();
+        $body = json_decode($this->client->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR);
+        $newToken = $body['apiToken'];
+        self::assertMatchesRegularExpression('/^[a-f0-9]{64}$/', $newToken);
+        self::assertNotSame($oldToken, $newToken);
+
+        $this->client->request('GET', '/api/account/me', server: ['HTTP_X_AUTH_TOKEN' => $oldToken]);
+        self::assertResponseStatusCodeSame(401);
+        $this->client->request('GET', '/api/account/me', server: ['HTTP_X_AUTH_TOKEN' => $newToken]);
+        self::assertResponseIsSuccessful();
+    }
+
     public function testUserCanUpdateTheirProfileAndPassword(): void
     {
-        $token = $this->createUser();
+        $token = $this->createTestUser();
         $originalHash = $this->findUser('client@example.test')->getMotDePasseHash();
         $this->client->request(
             'PUT',
@@ -65,6 +148,7 @@ final class SecurityProfileTest extends WebTestCase
                 'nbConvivesDefaut' => 3,
                 'allergies' => 'Noix',
                 'password' => 'Nouveau-Mot-De-Passe-123!',
+                'currentPassword' => 'Mot-De-Passe-Initial-123!',
                 'roles' => ['ROLE_ADMIN'],
             ], JSON_THROW_ON_ERROR)
         );
@@ -91,7 +175,7 @@ final class SecurityProfileTest extends WebTestCase
 
     public function testInvalidProfileUpdateDoesNotChangeTheAccount(): void
     {
-        $token = $this->createUser();
+        $token = $this->createTestUser();
         $this->client->request(
             'PUT',
             '/api/account/me',
@@ -111,10 +195,76 @@ final class SecurityProfileTest extends WebTestCase
         self::assertSame('Alice', $this->findUser('client@example.test')->getPrenom());
     }
 
+    public function testWeakPasswordAndOversizedNamesAreRejectedAtRegistration(): void
+    {
+        $body = ['prenom' => 'Alice', 'nom' => 'Martin', 'email' => 'weak@example.test', 'password' => 'abc'];
+        $this->client->request('POST', '/api/registration', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode($body, JSON_THROW_ON_ERROR));
+        self::assertResponseStatusCodeSame(400);
+        $body['password'] = 'Mot-De-Passe-123!';
+        $body['prenom'] = str_repeat('A', 81);
+        $this->client->request('POST', '/api/registration', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode($body, JSON_THROW_ON_ERROR));
+        self::assertResponseStatusCodeSame(400);
+    }
+
+    public function testChangingPasswordRequiresCurrentPasswordAndRevokesToken(): void
+    {
+        $token = $this->createTestUser();
+        $headers = ['CONTENT_TYPE' => 'application/json', 'HTTP_X_AUTH_TOKEN' => $token];
+        $body = ['prenom' => 'Alice', 'nom' => 'Martin', 'password' => 'Nouveau-Mot-De-Passe-123!', 'currentPassword' => 'wrong'];
+        $this->client->request('PUT', '/api/account/me', server: $headers, content: json_encode($body, JSON_THROW_ON_ERROR));
+        self::assertResponseStatusCodeSame(400);
+        $body['currentPassword'] = 'Mot-De-Passe-Initial-123!';
+        $this->client->request('PUT', '/api/account/me', server: $headers, content: json_encode($body, JSON_THROW_ON_ERROR));
+        self::assertResponseIsSuccessful();
+        $this->client->request('GET', '/api/account/me', server: ['HTTP_X_AUTH_TOKEN' => $token]);
+        self::assertResponseStatusCodeSame(401);
+    }
+
+    public function testLogoutRevokesToken(): void
+    {
+        $token = $this->createTestUser();
+        $this->client->request('POST', '/api/logout', server: ['HTTP_X_AUTH_TOKEN' => $token]);
+        self::assertResponseStatusCodeSame(204);
+        $this->client->request('GET', '/api/account/me', server: ['HTTP_X_AUTH_TOKEN' => $token]);
+        self::assertResponseStatusCodeSame(401);
+    }
+
+    public function testProfileEmailMustBeValidAndUnique(): void
+    {
+        $token = $this->createTestUser();
+        $this->createTestUser('other@example.test', ['ROLE_USER'], 'other-token');
+        $headers = ['CONTENT_TYPE' => 'application/json', 'HTTP_X_AUTH_TOKEN' => $token];
+        $body = ['prenom' => 'Alice', 'nom' => 'Martin', 'email' => 'other@example.test'];
+        $this->client->request('PUT', '/api/account/me', server: $headers, content: json_encode($body, JSON_THROW_ON_ERROR));
+        self::assertResponseStatusCodeSame(409);
+        $body['email'] = 'nouveau@example.test';
+        $this->client->request('PUT', '/api/account/me', server: $headers, content: json_encode($body, JSON_THROW_ON_ERROR));
+        self::assertResponseIsSuccessful();
+        self::assertSame('nouveau@example.test', json_decode($this->client->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR)['data']['email']);
+    }
+
+    public function testLoginThrottlingBlocksRepeatedFailedAttempts(): void
+    {
+        $email = 'throttle-'.bin2hex(random_bytes(6)).'@example.test';
+        $this->createTestUser($email);
+        $address = '2001:db8::'.bin2hex(random_bytes(2));
+        $headers = ['CONTENT_TYPE' => 'application/json', 'REMOTE_ADDR' => $address];
+        for ($i = 0; $i < 5; ++$i) {
+            $this->client->request('POST', '/api/login', server: $headers,
+                content: json_encode(['email' => $email, 'password' => 'incorrect'], JSON_THROW_ON_ERROR));
+            self::assertResponseStatusCodeSame(401);
+        }
+        $this->client->request('POST', '/api/login', server: $headers,
+            content: json_encode(['email' => $email, 'password' => 'Mot-De-Passe-Initial-123!'], JSON_THROW_ON_ERROR));
+        self::assertResponseStatusCodeSame(401);
+        $body = json_decode($this->client->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR);
+        self::assertArrayNotHasKey('apiToken', $body);
+    }
+
     public function testCardIsPublicButOnlyAdministratorsCanChangeIt(): void
     {
-        $clientToken = $this->createUser();
-        $adminToken = $this->createUser('admin@example.test', ['ROLE_ADMIN']);
+        $clientToken = $this->createTestUser();
+        $adminToken = $this->createTestUser('admin@example.test', ['ROLE_ADMIN'], 'admin-api-token');
         $this->client->request('GET', '/api/categories');
         self::assertResponseIsSuccessful();
 
@@ -144,29 +294,6 @@ final class SecurityProfileTest extends WebTestCase
             content: json_encode(['titre' => 'Entrées'], JSON_THROW_ON_ERROR)
         );
         self::assertResponseStatusCodeSame(201);
-    }
-
-    private function createUser(
-        string $email = 'client@example.test',
-        array $roles = ['ROLE_USER']
-    ): string {
-        $token = 'test-token-'.$email;
-        $utilisateur = new Utilisateur();
-        $utilisateur->setUuid(UuidGenerator::generate());
-        $utilisateur->setPrenom('Alice');
-        $utilisateur->setNom('Martin');
-        $utilisateur->setEmail($email);
-        $utilisateur->setRoles($roles);
-        $utilisateur->setApiTokenHash(hash('sha256', $token));
-        $utilisateur->setMotDePasseHash(
-            static::getContainer()->get(UserPasswordHasherInterface::class)
-                ->hashPassword($utilisateur, 'Mot-De-Passe-Initial-123!')
-        );
-
-        $this->entityManager->persist($utilisateur);
-        $this->entityManager->flush();
-
-        return $token;
     }
 
     private function findUser(string $email): Utilisateur

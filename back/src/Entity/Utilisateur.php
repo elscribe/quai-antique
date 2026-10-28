@@ -65,6 +65,9 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 64, nullable: true, unique: true)]
     private ?string $apiTokenHash = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $apiTokenExpiresAt = null;
+
     public function __construct()
     {
         $this->dateCreation = new \DateTimeImmutable();
@@ -251,6 +254,18 @@ class Utilisateur implements UserInterface, PasswordAuthenticatedUserInterface
     public function getApiTokenHash(): ?string
     {
         return $this->apiTokenHash;
+    }
+
+    public function getApiTokenExpiresAt(): ?\DateTimeImmutable
+    {
+        return $this->apiTokenExpiresAt;
+    }
+
+    public function setApiTokenExpiresAt(?\DateTimeImmutable $expiresAt): static
+    {
+        $this->apiTokenExpiresAt = $expiresAt;
+
+        return $this;
     }
 
     public function setApiTokenHash(?string $apiTokenHash): static
