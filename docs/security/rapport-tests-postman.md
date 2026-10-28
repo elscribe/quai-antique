@@ -13,6 +13,8 @@ Cette passe valide le parcours d’inscription et de connexion, l’émission et
 
 La collection a été exécutée avec Postman CLI. La mise à jour de Postman Desktop empêchait de modifier sa requête ouverte de façon fiable pendant cette session; le CLI Postman a donc servi à exécuter les requêtes et assertions. Ce rapport ne prétend pas qu’une démonstration dans l’interface graphique ou une capture d’écran a été réalisée.
 
+**Note de portée :** les lignes ci-dessous consignent l’état observé lors de cette exécution. Depuis, `GET /api/health` a été rendu public pour correspondre à son rôle de contrôle de disponibilité et à son contrat OpenAPI. Les essais actuels d’accès protégé doivent donc cibler `/api/account/me`; ils sont couverts par la suite PHPUnit (absence de jeton `401`, jeton valide `200`). Les résultats Postman ci-dessous restent un relevé historique de la configuration au moment de leur exécution, pas la règle d’accès actuelle à `/api/health`.
+
 ## Scénarios et résultats
 
 ### Authentification et jeton
@@ -67,6 +69,6 @@ La collection a été exécutée avec Postman CLI. La mise à jour de Postman De
 
 ## Interprétation et limites
 
-Les scénarios Postman confirment le comportement HTTP local du flux d’authentification et du profil client. La suite PHPUnit séparée (`php bin/phpunit`) comporte 5 tests et 29 assertions; elle vérifie aussi l’accès administrateur sur une base SQLite dédiée aux tests. Les tests Postman ont été exécutés avec Postman CLI; aucune capture de l’interface Postman Desktop n’est jointe. Avant déploiement, un compte administrateur devra être provisionné par une opération réservée à l’exploitant; l’inscription publique ne peut pas lui attribuer ce rôle. Les autres parcours métier restent à construire.
+Ce relevé est historique : il documente le scénario Postman exécuté le 26 octobre sur l’URL locale indiquée plus haut. À cette date, la suite PHPUnit avait 5 tests et 29 assertions ; elle a ensuite atteint 23 tests et 177 assertions au 26 octobre, puis 40 tests et 334 assertions dans l’audit du 28 octobre (voir [`../backend/audit-global-quai-antique-2026-10-27.md`](../backend/audit-global-quai-antique-2026-10-27.md)). Les 16 requêtes et 23 assertions Postman restent le résultat de cette passe ancienne, qui n’est pas la couverture exhaustive de l’API finale. Les tests ont été exécutés avec Postman CLI ; aucune capture Postman Desktop n’est jointe. Avant déploiement, un compte administrateur devra être provisionné par l’exploitant ; l’inscription publique ne peut pas lui attribuer ce rôle.
 
 **Bilan total Postman :** 16 requêtes et 23 assertions réussies, 0 échec. Pour expliquer le stockage du jeton : le serveur remet le jeton brut au client, mais conserve en base son empreinte SHA-256. La collection a vérifié la conséquence fonctionnelle de la rotation en montrant que l’ancien jeton ne permet plus d’accéder à la route protégée après la connexion.
