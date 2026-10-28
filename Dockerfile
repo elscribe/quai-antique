@@ -2,6 +2,7 @@ FROM nginx:1.27-alpine
 
 COPY src/ /usr/share/nginx/html/
 COPY assets/ /usr/share/nginx/html/assets/
+COPY docker/api-config.js /usr/share/nginx/html/src/api-config.js
 COPY nginx-default.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
