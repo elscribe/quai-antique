@@ -251,13 +251,34 @@ final class SecurityProfileTest extends ApiTestCase
         $token = $this->createTestUser();
         $this->createTestUser('other@example.test', ['ROLE_USER'], 'other-token');
         $headers = ['CONTENT_TYPE' => 'application/json', 'HTTP_X_AUTH_TOKEN' => $token];
-        $body = ['prenom' => 'Alice', 'nom' => 'Martin', 'email' => 'other@example.test'];
+        $body = ['prenom' => 'Alice', 'nom' => 'Martin', 'email' => 'other@example.test', 'currentPassword' => 'Mot-De-Passe-Initial-123!'];
         $this->client->request('PUT', '/api/account/me', server: $headers, content: json_encode($body, JSON_THROW_ON_ERROR));
         self::assertResponseStatusCodeSame(409);
         $body['email'] = 'nouveau@example.test';
         $this->client->request('PUT', '/api/account/me', server: $headers, content: json_encode($body, JSON_THROW_ON_ERROR));
         self::assertResponseIsSuccessful();
         self::assertSame('nouveau@example.test', json_decode($this->client->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR)['data']['email']);
+    }
+
+    public function testChangingEmailRequiresTheCurrentPassword(): void
+    {
+        $token = $this->createTestUser();
+        $headers = ['CONTENT_TYPE' => 'application/json', 'HTTP_X_AUTH_TOKEN' => $token];
+        $payload = ['prenom' => 'Alice', 'nom' => 'Martin', 'email' => 'nouvelle-adresse@example.test'];
+
+        $this->client->request('PUT', '/api/account/me', server: $headers, content: json_encode($payload, JSON_THROW_ON_ERROR));
+        self::assertResponseStatusCodeSame(400);
+        self::assertSame('client@example.test', $this->findUser('client@example.test')->getEmail());
+
+        $payload['currentPassword'] = 'Mot-De-Passe-Incorrect-123!';
+        $this->client->request('PUT', '/api/account/me', server: $headers, content: json_encode($payload, JSON_THROW_ON_ERROR));
+        self::assertResponseStatusCodeSame(400);
+        self::assertSame('client@example.test', $this->findUser('client@example.test')->getEmail());
+
+        $payload['currentPassword'] = 'Mot-De-Passe-Initial-123!';
+        $this->client->request('PUT', '/api/account/me', server: $headers, content: json_encode($payload, JSON_THROW_ON_ERROR));
+        self::assertResponseIsSuccessful();
+        self::assertSame('nouvelle-adresse@example.test', $this->findUser('nouvelle-adresse@example.test')->getEmail());
     }
 
     public function testLoginThrottlingBlocksRepeatedFailedAttempts(): void

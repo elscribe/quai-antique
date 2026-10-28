@@ -238,7 +238,7 @@ final class SecurityController
                 new OA\Property(property: 'email', type: 'string', format: 'email'),
                 new OA\Property(property: 'allergies', type: 'string', nullable: true, example: 'Noix'),
                 new OA\Property(property: 'password', type: 'string', format: 'password', nullable: true, example: 'NouveauMotDePasse-123!'),
-                new OA\Property(property: 'currentPassword', type: 'string', format: 'password', nullable: true),
+                new OA\Property(property: 'currentPassword', type: 'string', format: 'password', nullable: true, description: 'Requis lorsque l’adresse e-mail ou le mot de passe est modifié.'),
             ]
         )),
         responses: [
@@ -253,7 +253,7 @@ final class SecurityController
                     new OA\Property(property: 'allergies', type: 'string', nullable: true),
                 ]),
             ])),
-            new OA\Response(response: 400, description: 'JSON invalide ou champs de profil invalides.'),
+            new OA\Response(response: 400, description: 'JSON ou champs invalides; mot de passe actuel requis pour modifier l’adresse e-mail ou le mot de passe.'),
             new OA\Response(response: 401, description: 'Jeton API absent ou invalide.'),
             new OA\Response(response: 409, description: 'Cette adresse e-mail est déjà utilisée.'),
         ]
@@ -310,10 +310,18 @@ final class SecurityController
             return new JsonResponse(['error' => 'La mention des allergies est trop longue.'], Response::HTTP_BAD_REQUEST);
         }
 
-        if ($input->password !== null && (!PasswordPolicy::isValid($input->password)
-            || $input->currentPassword === null || !$passwordHasher->isPasswordValid($utilisateur, $input->currentPassword))) {
+        $emailChanged = $email !== $utilisateur->getEmail();
+        $passwordChanged = $input->password !== null;
+        if (($emailChanged || $passwordChanged)
+            && ($input->currentPassword === null || !$passwordHasher->isPasswordValid($utilisateur, $input->currentPassword))) {
             return new JsonResponse(
-                ['error' => 'Mot de passe actuel incorrect ou nouveau mot de passe non conforme.'],
+                ['error' => 'Le mot de passe actuel est requis et doit être correct pour modifier l’adresse e-mail ou le mot de passe.'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+        if ($passwordChanged && !PasswordPolicy::isValid($input->password)) {
+            return new JsonResponse(
+                ['error' => 'Le nouveau mot de passe ne respecte pas les critères de sécurité.'],
                 Response::HTTP_BAD_REQUEST
             );
         }

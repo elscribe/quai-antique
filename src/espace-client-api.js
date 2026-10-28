@@ -38,6 +38,16 @@ function remplirProfil(data) {
   profilForm.elements.email.value = data.email;
   profilForm.elements.nbConvivesDefaut.value = data.nbConvivesDefaut ?? "";
   profilForm.elements.allergies.value = data.allergies ?? "";
+  profilForm.elements.currentPassword.value = "";
+  actualiserChampMotDePasse();
+}
+
+function actualiserChampMotDePasse() {
+  const emailModifie = profilForm.elements.email.value.trim() !== profil?.email;
+  const labelMotDePasse = document.querySelector("#client-current-password-field");
+  labelMotDePasse.hidden = !emailModifie;
+  profilForm.elements.currentPassword.required = emailModifie;
+  if (!emailModifie) profilForm.elements.currentPassword.value = "";
 }
 
 function champ(form, label, name, type, value) {
@@ -111,15 +121,19 @@ async function chargerReservations() {
   afficherReservations(body.data);
 }
 
+profilForm.elements.email.addEventListener("input", actualiserChampMotDePasse);
+
 profilForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   try {
     const fields = profilForm.elements;
-    const body = await requete("/account/me", "PUT", {
+    const changes = {
       prenom: fields.prenom.value.trim(), nom: fields.nom.value.trim(), email: fields.email.value.trim(),
       nbConvivesDefaut: fields.nbConvivesDefaut.value ? Number(fields.nbConvivesDefaut.value) : null,
       allergies: fields.allergies.value.trim() || null,
-    });
+    };
+    if (changes.email !== profil.email) changes.currentPassword = fields.currentPassword.value;
+    const body = await requete("/account/me", "PUT", changes);
     remplirProfil(body.data);
     status.textContent = "Vos informations ont été enregistrées.";
   } catch (error) { status.textContent = error.message; }
