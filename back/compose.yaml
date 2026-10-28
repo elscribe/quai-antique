@@ -1,0 +1,13 @@
+services:
+  database:
+    image: mysql:8.4.13
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?Définis MYSQL_DATABASE dans .env.local}
+      MYSQL_USER: ${MYSQL_USER:?Définis MYSQL_USER dans .env.local}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Définis MYSQL_PASSWORD dans .env.local}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Définis MYSQL_ROOT_PASSWORD dans .env.local}
+    volumes:
+      - database_data:/var/lib/mysql:rw
+
+volumes:
+  database_data:
