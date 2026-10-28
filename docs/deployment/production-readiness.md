@@ -30,16 +30,16 @@ La stack Docker locale est opérationnelle et le dépôt `main` contient le code
 
 ## Séquence de mise en œuvre recommandée
 
-1. Relire et valider les corrections de documentation de démarrage et la mise à jour de PHPUnit sur la branche de préparation.
-2. Choisir l’hébergeur et obtenir ses contraintes réseau, de volumes, de base et de secrets.
-3. Créer un profil/image de production distincts et tester leur construction localement.
-4. Déployer en préproduction avec secrets temporaires, domaine de test et base jetable.
-5. Valider migrations, limites d’upload, parcours, sauvegarde/restauration, sécurité et retour arrière.
-6. Seulement après ces validations, planifier la mise en production.
+1. Choisir l’hébergeur et obtenir ses contraintes réseau, de volumes, de base et de secrets.
+2. Créer un profil/image de production distincts et tester leur construction localement.
+3. Déployer en préproduction avec secrets temporaires, domaine de test et base jetable.
+4. Valider migrations, limites d’upload, parcours, sauvegarde/restauration, sécurité et retour arrière.
+5. Seulement après ces validations, planifier la mise en production.
 
 ## Faits et limites
 
-- L’état Docker local a été vérifié sur le dépôt au commit de la stack Docker. Les corrections décrites dans ce rapport sont des changements locaux non commités sur la branche `chore/production-readiness` ; aucun fichier de production n’existait encore lors de l’audit.
+- Les corrections de sécurité locale, de dépendances et de documentation décrites dans ce rapport ont été fusionnées dans `main` via une pull request. La suite de 41 tests et 344 assertions a passé dans l’image Docker reconstruite.
+- L’état Docker local a été vérifié ; aucun profil ni fichier de production n’existe encore dans le dépôt.
 - Le port 82 est l’accès HTTP local et ne fournit pas TLS.
 - Les avis Composer reflètent la base d’avis consultée le 28 octobre 2026 ; les réexaminer au moment de la construction de l’image.
 - Le déploiement n’est pas réalisé et aucun service public n’a été créé.
