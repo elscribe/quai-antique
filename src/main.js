@@ -1,9 +1,52 @@
 const footerStyles = document.createElement("link");
 footerStyles.rel = "stylesheet";
-footerStyles.href = "footer.css?v=figma-footer-3";
+footerStyles.href = "footer.css?v=figma-footer-5";
 document.head.append(footerStyles);
 
-const publicFooterMarkup = `<footer class="site-footer"><div class="footer-brand"><strong>Le Quai Antique</strong><p>Chambéry</p><p>Cuisine gastronomique savoyarde.</p></div><div class="footer-section"><strong>Plan du site</strong><a href="index.html">Accueil</a><a href="galerie.html">Notre galerie</a><a href="carte.html">La carte &amp; menus</a><a href="reservation.html">Réserver une table</a><a href="contact.html">Contact &amp; accès</a></div><div class="footer-section"><strong>Contact &amp; accès</strong><p>14 Quai de la Rive Gauche<br>73000 Chambéry<br>04 79 12 34 56</p></div><div class="footer-section"><strong>Mentions</strong><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgu-cgv.html">CGU / CGV</a></div></footer>`;
+const sessionNavigation = document.querySelector("[data-session-nav]");
+if (sessionNavigation) {
+  const token = sessionStorage.getItem("quai_api_token");
+  let cachedRoles = [];
+  try {
+    const storedRoles = JSON.parse(sessionStorage.getItem("quai_api_roles") || "[]");
+    if (Array.isArray(storedRoles)) cachedRoles = storedRoles;
+  } catch {
+    sessionStorage.removeItem("quai_api_roles");
+  }
+  const setSessionLink = (roles) => {
+    const isAdmin = roles.includes("ROLE_ADMIN");
+    sessionNavigation.textContent = isAdmin ? "Tableau de bord" : "Mon espace";
+    sessionNavigation.href = isAdmin ? "administration.html" : "espace-client.html";
+  };
+
+  if (!token) {
+    sessionNavigation.textContent = "Connexion";
+    sessionNavigation.href = "connexion.html";
+  } else {
+    if (cachedRoles.length) setSessionLink(cachedRoles);
+    else sessionNavigation.textContent = "Vérification de la session…";
+    fetch(`${apiBaseUrl}/account/me`, {
+      headers: { "X-AUTH-TOKEN": token },
+    }).then(async (response) => {
+      if (response.status === 401) {
+        sessionStorage.removeItem("quai_api_token");
+        sessionStorage.removeItem("quai_api_roles");
+        sessionNavigation.textContent = "Connexion";
+        sessionNavigation.href = "connexion.html";
+        return;
+      }
+      if (!response.ok) throw new Error("Impossible de vérifier la session.");
+      const profile = await response.json();
+      const roles = profile.data.roles || [];
+      sessionStorage.setItem("quai_api_roles", JSON.stringify(roles));
+      setSessionLink(roles);
+    }).catch(() => {
+      if (!cachedRoles.length) sessionNavigation.textContent = "Session à vérifier";
+    });
+  }
+}
+
+const publicFooterMarkup = `<footer class="site-footer"><div class="footer-brand"><strong>Le Quai Antique</strong><p>Chambéry</p><p>Cuisine gastronomique inspirée par le terroir savoyard et orchestrée avec passion par le Chef Arnaud Michant.</p></div><div class="footer-section"><strong>Plan du site</strong><a href="index.html">Accueil</a><a href="galerie.html">Notre galerie</a><a href="carte.html">La carte &amp; menus</a><a href="reservation.html">Réserver une table</a><a href="contact.html">Contact &amp; accès</a></div><div class="footer-section"><strong>Contact &amp; accès</strong><p>14 Quai de la Rive Gauche<br>73000 Chambéry<br>04 79 12 34 56</p></div><div class="footer-section"><strong>Mentions</strong><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgu-cgv.html">CGU / CGV</a></div></footer>`;
 
 document.querySelectorAll(".site-footer").forEach((footer) => {
   if (!footer.classList.contains("admin-footer"))
@@ -62,90 +105,6 @@ galleryDialog?.addEventListener("click", (event) => {
   if (event.target === galleryDialog) galleryDialog.close();
 });
 
-const reservationForm = document.querySelector("#reservation-form");
-const formMessage = document.querySelector("#form-message");
-const submitButton = document.querySelector("#reservation-submit");
-const setError = (field, message) => {
-  const input = document.querySelector(`#${field}`);
-  const error = document.querySelector(`#${field}-error`);
-  input?.setAttribute("aria-invalid", String(Boolean(message)));
-  if (error) error.textContent = message;
-};
-
-const reservationFields = ["date", "guests"];
-const validateReservationField = (field) => {
-  const input = document.querySelector(`#${field}`);
-  if (!input) return true;
-  if (field === "date") {
-    const valid = Boolean(input.value);
-    setError(field, valid ? "" : "Choisissez une date.");
-    return valid;
-  }
-  const valid =
-    Number.isInteger(Number(input.value)) &&
-    Number(input.value) >= 1 &&
-    Number(input.value) <= 6;
-  setError(field, valid ? "" : "Choisissez le nombre de couverts.");
-  return valid;
-};
-
-reservationFields.forEach((field) => {
-  document
-    .querySelector(`#${field}`)
-    ?.addEventListener("change", () => validateReservationField(field));
-});
-
-document.querySelectorAll(".time-slot").forEach((slot) => {
-  slot.addEventListener("click", () => {
-    document.querySelectorAll(".time-slot").forEach((button) => {
-      button.classList.remove("is-selected");
-      button.setAttribute("aria-pressed", "false");
-    });
-    slot.classList.add("is-selected");
-    slot.setAttribute("aria-pressed", "true");
-    document.querySelector("#time").value = slot.dataset.time;
-    setError("time", "");
-  });
-});
-
-reservationForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  ["date", "time", "guests"].forEach((field) => setError(field, ""));
-  const data = Object.fromEntries(new FormData(reservationForm).entries());
-  const errors = {};
-  if (!data.date) errors.date = "Choisissez une date.";
-  if (!data.time) errors.time = "Choisissez un créneau.";
-  if (
-    !Number.isInteger(Number(data.guests)) ||
-    Number(data.guests) < 1 ||
-    Number(data.guests) > 6
-  )
-    errors.guests = "Choisissez le nombre de couverts.";
-  Object.entries(errors).forEach(([field, message]) =>
-    setError(field, message),
-  );
-  if (Object.keys(errors).length) {
-    formMessage.textContent = "Vérifiez les champs signalés.";
-    formMessage.className = "form-message form-message--error";
-    document.querySelector(`#${Object.keys(errors)[0]}`)?.focus();
-    return;
-  }
-  submitButton.disabled = true;
-  submitButton.textContent = "Envoi en cours…";
-  window.setTimeout(() => {
-    reservationForm.reset();
-    document.querySelectorAll(".time-slot").forEach((button) => {
-      button.classList.remove("is-selected");
-      button.setAttribute("aria-pressed", "false");
-    });
-    formMessage.textContent =
-      "Créneau enregistré en mode démonstration. La connexion et la disponibilité réelle seront reliées à Symfony.";
-    formMessage.className = "form-message form-message--success";
-    submitButton.disabled = false;
-    submitButton.textContent = "Continuer vers la connexion";
-  }, 400);
-});
-
 const isValidEmail = (email) => {
   const atIndex = email.indexOf("@");
   const lastDotIndex = email.lastIndexOf(".");
@@ -184,21 +143,6 @@ const loginForm = document.querySelector("#login-form");
   ),
 );
 
-loginForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const form = event.currentTarget;
-  const message = document.querySelector("#login-message");
-  if (!validateLogin(form)) {
-    message.textContent =
-      "Indiquez un e-mail et un mot de passe d'au moins 8 caractères.";
-    message.className = "form-message form-message--error";
-    return;
-  }
-  message.textContent =
-    "Connexion simulée : l’API Symfony sera branchée ensuite.";
-  message.className = "form-message form-message--success";
-});
-
 const registrationForm = document.querySelector("#registration-form");
 const validateRegistration = (form) => {
   const fields = form.elements;
@@ -231,71 +175,4 @@ const validateRegistration = (form) => {
     );
   },
 );
-
-registrationForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const form = event.currentTarget;
-  const message = document.querySelector("#registration-message");
-  if (!validateRegistration(form)) {
-    message.textContent =
-      "Vérifiez vos informations : e-mail valide, mot de passe de 8 caractères avec minuscule, majuscule, chiffre et caractère spécial, puis confirmation identique.";
-    message.className = "form-message form-message--error";
-    return;
-  }
-  form.reset();
-  message.textContent =
-    "Compte simulé créé côté Front. Symfony enregistrera le compte, le mot de passe chiffré et les préférences.";
-  message.className = "form-message form-message--success";
-});
-
-document.querySelectorAll("[data-demo-action]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const message = document.querySelector("#admin-message");
-    if (!message) return;
-    message.textContent =
-      "Cette action est préparée côté interface. Symfony contrôlera ensuite les droits et enregistrera les changements.";
-  });
-});
-
-const editReservationForm = document.querySelector("#edit-reservation-form");
-editReservationForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const message = document.querySelector("#edit-reservation-message");
-  message.textContent =
-    "Modification vérifiée en mode démonstration. Symfony enregistrera ensuite les données après contrôle des droits.";
-  message.className = "form-message form-message--success";
-});
-
-const cancelReservationDialog = document.querySelector(
-  "#cancel-reservation-dialog",
-);
-document
-  .querySelector("#open-cancel-dialog")
-  ?.addEventListener("click", () => cancelReservationDialog?.showModal());
-document
-  .querySelectorAll("[data-close-dialog]")
-  .forEach((button) =>
-    button.addEventListener("click", () => cancelReservationDialog?.close()),
-  );
-document.querySelector("#confirm-cancel")?.addEventListener("click", () => {
-  cancelReservationDialog?.close();
-  const message = document.querySelector("#edit-reservation-message");
-  message.textContent =
-    "Annulation simulée : aucune donnée n’a été supprimée. Symfony assurera l’annulation réelle et sa traçabilité.";
-  message.className = "form-message form-message--success";
-});
-
-const apiBaseUrl = "http://127.0.0.1:8000";
-
-try {
-  const response = await fetch(`${apiBaseUrl}/api/health`);
-
-  if (!response.ok) {
-    throw new Error(`Erreur HTTP : ${response.status}`);
-  }
-
-  const data = await response.json();
-  console.log("API Quai Antique :", data);
-} catch (error) {
-  console.error("Erreur lors de l’appel API :", error);
-}
+import { apiBaseUrl } from "./api-config.js";

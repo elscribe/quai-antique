@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Quai Antique — Espace client</title>
-    <link rel="stylesheet" href="styles.css?v=front-multipage-1" />
+    <link rel="stylesheet" href="styles.css?v=front-multipage-12" />
   </head>
   <body>
     <a class="skip-link" href="#contenu">Aller au contenu</a>
@@ -26,78 +26,43 @@
         <a href="index.html">Accueil</a><a href="carte.html">Carte</a
         ><a href="galerie.html">Galerie</a
         ><a href="reservation.html">Réserver</a
-        ><a aria-current="page" href="espace-client.html">Mon compte</a>
+        ><a aria-current="page" data-session-nav href="espace-client.html">Mon espace</a>
       </nav>
     </header>
     <main class="dashboard client-dashboard" id="contenu">
-      <p>MON ESPACE CLIENT</p>
-      <h1>Bonjour Jean</h1>
-      <p class="dashboard-note">Gérez vos réservations et vos préférences.</p>
-      <section class="client-section">
-        <h2>Ma prochaine réservation</h2>
-        <article class="dashboard-card client-booking">
-          <div>
-            <strong>Vendredi 13 novembre 2026</strong>
-            <p>19h30 · 2 couverts</p>
-            <p>Allergies : aucune</p>
-          </div>
-          <span>Confirmée</span>
-          <div>
-            <button class="button button--outline" type="button" disabled>
-              Modifier</button
-            ><button class="button button--outline" type="button" disabled>
-              Annuler
-            </button>
-          </div>
-        </article>
+      <p>MON ESPACE CLIENT</p><h1 id="client-welcome">Mon compte</h1>
+      <p id="client-status" role="status"></p>
+      <p class="client-session-action">
+        <a class="button button--outline" id="client-login" href="connexion.html" hidden>Se connecter</a>
+        <button class="button button--outline" id="client-logout" type="button" hidden>Se déconnecter</button>
+      </p>
+      <section class="client-section"><h2>Mes réservations</h2>
+        <div id="client-reservations"></div>
         <a class="button" href="reservation.html">Nouvelle réservation</a>
       </section>
-      <section class="client-section">
-        <p>HISTORIQUE</p>
-        <article class="dashboard-card">
-          <div>
-            <strong>Samedi 24 octobre 2026</strong>
-            <p>12h30 · 4 couverts</p>
-          </div>
-          <span>Passée</span>
-        </article>
-      </section>
-      <section class="client-section client-profile">
-        <p>MES INFORMATIONS</p>
-        <form class="account-form" novalidate>
-          <label>Prénom<input value="Jean" autocomplete="given-name" /></label
-          ><label>Nom<input value="Dupont" autocomplete="family-name" /></label
-          ><label
-            >Adresse e-mail<input
-              value="jean.dupont@exemple.fr"
-              type="email"
-              autocomplete="email" /></label
-          ><label
-            >Couverts par défaut<select>
-              <option>1 personne</option>
-              <option selected>2 personnes</option>
-              <option>3 personnes</option>
-              <option>4 personnes</option>
-            </select></label
-          ><label
-            >Allergies déclarées<input
-              value="Aucune allergie enregistrée"
-              readonly /></label
-          ><button class="button" type="button" disabled>
-            Enregistrer les modifications
-          </button>
-          <p>ZONE SENSIBLE</p>
-          <small
-            >Supprimer votre compte effacera vos données personnelles.</small
-          ><button class="button button--outline" type="button" disabled>
-            Supprimer mon compte
-          </button>
+      <section class="client-section client-profile"><h2>Mes informations</h2>
+        <form id="client-profile" class="account-form">
+          <label>Prénom<input name="prenom" autocomplete="given-name" required maxlength="80" /></label>
+          <label>Nom<input name="nom" autocomplete="family-name" required maxlength="80" /></label>
+          <label>Adresse e-mail<input name="email" type="email" autocomplete="email" required maxlength="255" /></label>
+          <label>Couverts par défaut<input name="nbConvivesDefaut" type="number" min="1" max="65535" /></label>
+          <label>Allergies déclarées<textarea name="allergies" maxlength="5000"></textarea></label>
+          <button class="button" type="submit">Enregistrer les modifications</button>
+        </form>
+        <form id="client-password" class="account-form">
+          <h3>Changer mon mot de passe</h3>
+          <label>Mot de passe actuel<input name="currentPassword" type="password" autocomplete="current-password" required /></label>
+          <label>Nouveau mot de passe<input name="password" type="password" autocomplete="new-password" required /></label>
+          <button class="button button--outline" type="submit">Changer le mot de passe</button>
+          <p>Après changement, reconnectez-vous.</p>
+        </form>
+        <form id="client-delete" class="account-form">
+          <h3>Supprimer mon compte</h3>
+          <p>La suppression efface aussi vos réservations.</p>
+          <label>Mot de passe actuel<input name="currentPassword" type="password" autocomplete="current-password" required /></label>
+          <button class="button button--outline" type="submit">Supprimer mon compte</button>
         </form>
       </section>
-      <p class="dashboard-note">
-        Les données réelles, les modifications et la suppression de compte
-        seront sécurisées par Symfony.
-      </p>
     </main>
     <footer class="site-footer">
       <div>
@@ -129,6 +94,7 @@
       </div>
       <p class="footer-legal">© 2026 Le Quai Antique. Tous droits réservés.</p>
     </footer>
-    <script type="module" src="main.js?v=front-multipage-7"></script>
+    <script type="module" src="main.js?v=front-session-nav-1"></script>
+    <script type="module" src="espace-client-api.js?v=session-roles-1"></script>
   </body>
 </html>
