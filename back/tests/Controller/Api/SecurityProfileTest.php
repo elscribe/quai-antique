@@ -28,6 +28,18 @@ final class SecurityProfileTest extends ApiTestCase
         self::assertResponseStatusCodeSame(401);
     }
 
+    public function testExpiredApiTokenIsRejectedByProtectedEndpoint(): void
+    {
+        $token = $this->createTestUser();
+        $user = $this->findUser('client@example.test');
+        $user->setApiTokenExpiresAt(new \DateTimeImmutable('-1 minute'));
+        $this->entityManager->flush();
+
+        $this->client->request('GET', '/api/account/me', server: ['HTTP_X_AUTH_TOKEN' => $token]);
+
+        self::assertResponseStatusCodeSame(401);
+    }
+
     public function testRegistrationHashesPasswordAndReturnsOneTimeApiToken(): void
     {
         $headers = $this->registrationHeaders();
