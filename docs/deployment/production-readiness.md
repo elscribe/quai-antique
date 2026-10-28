@@ -33,6 +33,25 @@ La stack Docker locale de développement est opérationnelle. Un profil Docker d
 8. **Répéter les parcours en préproduction.** Vérifier inscription/connexion, accès client/admin, réservation et capacité concurrente, gestion de contenu, OpenAPI selon la politique retenue, et restauration avant ouverture au public.
 9. **Compléter les obligations du service.** Vérifier mentions légales, politique de confidentialité, conservation des données, courriels transactionnels et contacts de support avec les informations réelles du propriétaire.
 
+## Initialiser le restaurant sur une base neuve
+
+Les fixtures servent uniquement aux environnements de démonstration et de test. Sur une base de production neuve, appliquer les migrations puis créer la configuration métier avec la commande idempotente `app:init-restaurant` :
+
+```sh
+php bin/console doctrine:migrations:migrate --env=prod --no-interaction
+php bin/console app:init-restaurant --env=prod
+```
+
+Par défaut, la commande configure une capacité de 40 couverts, le service du midi de 12:00 à 14:00 et celui du soir de 19:00 à 21:00, du mardi au dimanche. Les options `--capacite-max`, `--debut-midi`, `--fin-midi`, `--debut-soir` et `--fin-soir` permettent d’adapter ces valeurs. Chaque service doit durer deux heures, la capacité doit être comprise entre 1 et 65 535, et le service du midi doit finir avant le début du soir. Si un restaurant existe déjà, la commande réussit sans le modifier.
+
+Exemple :
+
+```sh
+php bin/console app:init-restaurant --env=prod --capacite-max=48 --debut-midi=11:30 --fin-midi=13:30 --debut-soir=18:30 --fin-soir=20:30
+```
+
+Vérifier ensuite `GET /api/restaurant` avant d’ouvrir les réservations et la gestion de contenu.
+
 ## Séquence de mise en œuvre recommandée
 
 1. Choisir l’hébergeur et obtenir ses contraintes réseau, de volumes, de base, de secrets et de terminaison TLS.
