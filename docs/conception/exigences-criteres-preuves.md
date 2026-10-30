@@ -32,7 +32,19 @@ Un test cité prouve la règle côté API. Il ne prouve ni le parcours dans le n
 | Créer un administrateur sans exposer le mot de passe | `CreateAdminCommandTest::testAdminCreationIsInteractiveAndDoesNotPrintThePassword` |
 | Initialiser le restaurant en production | `InitRestaurantCommandTest` (3 tests) |
 | Contrat d’API documenté et à jour | `ApiDocumentationTest::testOpenApiContractDocumentsAllRoutesAndSecurityRules`, `::testSwaggerUiIsPublicAndLoadsSuccessfully` |
-| Sonde de santé | `ApiSmokeTest::testHealthEndpointReturnsTheExpectedServiceIdentity` |
+| Sonde de santé | `ApiSmokeTest::testHealthEndpointReturnsTheExpectedServiceIdentity` ; en ligne, `GET /api/health` renvoie `200` (vérifié, voir [alwaysdata.md](../deployment/alwaysdata.md)) |
+
+## Exigences de mise en ligne
+
+Mise en ligne : API sur alwaysdata, Front sur Cloudflare Workers. La procédure et les résultats sont dans [alwaysdata.md](../deployment/alwaysdata.md).
+
+| Exigence | Preuve | État |
+|---|---|---|
+| HTTPS | Le Front et l’API sont servis à des adresses `https://`. La redirection automatique de HTTP vers HTTPS (option « Forcer le HTTPS ») n’est pas encore contrôlée. | **À vérifier** |
+| Secrets hors du dépôt | `APP_SECRET` et `DATABASE_URL` sont uniquement dans `.env.local` sur le serveur (droits `600`), jamais dans Git. Utilisateur de base dédié, droits limités à la base de l’application. | Fait |
+| CORS limité au Front | Requête `OPTIONS` depuis l’origine du Front : en-tête `Access-Control-Allow-Origin` présent. Requête depuis une origine étrangère : aucun en-tête CORS. | Validé |
+| Limite d’inscription | 5 inscriptions par heure et par adresse IP, `429` au-delà. Pas de proxy devant l’application (adresse réelle du client dans `REMOTE_ADDR`), donc pas de `SYMFONY_TRUSTED_PROXIES`. Une machine peut avoir une adresse IPv4 et une IPv6, comptées séparément. Détail du diagnostic dans [alwaysdata.md](../deployment/alwaysdata.md). | Validé |
+| Limites d’upload | Le contrôleur accepte des images jusqu’à 3 MiB. Les limites PHP (`upload_max_filesize`, `post_max_size`) sont à régler dans Environnement > PHP sur alwaysdata, puis à tester avec un envoi réel. | **À vérifier** |
 
 ## Règles de preuve
 
@@ -44,4 +56,4 @@ Pour toute preuve nouvelle, conserver la date, le commit, l’environnement, la 
 
 - Mise en page en CSS natif, sans Bootstrap, Sass ni routeur JavaScript.
 - User stories attendues ou non, en plus de cette matrice.
-- Niveau de déploiement attendu pour l’exemple 6 du Dossier professionnel.
+- Niveau de déploiement attendu pour l’exemple 6 du Dossier professionnel (une mise en ligne sur alwaysdata et Cloudflare est réalisée).

@@ -60,6 +60,22 @@ La [matrice des exigences, critères et preuves](docs/conception/exigences-crite
 
 La suite PHPUnit compte 46 méthodes de test, soit 48 exécutions (le test `UuidGeneratorTest` est joué sur trois jeux de données). Le résultat de référence est la dernière sortie brute datée conservée avec la validation finale, pas un chiffre recopié dans la documentation.
 
+## Mise en ligne
+
+Le site est en ligne sur deux hébergeurs :
+
+| Élément | Hébergeur | Adresse |
+|---|---|---|
+| Front (fichiers statiques) | Cloudflare Workers | <https://quai-antique.jordan-mflouison.workers.dev> |
+| API Symfony | alwaysdata (site PHP, PHP 8.4.27) | <https://elscribe.alwaysdata.net> |
+| Base de données | alwaysdata (MariaDB 11.8.9) | base `elscribe_quai_antique` |
+
+Le Front et l’API ont **deux origines différentes**. Le navigateur applique donc CORS, et l’API n’accepte que l’origine du Front. En ligne, le Front n’utilise pas `window.location.origin` : sa copie de `src/api-config.js` fixe l’adresse de l’API.
+
+Les secrets (`APP_SECRET`, `DATABASE_URL`) sont uniquement dans `.env.local` sur le serveur, jamais dans Git. Les fixtures ne sont pas chargées en production.
+
+La procédure complète, les variables attendues, les vérifications faites et les points encore à vérifier sont dans [docs/deployment/alwaysdata.md](docs/deployment/alwaysdata.md).
+
 ## État
 
-La stack Docker locale sert le Front, l’API Symfony et sa base MySQL Docker dédiée. La base MySQL d’un éventuel serveur local (port 3307) reste indépendante de celle de Docker. Cette configuration utilise le mode développement et ne doit pas être exposée comme une installation de production. Le déploiement en ligne n’a pas été réalisé.
+La stack Docker locale sert le Front, l’API Symfony et sa base MySQL Docker dédiée. La base MySQL d’un éventuel serveur local (port 3307) reste indépendante de celle de Docker. Cette configuration utilise le mode développement et ne doit pas être exposée comme une installation de production. La version en ligne est décrite dans la section « Mise en ligne » ci-dessus.

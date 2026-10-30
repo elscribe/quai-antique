@@ -1,5 +1,7 @@
 # État de préparation à la production
 
+> **Mise à jour : mise en ligne réalisée.** L’API est hébergée sur alwaysdata et le Front sur Cloudflare Workers. La procédure et les faits vérifiés sont dans [alwaysdata.md](alwaysdata.md), qui fait foi. Les sections « Résumé » à « Faits et limites » ci-dessous décrivent la préparation locale d’avant la mise en ligne ; la section « Hébergeur retenu et faits vérifiés » donne l’état actuel.
+
 > **Lecture au 29 octobre 2026.** Les essais décrits ci-dessous ont été rapportés le 28 octobre pour l’aperçu local ; ils ne constituent pas une preuve de déploiement. Les chiffres de tests cités (41 tests / 344 assertions) datent de ce contrôle : la suite compte aujourd’hui 46 méthodes de test (48 exécutions). Les sorties de référence, datées et liées au commit, sont dans le dossier de validation finale.
 
 Date du contrôle initial : 28 octobre 2026. Cet audit décrit la préparation locale du projet. Il ne constitue pas une validation d’un hébergeur ni un déploiement.
@@ -24,9 +26,37 @@ La stack Docker locale de développement est opérationnelle. Un profil Docker d
 - Le healthcheck de l’API vérifie seulement que PHP-FPM écoute sur son port. Le healthcheck du service Web appelle `/api/health` via Nginx ; ce dernier vérifie le routage et l’application, mais `/api/health` ne contrôle pas MySQL. Un healthcheck qui vérifie les dépendances métier reste à définir selon l’hébergeur.
 - `.env.production.example` ne contient que des valeurs factices. L’aperçu utilise un fichier `.env.production` local ignoré par Git, avec des secrets aléatoires temporaires ; ils ne sont pas les secrets d’un hébergeur.
 
+## Hébergeur retenu et faits vérifiés
+
+**Décision.** L’API Symfony est hébergée sur alwaysdata (site PHP), le Front sur Cloudflare Workers (fichiers statiques). Raison : offre gratuite d’alwaysdata, sans carte bancaire. Sur cette offre, les sous-domaines de `alwaysdata.net` ne se créent pas librement : l’API utilise l’adresse principale du compte et le Front est hébergé ailleurs. Le profil Docker de production n’est pas utilisé en ligne : le code de `back/` est copié sur le serveur, et Apache sert `back/public/`.
+
+| Élément | Adresse | Version |
+|---|---|---|
+| Front | `https://quai-antique.jordan-mflouison.workers.dev` | fichiers statiques |
+| API | `https://elscribe.alwaysdata.net` | PHP 8.4.27, Symfony 7.4 |
+| Base de données | `mysql-elscribe.alwaysdata.net`, base `elscribe_quai_antique` | MariaDB 11.8.9 |
+
+**Faits vérifiés** (détail dans [alwaysdata.md](alwaysdata.md)) :
+
+- `GET /api/health` renvoie `200`, `GET /api/restaurant` renvoie `200` après initialisation, `GET /api/account/me` sans jeton renvoie `401`.
+- CORS : l’origine du Front reçoit l’en-tête `Access-Control-Allow-Origin` ; une origine étrangère ne reçoit aucun en-tête CORS.
+- Secrets : `APP_SECRET` et `DATABASE_URL` sont uniquement dans `.env.local` sur le serveur (droits `600`), jamais dans Git. L’utilisateur de base est dédié, avec des droits sur cette base uniquement.
+- Migrations appliquées en production ; administrateur créé avec `app:create-admin` ; restaurant initialisé avec `app:init-restaurant`. Les fixtures ne sont pas chargées.
+- Limite d’inscription : 5 par heure et par adresse IP, `429` au-delà. Il n’y a pas de proxy devant l’application (`REMOTE_ADDR` réel, pas d’en-tête `X-Forwarded-For`) : `SYMFONY_TRUSTED_PROXIES` n’est pas nécessaire. Une même machine peut avoir une adresse IPv4 et une adresse IPv6, comptées séparément.
+
+**À vérifier :**
+
+- La redirection automatique de HTTP vers HTTPS (option « Forcer le HTTPS » du site).
+- Les limites d’upload PHP (`upload_max_filesize`, `post_max_size`), à régler dans Environnement > PHP pour accepter les images de 3 MiB.
+- Le quota disque réel du compte gratuit et l’emplacement durable des images téléversées.
+- Les sauvegardes proposées par alwaysdata pour la base et les fichiers, et une restauration d’essai.
+- Le contenu de la carte et de la galerie, à ajouter depuis l’espace administrateur.
+
 ## Bloqueurs avant publication
 
-1. **Choisir l’hébergeur et l’architecture réseau.** Décider où se termine TLS (plateforme, proxy géré ou reverse proxy) et comment seul le trafic prévu atteint Nginx. Aucun choix de fournisseur n’est enregistré.
+> Liste établie avant la mise en ligne. Le point 1 est tranché ; les points 3 et 4 sont en partie traités (voir la section précédente).
+
+1. **Hébergeur et architecture réseau : décidé.** API sur alwaysdata, Front sur Cloudflare Workers, deux origines. TLS est assuré par chaque plateforme ; la redirection forcée vers HTTPS reste à vérifier.
 2. **Adapter le profil au fournisseur.** Le runtime prod et son test local sont réalisés ; adapter le binding réseau, les services DB, le stockage média, les sondes et le proxy selon l’hébergeur avant publication. Le contrôle PHP-FPM seul n’est pas une sonde applicative ; le contrôle HTTP actuel de Nginx couvre la route de santé, pas la disponibilité MySQL.
 3. **Configurer les secrets et origines publiques.** Fournir `APP_SECRET`, `DATABASE_URL`, origine CORS et `DEFAULT_URI` depuis le gestionnaire de secrets de l’hébergeur ; ne pas réutiliser `.env.docker` ni les valeurs factices du fichier exemple.
 4. **Valider HTTPS et les protections Web.** Tester certificats, redirection HTTPS, en-têtes de sécurité, cookies, domaines, proxy de confiance et politique CSP. Examiner le risque lié au jeton d’authentification conservé dans `sessionStorage`, accessible à un script injecté en cas de XSS. Si un proxy est placé devant Nginx, déclarer son adresse dans `framework.trusted_proxies` : sans cela, Symfony voit l’adresse du proxy pour toutes les requêtes, et les limiteurs de connexion et d’inscription bloqueraient tous les utilisateurs ensemble.
@@ -63,7 +93,7 @@ Vérifier ensuite `GET /api/restaurant` avant d’ouvrir les réservations et la
 
 ## Séquence de mise en œuvre recommandée
 
-1. Choisir l’hébergeur et obtenir ses contraintes réseau, de volumes, de base, de secrets et de terminaison TLS.
+1. Hébergeur choisi : alwaysdata pour l’API, Cloudflare Workers pour le Front (voir [alwaysdata.md](alwaysdata.md)).
 2. Adapter le profil d’aperçu validé à l’hébergeur ; produire ses secrets et valeurs d’origine dans son gestionnaire de secrets.
 3. Déployer en préproduction avec domaine de test et base jetable.
 4. Valider HTTPS, migrations, limites d’upload, parcours, sauvegarde/restauration, sécurité et retour arrière.
@@ -75,4 +105,4 @@ Vérifier ensuite `GET /api/restaurant` avant d’ouvrir les réservations et la
 - L’état Docker local et le profil de production de prévisualisation ont été vérifiés. Le profil n’est pas un déploiement et ne connaît pas encore l’hébergeur cible.
 - Le port 82 est l’accès HTTP local et ne fournit pas TLS.
 - Les avis Composer reflètent la base d’avis consultée le 28 octobre 2026 ; les réexaminer au moment de la construction de l’image.
-- Le déploiement n’est pas réalisé et aucun service public n’a été créé.
+- Au moment de cet audit, le déploiement n’était pas réalisé. Il l’est depuis : voir la section « Hébergeur retenu et faits vérifiés » et [alwaysdata.md](alwaysdata.md).

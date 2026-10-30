@@ -18,4 +18,19 @@ Le dépôt du Dossier professionnel est distinct et local, avec ses propres comm
 
 Les cinq vues documentent la conception ; elles ne prouvent pas à elles seules la base en fonctionnement. Le code contient huit entités Doctrine et **six migrations** (`back/migrations/`). La preuve que le schéma réel correspond au mapping est la sortie datée de `doctrine:migrations:status` et de `doctrine:schema:validate` (code de retour 0), conservée dans le dossier de validation finale.
 
+## Moteur de base de données : local et en ligne
+
+| Environnement | Moteur | Version |
+|---|---|---|
+| Local (Docker) | MySQL | 8.4 |
+| En ligne (alwaysdata) | MariaDB | 11.8 (11.8.9 vérifiée) |
+
+alwaysdata fournit MariaDB et non MySQL. Ce choix reste cohérent avec le développement en local :
+
+- MySQL et MariaDB sont de la même famille : l’API s’y connecte avec le même pilote `pdo_mysql` ;
+- les migrations et la validation du schéma (`doctrine:schema:validate`) ont été testées en local avec MariaDB 11.8 ;
+- aucun écart sur les colonnes JSON n’a été signalé.
+
+En ligne, `DATABASE_URL` précise `serverVersion=11.8.9-MariaDB`, pour que Doctrine génère du SQL adapté à MariaDB. La procédure est dans [alwaysdata.md](../deployment/alwaysdata.md).
+
 Le [rapport des écarts](rapport-ecarts-cours.md) conserve les observations du 26/10 et les adaptations ultérieures. Les résultats Postman historiques figurent dans le [rapport de sécurité](../security/rapport-tests-postman.md). La [matrice exigences et preuves](../conception/exigences-criteres-preuves.md) distingue implémentation et validation.
