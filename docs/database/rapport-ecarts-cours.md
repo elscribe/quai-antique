@@ -1,6 +1,9 @@
 # Rapport de conception — modèle de données et cours Studi
 
-**État au 26 octobre 2026 :** les cinq vues de données et d’UML ont été relues ensemble après la mise à jour des cardinalités du MCD. Les différences conservées par rapport au MPD Studi sont justifiées ci-dessous; les règles tarifaires de la maquette restent à confirmer. Les huit entités Doctrine et leurs relations de base sont mappées; cinq migrations sont appliquées à `quai_antique`, dont une qui ajoute `Utilisateur.apiTokenHash`; `doctrine:schema:validate` confirme de nouveau la synchronisation du schéma.
+> **Lecture au 29 octobre 2026.** Les sections datées du 26 octobre décrivent l’état de la base à cette date (cinq migrations). Depuis, une sixième migration a été ajoutée (expiration du jeton d’API) : le code contient **six migrations**. Les résultats de commandes cités dans ces sections sont historiques ; la preuve actuelle du schéma est la sortie datée de `doctrine:schema:validate` conservée dans le dossier de validation finale. Voir [la matrice de critères](../conception/exigences-criteres-preuves.md).
+
+
+**État au 26 octobre 2026 :** les cinq vues de données et d’UML ont été relues ensemble après la mise à jour des cardinalités du MCD. Les différences conservées par rapport au MPD Studi sont justifiées ci-dessous; les règles tarifaires de la maquette restent à confirmer. Les huit entités Doctrine et leurs relations de base sont mappées; cinq migrations étaient alors appliquées à `quai_antique` (une sixième a été ajoutée depuis), dont une qui ajoute `Utilisateur.apiTokenHash`; `doctrine:schema:validate` confirmait alors la synchronisation du schéma.
 **Sources :** cahier des charges Quai Antique, maquette de la carte, modèle Draw.io et cours Studi « Créer base de données application » (notamment « Pour aller plus loin »).
 
 ## Décisions de modélisation
@@ -55,7 +58,7 @@ Les entités mappées sont `Restaurant`, `Reservation`, `Utilisateur`, `Categori
 
 **Adaptation de nommage Doctrine :** dans la base générée, Doctrine nomme les clés primaires techniques `id` (y compris dans `menu_categorie`), alors que le MPD les nomme par entité (`id_restaurant`, `id_menu_categorie`, etc.). Les colonnes UUID restent présentes et uniques. Ce choix conserve une clé technique simple pour Doctrine; les différences de noms sont une convention d’implémentation, pas une modification des relations métier. Le MPD décrit la cible conceptuelle physique et cette différence doit être expliquée lors de la présentation.
 
-Les colonnes de la table `restaurant` (`id`, `nom`, `description`, `uuid`, `horaire_midi`, `horaire_soir`, `capacite_max`, `date_creation` et `date_modification`) ainsi que les autres tables sont créées dans la base `quai_antique`. La cinquième migration ajoute la colonne nullable `api_token_hash` et son index unique. `doctrine:migrations:status` indique cinq migrations exécutées et aucune en attente; `doctrine:schema:validate` confirme que le schéma et le mapping sont synchronisés.
+Les colonnes de la table `restaurant` (`id`, `nom`, `description`, `uuid`, `horaire_midi`, `horaire_soir`, `capacite_max`, `date_creation` et `date_modification`) ainsi que les autres tables sont créées dans la base `quai_antique`. La cinquième migration ajoute la colonne nullable `api_token_hash` et son index unique. Au 26 octobre, `doctrine:migrations:status` indiquait cinq migrations exécutées et aucune en attente, et `doctrine:schema:validate` confirmait la synchronisation ; une sixième migration (expiration du jeton) a été ajoutée ensuite.
 
 ## Adaptation du cours « Sécuriser accès données » — jeton API
 
@@ -63,7 +66,7 @@ Le cours ajoute un jeton à son entité `User`. Quai Antique conserve son entit�
 
 **État réel au 26 octobre 2026 :** le champ et sa migration sont en place, et Doctrine confirme la synchronisation. L’inscription crée un compte et hache le mot de passe; inscription et login renvoient un jeton aléatoire, tandis que seule son empreinte SHA-256 est stockée. Le login JSON utilise l’email et le mot de passe. L’authentificateur vérifie `X-AUTH-TOKEN`. L’inscription et le login sont publics; les lectures de la carte sont publiques; les écritures de catégories et de plats exigent `ROLE_ADMIN`; les routes du compte et les autres routes `/api` exigent `ROLE_USER`. Le profil connecté peut être lu et modifié à `/api/account/me`, avec validation, hash du nouveau mot de passe et mise à jour de la date de modification. La validation Postman a réussi (16 requêtes, 23 assertions); 5 tests PHPUnit indépendants (29 assertions) couvrent aussi les rôles. Voir le [rapport de validation Postman](../security/rapport-tests-postman.md). Le provider seul ne réalise pas l’authentification : ce sont `json_login` et l’authentificateur personnalisé qui traitent les requêtes.
 
-**Justification de l’écart :** le cours illustre le flux avec le jeton stocké directement. Le projet choisit de ne conserver que son empreinte, afin qu’une fuite de la base ne divulgue pas directement les jetons utilisables. À chaque requête protégée, l’authentificateur calcule l’empreinte du jeton présenté et cherche l’utilisateur correspondant. Le périmètre actuel prévoit un jeton actif par compte; la gestion de plusieurs appareils, de dates d’expiration et de révocations individuelles demanderait une entité séparée ultérieurement.
+**Justification de l’écart :** le cours illustre le flux avec le jeton stocké directement. Le projet choisit de ne conserver que son empreinte, afin qu’une fuite de la base ne divulgue pas directement les jetons utilisables. À chaque requête protégée, l’authentificateur calcule l’empreinte du jeton présenté et cherche l’utilisateur correspondant. Le périmètre actuel prévoit un jeton actif par compte; la gestion de plusieurs appareils et de révocations indépendantes demanderait une entité séparée ultérieurement.
 
 Les champs de profil du cours (« prénom », « nom », nombre de convives par défaut et allergies) existent déjà sous les noms `prenom`, `nom`, `nbConvivesDefaut` et `allergies`; ils ne sont pas à recréer.
 
@@ -77,4 +80,20 @@ Les CRUD de `Categorie` et `Plat` ont été vérifiés localement sur les routes
 
 ## Limite de preuve et suite
 
-Les diagrammes constituent une preuve de conception de données pour l’exemple 4, et les migrations/synchronisation prouvent la création actuelle du schéma. L’inscription, le login, le profil, la rotation du jeton et les autorisations ont été validés par Postman CLI et PHPUnit; les résultats et limites sont consignés dans le rapport de test. Il reste à provisionner un compte administrateur par une opération d’exploitation contrôlée avant de publier les fonctions d’administration. Aucune capture de l’interface Postman Desktop n’a été prise. Les routes métier de réservation et d’autres ressources restent à construire. La sauvegarde/restauration de la base reste également à préparer et vérifier.
+Les diagrammes constituent une preuve de conception de données pour l’exemple 4, et les migrations/synchronisation prouvent la création actuelle du schéma. L’inscription, le login, le profil, la rotation du jeton et les autorisations ont été validés par Postman CLI et PHPUnit; les résultats et limites sont consignés dans le rapport de test. Il reste à provisionner un compte administrateur par une opération d’exploitation contrôlée avant de publier les fonctions d’administration. Aucune capture de l’interface Postman Desktop n’a été prise. Au 26/10, les routes métier de réservation et d’autres ressources restaient à construire ; elles ont depuis été implémentées, leur preuve actuelle restant à établir selon la matrice. La sauvegarde/restauration de la base reste également à préparer et vérifier.
+
+## Complément du 28 octobre — adaptations Front et règles à clarifier
+
+| Sujet | Choix ou écart | Justification et preuve restante |
+|---|---|---|
+| Bootstrap et Sass | CSS natif, Grid et Flexbox | Adaptation aux maquettes ; conformité aux attendus du cours à confirmer par la formation. |
+| Routeur | Pages HTML distinctes et navigation par liens | Les URL et l’historique sont gérés par le navigateur ; acceptation de l’écart au routeur du cours à confirmer. |
+| Responsive | Paliers CSS à 760 et 1100 px ; maquettes mobile et bureau | Le contrôle historique à 375/768/1440 px concerne le débordement avec API simulée ; lisibilité, contraste et tablette restent à vérifier. |
+| Pied de page | Horaires publics absents ou statiques lors de l’audit | Écart avec le cours et besoin d’informations à jour ; affichage dynamique et preuve à produire. |
+| Galerie et carte administrateur | Pages de gestion distinctes plutôt que boutons intégrés à la galerie | Séparation des outils d’administration ; vérifier les parcours, permissions et fidélité aux maquettes. |
+| Navigation réservation | Lien public absent de l’en-tête lors de l’audit | Accès par d’autres appels à l’action ; vérifier sa visibilité sur chaque parcours. |
+| Mot de passe | Modification proposée dans l’espace client, hors maquette et CDC | Fonction complémentaire ; règles, confirmation et cohérence Front/API à vérifier. |
+| Statut de réservation | `confirmee` renseigné ; suppression physique rapportée | État technique ajouté au modèle, sans preuve que les autres badges Figma existent ; arbitrer le besoin avant de leur attribuer un comportement. |
+| Réponses invalides | L’audit relève des réponses 400 et 422 selon les cas | Documenter et tester la convention retenue par route ; ne pas déduire une règle uniforme sans vérification. |
+
+Les observations datées du 26/10 ci-dessus sont historiques. Le projet contient désormais six migrations ; l’expiration et la révocation du jeton sont présentes dans les versions ultérieures selon l’audit. Une preuve actuelle de schéma reste à capturer.

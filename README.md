@@ -25,15 +25,24 @@ docker compose --env-file .env.docker up -d --build
 docker compose --env-file .env.docker ps
 ```
 
-Le site est disponible sur [http://localhost:82](http://localhost:82). L’API passe par la même origine, par exemple `/api/health`.
+Le site est disponible sur [http://localhost:82](http://localhost:82) (port modifiable avec la variable `WEB_PORT`). Nginx sert le Front et transmet `/api` à Symfony sur la même origine : l’image Front remplace `src/api-config.js` par `docker/api-config.js`, qui utilise `window.location.origin`. L’onglet Réseau du navigateur doit donc montrer des appels vers `localhost:82/api/…`, jamais vers `127.0.0.1:8000`.
 
-Sur une base Docker neuve, appliquer les migrations :
+Sur une base Docker neuve, appliquer les migrations puis initialiser la configuration du restaurant (horaires et capacité) :
 
 ```sh
 docker compose --env-file .env.docker exec api php bin/console doctrine:migrations:migrate --no-interaction
+docker compose --env-file .env.docker exec api php bin/console app:init-restaurant
 ```
 
-Les fixtures de démonstration sont facultatives et purgent la base ciblée. Ne les charger que dans la base Docker locale, jamais dans une base contenant des données à conserver.
+`app:init-restaurant` est idempotente : si le restaurant existe déjà, elle ne modifie rien. Les valeurs par défaut (40 couverts, 12:00–14:00 et 19:00–21:00) se remplacent par les options `--capacite-max`, `--debut-midi`, `--fin-midi`, `--debut-soir` et `--fin-soir`.
+
+Pour créer un compte administrateur, la commande demande le mot de passe de façon masquée (il n’apparaît ni dans l’historique du terminal ni dans la liste des processus) :
+
+```sh
+docker compose --env-file .env.docker exec api php bin/console app:create-admin --email=admin@example.test --prenom=Prénom --nom=Nom
+```
+
+Les fixtures de démonstration (`doctrine:fixtures:load --group=quai-antique-demo`) sont facultatives et **purgent la base ciblée**. Ne les charger que dans la base Docker locale, jamais dans une base contenant des données à conserver. Elles ne sont pas installées dans l’image de production.
 
 Pour arrêter les conteneurs en conservant leurs volumes :
 
@@ -47,6 +56,10 @@ Ne pas utiliser `down -v` sauf si l’effacement de la base et des images télé
 
 Le guide [Docker local](docs/deployment/docker-local.md) décrit les contrôles de configuration, de schéma Doctrine et la suite PHPUnit isolée sur SQLite en mémoire. Le rapport [préparation production](docs/deployment/production-readiness.md) distingue l’état local validé des étapes encore nécessaires avant une publication.
 
+La [matrice des exigences, critères et preuves](docs/conception/exigences-criteres-preuves.md) relie chaque exigence du cahier des charges au test automatisé ou à la recette qui la couvre.
+
+La suite PHPUnit compte 46 méthodes de test, soit 48 exécutions (le test `UuidGeneratorTest` est joué sur trois jeux de données). Le résultat de référence est la dernière sortie brute datée conservée avec la validation finale, pas un chiffre recopié dans la documentation.
+
 ## État
 
-La stack Docker locale sert le Front, l’API Symfony et sa base MySQL Docker dédiée. Elle a été vérifiée sur le port 82 ; la base MySQL locale du port 3307 reste indépendante. Cette configuration utilise le mode développement et ne doit pas être exposée comme une installation de production. Le déploiement en ligne n’a pas été réalisé.
+La stack Docker locale sert le Front, l’API Symfony et sa base MySQL Docker dédiée. La base MySQL d’un éventuel serveur local (port 3307) reste indépendante de celle de Docker. Cette configuration utilise le mode développement et ne doit pas être exposée comme une installation de production. Le déploiement en ligne n’a pas été réalisé.

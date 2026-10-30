@@ -1,5 +1,8 @@
 # Checklist de recette des parcours — Quai Antique
 
+> **Lecture au 29 octobre 2026.** Les résultats ci-dessous ont été obtenus le 27 et le 28 octobre, avec le serveur Front local et Symfony sur une base SQLite jetable, pas avec la stack Docker. Ils restent valables comme recette historique ; la recette de référence est celle rejouée sur la stack Docker et conservée dans le dossier de validation finale. Voir [la matrice de critères](exigences-criteres-preuves.md) pour les tests automatisés qui couvrent chaque exigence.
+
+
 Mise à jour : 28 octobre 2026. Cette checklist reprend le document `parcours-utilisateur.md`. Elle sert à vérifier l'application comme un visiteur, un client ou l'administrateur, puis à consigner les écarts. Les tests PHPUnit valident principalement l'API ; ils ne prouvent pas à eux seuls le fonctionnement de chaque page du navigateur. Les parcours ont été exercés dans une base isolée ; cette checklist ne constitue pas un compte-rendu de déploiement. Le 28/10, le propriétaire du projet a revu le site et accepté la recette Front comme suffisante ; aucun nouveau passage global Front n'est prévu. Les points ci-dessous signalés comme non attestés restent des limites précises de preuve, pas des tâches bloquant cette acceptation.
 
 ## Visiteur
@@ -41,13 +44,14 @@ Mise à jour : 28 octobre 2026. Cette checklist reprend le document `parcours-ut
 | Apparence des boutons admin | Corrigée et vérifiée visuellement le 27/10 | Les boutons créés dynamiquement n’avaient pas les classes CSS `.button`. Les actions Enregistrer/Modifier/Supprimer et Nouveau sont maintenant stylées ; Enregistrer est doré et les actions secondaires utilisent le contour. |
 | Bloc « Gestion des contenus » | Corrigé et vérifié en mise en page bureau le 27/10 | Deux liens-boutons de même largeur sont alignés sur deux colonnes ; le mobile repasse sur une colonne. |
 
-## Comment finir la recette
+## Comment rejouer la recette
 
-1. Utiliser l'application via le serveur Front local (par exemple `http://127.0.0.1:8085/src/`) avec Symfony actif sur le port 8000.
-2. Utiliser des données de test reconnaissables, ne pas modifier les vrais comptes ou données conservés localement.
-3. Pour chaque étape « à rejouer », noter le résultat et le message visible. En cas d'échec, corriger puis refaire uniquement l'étape concernée.
-4. Les tests PHPUnit restent le contrôle répétable de l'API ; la recette navigateur vérifie la liaison entre pages, JavaScript, API et retours visibles.
+1. Démarrer la stack Docker (voir le [README](../../README.md)) et ouvrir `http://localhost:82`. Dans l’onglet Réseau, vérifier que les appels partent vers `localhost:82/api/…`.
+2. Partir d’une base Docker jetable : migrations puis fixtures `quai-antique-demo`. Ne jamais charger les fixtures dans une base contenant des données à conserver.
+3. Utiliser des données de test reconnaissables. Pour chaque étape, noter la date, le rôle, la page, l’action, le message visible et le résultat ; joindre une capture pour les étapes clés.
+4. En cas d’échec, corriger puis rejouer uniquement l’étape concernée, en notant le nouveau commit.
+5. Les tests PHPUnit restent le contrôle répétable de l’API ; la recette navigateur vérifie la liaison entre pages, JavaScript, API et retours visibles.
 
 ## Résultat actuel
 
-La recette admin est validée sur une base SQLite isolée : authentification, navigation, réglages, catalogue, galerie, filtres, modification et suppression d’une réservation. Les formulaires invalides sont rejetés. L’upload et la suppression d’une photo ont été exécutés manuellement dans le navigateur ; la suppression d’une réservation admin a affiché le message de réussite après une confirmation. Après nettoyage, la base isolée contenait zéro réservation et les neuf photos initiales. La suite globale actuelle passe (40 tests, 334 assertions), dont les tests d’upload, remplacement et révocation de jeton. Le parcours client connexion, redirection, profil, réservation et déconnexion a été contrôlé dans le navigateur. Restent à attester manuellement dans l’espace client la suppression d’une réservation et la confirmation UI de suppression du compte. Aucun compte administrateur réel n’a été créé ; il faudra le provisionner avant la mise en ligne. Il n'est pas nécessaire de créer des user stories supplémentaires.
+La recette admin est validée sur une base SQLite isolée : authentification, navigation, réglages, catalogue, galerie, filtres, modification et suppression d’une réservation. Les formulaires invalides sont rejetés. L’upload et la suppression d’une photo ont été exécutés manuellement dans le navigateur ; la suppression d’une réservation admin a affiché le message de réussite après une confirmation. Après nettoyage, la base isolée contenait zéro réservation et les neuf photos initiales. La suite globale alors rapportée passait (40 tests, 334 assertions), dont les tests d’upload, remplacement et révocation de jeton. Le parcours client connexion, redirection, profil, réservation et déconnexion a été contrôlé dans le navigateur. Restent à attester manuellement dans l’espace client la suppression d’une réservation et la confirmation UI de suppression du compte. Aucun compte administrateur réel n’a été créé ; il faudra le provisionner avant la mise en ligne. La nécessité de user stories supplémentaires reste à confirmer auprès de la formation.
