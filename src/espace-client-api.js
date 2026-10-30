@@ -1,6 +1,6 @@
-import { apiBaseUrl } from "./api-config.js";
+import { passwordMeetsRequirements, passwordHint } from "./password.js";
+import { fetchJson, messageUtilisateur } from "./http.js";
 
-const base = apiBaseUrl;
 const tokenKey = "quai_api_token";
 const status = document.querySelector("#client-status");
 const loginLink = document.querySelector("#client-login");
@@ -12,22 +12,7 @@ const reservations = document.querySelector("#client-reservations");
 let profil;
 
 async function requete(path, method = "GET", data = null) {
-  const token = sessionStorage.getItem(tokenKey);
-  if (!token) throw new Error("Connectez-vous pour accéder à votre espace client.");
-  const headers = { "X-AUTH-TOKEN": token };
-  if (data !== null) headers["Content-Type"] = "application/json";
-  const response = await fetch(`${base}${path}`, {
-    method, headers, body: data === null ? null : JSON.stringify(data),
-  });
-  const body = response.status === 204 ? {} : await response.json();
-  if (!response.ok) {
-    if (response.status === 401) {
-      sessionStorage.removeItem(tokenKey);
-      sessionStorage.removeItem("quai_api_roles");
-    }
-    throw new Error(body.error || "La demande n’a pas pu aboutir.");
-  }
-  return body;
+  return fetchJson(path, { method: method, body: data });
 }
 
 function remplirProfil(data) {
@@ -101,7 +86,7 @@ function afficherReservations(items) {
         });
         status.textContent = "Réservation modifiée.";
         await chargerReservations();
-      } catch (error) { status.textContent = error.message; }
+      } catch (error) { status.textContent = messageUtilisateur(error); }
     });
     remove.addEventListener("click", async () => {
       if (!window.confirm("Annuler cette réservation ?")) return;
@@ -109,7 +94,7 @@ function afficherReservations(items) {
         await requete(`/reservations/${encodeURIComponent(item.uuid)}`, "DELETE");
         status.textContent = "Réservation annulée.";
         await chargerReservations();
-      } catch (error) { status.textContent = error.message; }
+      } catch (error) { status.textContent = messageUtilisateur(error); }
     });
     article.append(title, edit);
     reservations.append(article);
@@ -121,7 +106,10 @@ async function chargerReservations() {
   afficherReservations(body.data);
 }
 
-profilForm.elements.email.addEventListener("input", actualiserChampMotDePasse);
+profilForm.addEventListener("input", () => {
+  status.textContent = "";
+  actualiserChampMotDePasse();
+});
 
 profilForm.addEventListener("submit", async (event) => {
   event.preventDefault();
@@ -136,23 +124,32 @@ profilForm.addEventListener("submit", async (event) => {
     const body = await requete("/account/me", "PUT", changes);
     remplirProfil(body.data);
     status.textContent = "Vos informations ont été enregistrées.";
-  } catch (error) { status.textContent = error.message; }
+  } catch (error) { status.textContent = messageUtilisateur(error); }
 });
 
 passwordForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   if (!profil) return;
+  if (!passwordMeetsRequirements(passwordForm.elements.password.value)) {
+    status.textContent = passwordHint;
+    return;
+  }
+  if (passwordForm.elements.password.value !== passwordForm.elements.confirmPassword.value) {
+    status.textContent = "La confirmation du mot de passe ne correspond pas.";
+    return;
+  }
   try {
     await requete("/account/me", "PUT", {
       prenom: profil.prenom, nom: profil.nom, email: profil.email,
       nbConvivesDefaut: profil.nbConvivesDefaut, allergies: profil.allergies,
       currentPassword: passwordForm.elements.currentPassword.value, password: passwordForm.elements.password.value,
     });
-    sessionStorage.removeItem("quai_api_token");
+    sessionStorage.removeItem(tokenKey);
     sessionStorage.removeItem("quai_api_roles");
     passwordForm.reset();
-    status.textContent = "Mot de passe modifié. Reconnectez-vous pour poursuivre.";
-  } catch (error) { status.textContent = error.message; }
+    // Le jeton n'est plus valable : on renvoie vers la connexion, qui affiche la confirmation.
+    window.location.assign("connexion.html?motdepasse=modifie");
+  } catch (error) { status.textContent = messageUtilisateur(error); }
 });
 
 deleteForm.addEventListener("submit", async (event) => {
@@ -160,11 +157,11 @@ deleteForm.addEventListener("submit", async (event) => {
   if (!window.confirm("Supprimer définitivement votre compte et toutes vos réservations ?")) return;
   try {
     await requete("/account/me", "DELETE", { currentPassword: deleteForm.elements.currentPassword.value });
-    sessionStorage.removeItem("quai_api_token");
+    sessionStorage.removeItem(tokenKey);
     sessionStorage.removeItem("quai_api_roles");
     document.querySelectorAll(".client-section").forEach((section) => { section.hidden = true; });
     status.textContent = "Votre compte et vos réservations ont été supprimés.";
-  } catch (error) { status.textContent = error.message; }
+  } catch (error) { status.textContent = messageUtilisateur(error); }
 });
 
 logoutButton.addEventListener("click", async () => {
@@ -174,7 +171,7 @@ logoutButton.addEventListener("click", async () => {
     sessionStorage.removeItem(tokenKey);
     sessionStorage.removeItem("quai_api_roles");
     window.location.assign("connexion.html?deconnecte=1");
-  } catch (error) {
+  } catch {
     if (!sessionStorage.getItem(tokenKey)) {
       window.location.assign("connexion.html?deconnecte=1");
       return;
@@ -189,14 +186,17 @@ try {
   remplirProfil(body.data);
   loginLink.hidden = true;
   logoutButton.hidden = false;
-  await chargerReservations();
+  try { await chargerReservations(); }
+  catch (error) {
+    reservations.textContent = `Réservations indisponibles : ${messageUtilisateur(error)}`;
+  }
   if (new URLSearchParams(window.location.search).get("reservation") === "confirmee") {
-    status.textContent = "Votre réservation est confirmée et apparaît ci-dessous.";
+    status.textContent = "Votre réservation est confirmée.";
     window.history.replaceState(null, "", "espace-client.html");
   }
 } catch (error) {
   document.querySelectorAll(".client-section").forEach((section) => { section.hidden = true; });
-  status.textContent = error.message;
+  status.textContent = messageUtilisateur(error);
   logoutButton.hidden = true;
   loginLink.hidden = Boolean(sessionStorage.getItem(tokenKey));
 }

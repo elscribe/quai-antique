@@ -17,13 +17,23 @@ final class ReservationService
 
     public function parseDate(string $value): ?\DateTime
     {
-        $date = \DateTime::createFromFormat('!Y-m-d', $value, new \DateTimeZone('Europe/Paris'));
+        try {
+            $date = \DateTime::createFromFormat('!Y-m-d', $value, new \DateTimeZone('Europe/Paris'));
+        } catch (\ValueError) {
+            return null;
+        }
+
         return $date && $date->format('Y-m-d') === $value ? $date : null;
     }
 
     public function parseTime(string $value): ?\DateTime
     {
-        $time = \DateTime::createFromFormat('!H:i', $value, new \DateTimeZone('Europe/Paris'));
+        try {
+            $time = \DateTime::createFromFormat('!H:i', $value, new \DateTimeZone('Europe/Paris'));
+        } catch (\ValueError) {
+            return null;
+        }
+
         return $time && $time->format('H:i') === $value ? $time : null;
     }
 

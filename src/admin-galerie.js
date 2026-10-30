@@ -1,4 +1,5 @@
-import { apiBaseUrl, apiOrigin } from "./api-config.js";
+import { fetchJson, messageUtilisateur } from "./http.js";
+import { photoUrl } from "./photo-url.js";
 const token = sessionStorage.getItem("quai_api_token");
 const status = document.querySelector("#galerie-admin-status");
 const zone = document.querySelector("#galerie-admin");
@@ -7,16 +8,7 @@ const upload = document.querySelector("#photo-upload");
 const photos = document.querySelector("#photos-admin");
 
 async function requete(path, method = "GET", payload = null) {
-  const headers = { "X-AUTH-TOKEN": token };
-  let body = payload;
-  if (payload !== null && !(payload instanceof FormData)) {
-    headers["Content-Type"] = "application/json";
-    body = JSON.stringify(payload);
-  }
-  const response = await fetch(`${apiBaseUrl}/${path}`, { method, headers, body });
-  const data = response.status === 204 ? {} : await response.json();
-  if (!response.ok) throw new Error(data.error || "La demande a échoué.");
-  return data;
+  return fetchJson(path, { method: method, body: payload });
 }
 
 async function charger() {
@@ -26,7 +18,9 @@ async function charger() {
   for (const photo of body.data) {
     const article = document.createElement("article");
     const image = document.createElement("img");
-    image.src = photo.url_image.startsWith("/uploads/") ? apiOrigin + photo.url_image : photo.url_image;
+    const url = photoUrl(photo.url_image);
+    if (url) image.src = url;
+    else image.hidden = true;
     image.alt = photo.titre;
     image.width = 160;
     const form = document.createElement("form");
@@ -66,7 +60,7 @@ async function charger() {
         }
         status.textContent = "Photo modifiée.";
         await charger();
-      } catch (error) { status.textContent = error.message; }
+      } catch (error) { status.textContent = messageUtilisateur(error); }
     });
     remove.addEventListener("click", async () => {
       if (!window.confirm("Supprimer cette photo de la galerie ?")) return;
@@ -74,7 +68,7 @@ async function charger() {
         await requete(`photos/${encodeURIComponent(photo.uuid)}`, "DELETE");
         status.textContent = "Photo supprimée.";
         await charger();
-      } catch (error) { status.textContent = error.message; }
+      } catch (error) { status.textContent = messageUtilisateur(error); }
     });
     article.append(image, form);
     photos.append(article);
@@ -88,7 +82,7 @@ upload.addEventListener("submit", async (event) => {
     upload.reset();
     status.textContent = "Photo ajoutée.";
     await charger();
-  } catch (error) { status.textContent = error.message; }
+  } catch (error) { status.textContent = messageUtilisateur(error); }
 });
 
 try {
@@ -101,5 +95,5 @@ try {
 } catch (error) {
   zone.hidden = true;
   loginPrompt.hidden = false;
-  status.textContent = error.message;
+  status.textContent = messageUtilisateur(error);
 }

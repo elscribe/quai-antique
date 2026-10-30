@@ -1,52 +1,43 @@
 # Audit global Quai Antique — état avant déploiement
 
-Mise à jour : 28 octobre 2026. Cet audit décrit le dépôt après intégration locale des branches Base de données, CRUD, Sécurité, API complète et Front API. Ces intégrations sont fusionnées dans le `main` distant ; la copie locale `main` doit encore être actualisée. Le déploiement n’a pas été réalisé.
+Mise à jour : 29 octobre 2026. Cette note remplace la version du 27-28 octobre, dont plusieurs résultats n’étaient plus à jour (nombre de tests, uploads, concurrence, état de `main`). Elle distingue ce qui est **implémenté dans le code** de ce qui est **prouvé par une sortie datée**. Les preuves d’exécution (Docker, MySQL, PHPUnit, profil de production) sont rassemblées dans le dossier de validation finale du 29 octobre, avec la date, le commit et le code de retour de chaque commande. Le déploiement en ligne n’a pas été réalisé.
 
-## État de validation
+## État du code
 
-- **Backend Symfony/Doctrine : validé localement.** Six migrations exécutées, aucune en attente ; mapping et schéma MySQL synchronisés. Le conteneur Symfony est valide.
-- **API et sécurité : validées par tests automatisés.** PHPUnit : 40 tests et 334 assertions réussis. Les routes, contrôleurs, validation, autorisations, authentification, documentation, fixtures et principaux parcours API sont couverts.
-- **Front connecté : implémenté et contrôlé.** Les pages publiques, l’espace client et l’administration consomment l’API. Le dernier test statique des modules JavaScript passe. La navigation du rôle et les redirections sont intégrées.
-- **Recette Front : acceptée par le propriétaire du projet le 28/10 après revue du site ; aucun nouveau parcours global n’est requis.** Les parcours visiteur, client et administrateur ont été joués dans l’instance isolée, y compris ajout/suppression de photo et suppression d’une réservation côté admin. Voir [la checklist de recette](../conception/recette-parcours-2026-10-27.md). La suppression de réservation côté client et la confirmation UI de suppression de compte ne sont pas attestées dans le navigateur ; les API et les tests automatisés couvrent ces opérations. Cette limite de preuve n’annule pas l’acceptation générale de la recette Front.
-- **Docker local complet : validé le 28/10.** La stack lance Front/Nginx, Symfony/PHP-FPM et un MySQL Docker isolé sur le port Front historique 82. Nginx route `/api` vers Symfony ; les uploads utilisent un volume partagé et restent accessibles après redémarrage. La configuration, les migrations, le schéma Doctrine, les précontrôles CORS, les routes de santé/catalogue et les 40 tests PHPUnit (334 assertions, SQLite en mémoire) ont été vérifiés. Le propriétaire a contrôlé visuellement l’accueil, la Carte et la Galerie sur la stack de test avant le basculement. Voir [le guide Docker local](../deployment/docker-local.md). Cet environnement est en `APP_ENV=dev` et n’est pas une configuration de production.
-- **SonarQube : audit final non effectué.** Les alertes IDE précédentes sont des recommandations de maintenabilité ; elles ne constituent ni une validation ni un audit de sécurité.
-
-Ces résultats attestent les contrôles effectivement exécutés. Ils ne garantissent ni une note donnée, ni une conformité juridique, ni une certification de sécurité.
+- **Backend Symfony 7.4 / Doctrine.** 8 entités, 6 migrations, contrôleurs d’API pour le restaurant, les catégories, les plats, les menus, la galerie, les réservations et le compte. Commandes d’exploitation : `app:init-restaurant` (idempotente) et `app:create-admin` (mot de passe saisi de façon masquée).
+- **Sécurité.** Jeton `X-AUTH-TOKEN` haché en SHA-256, expiration à 12 heures, révocation à la déconnexion et au changement de mot de passe ; mots de passe hachés ; rôle administrateur contrôlé côté serveur ; limiteurs de connexion (5 échecs / 15 min) et d’inscription (5 / heure / IP) ; mot de passe actuel exigé pour changer d’e-mail ou de mot de passe et pour supprimer le compte ; accès aux réservations d’autrui refusé (404).
+- **Réservations.** Créneaux de 15 minutes, jours de fermeture, capacité par service, verrou pessimiste MySQL sur le restaurant pour éviter la sur-réservation de la dernière place (désactivé sous SQLite).
+- **Documentation d’API.** Nelmio/OpenAPI : Swagger UI sur `/api/doc`, JSON sur `/api/doc.json`, schémas de réponse sur toutes les opérations 200/201. Un test vérifie que chaque route du routeur est documentée.
+- **Tests.** 46 méthodes de test PHPUnit / BrowserKit (48 exécutions), sur SQLite en mémoire forcé par `phpunit.dist.xml`.
+- **Front.** 13 pages reliées à l’API par `src/http.js`. Voir [RAPPORT-FRONT-ORAL.md](../../RAPPORT-FRONT-ORAL.md).
+- **Docker.** `compose.yaml` (projet `quai-antique`, port 82 par défaut) : Nginx (Front et proxy `/api`), PHP-FPM, MySQL 8.4, volume pour les uploads. `compose.production.yaml` (projet `quai-antique-prod-preview`, port 8086) : images sans dépendances de développement, sans tests ni Composer.
 
 ## Correspondance avec les cours backend
 
-- **Documenter son API** : Nelmio/OpenAPI expose Swagger UI `/api/doc` et le JSON `/api/doc.json`. Les attributs PHP sont utilisés avec les versions installées. Le test de contrat vérifie la correspondance des opérations entre le routeur Symfony et OpenAPI ; il ne certifie pas à lui seul chaque description métier.
-- **Base de données DataFixtures** : fixtures ordonnées par références et groupes. Un chargement a été effectué avec `--append` dans la base de développement, après essai isolé. La commande de chargement sans `--append` peut purger la base ciblée : contrôler `DATABASE_URL` avant toute exécution.
-- **Tester une application web** : PHPUnit/BrowserKit utilisent SQLite en mémoire, protégée contre une réinitialisation d’une autre base. Résultat courant : 40 tests, 334 assertions. Les tests répétables complètent, sans remplacer, les vérifications manuelles du navigateur.
-- **Sécuriser l’accès aux données** : authentification par jeton, hash de mot de passe, rôle admin contrôlé côté serveur, limiteur de tentatives, expiration et révocation de jeton, validation des entrées. Le navigateur garde le jeton dans `sessionStorage`, accessible à un script injecté ; réévaluer le stockage et renforcer la politique XSS avant production.
+- **Documenter son API** : attributs OpenAPI dans les contrôleurs, Swagger UI, test de contrat (`ApiDocumentationTest`).
+- **Base de données DataFixtures** : fixtures ordonnées par références et groupes (`quai-antique-demo`), enregistrées uniquement en `dev` et `test` (`config/services.yaml`). Le chargement sans `--append` purge la base ciblée : contrôler `DATABASE_URL` avant.
+- **Tester une application web** : tests fonctionnels BrowserKit, base SQLite isolée.
+- **Sécuriser l’accès aux données** : voir la section Sécurité ci-dessus. Le jeton est conservé côté navigateur dans `sessionStorage` ; aucune donnée de l’API n’est insérée avec `innerHTML`.
 
-Le projet adapte le cours au modèle Quai Antique : un restaurant, des catégories/plats/menus, des réservations, des photos et un compte client/admin. Les exemples du cours qui supposent des écrans ou entités différents ne sont pas copiés à l’identique ; les écarts fonctionnels sont consignés dans les rapports.
+Le projet adapte les cours au modèle Quai Antique ; les écarts sont consignés dans les [rapports de la base de données](../database/rapport-ecarts-cours.md) et de [validation des cours backend](rapport-validation-cours-backend.md).
 
-## Résultats techniques vérifiés
+## Ce qui doit être prouvé par une sortie datée
 
-- `vendor/bin/phpunit --colors=never` : **40 tests, 334 assertions, réussite**.
-- `php bin/console doctrine:schema:validate` : mappings corrects et schéma synchronisé.
-- `php bin/console lint:container` : réussi.
-- `composer validate --no-check-publish`, syntaxe PHP/JavaScript et `git diff --check` : réussis lors de l’audit.
-- `docker compose config -q` et `docker compose build --quiet` à la racine : réussis. Ce build ne porte que sur l’image Front Nginx.
-- Le test isolé de concurrence MySQL a refusé l’une de deux réservations simultanées sur la dernière place (`201` et `409`) et a préservé les invariants métier. Ce résultat n’est pas une preuve d’une capacité de charge de production.
+| Point | Commande ou geste |
+|---|---|
+| Schéma à jour | `doctrine:migrations:status` et `doctrine:schema:validate`, code de retour 0 |
+| Tests | `php bin/phpunit --testdox` dans le conteneur |
+| Front et API sur la même origine | Onglet Réseau : appels vers `localhost:82/api/…` |
+| Persistance des uploads | téléversement, `restart`, `down` sans `-v`, `up` : l’image reste servie |
+| Concurrence MySQL | deux réservations simultanées sur la dernière place : 201 et 409 |
+| Profil de production | build, `about --env=prod`, `nginx -t`, absence de PHPUnit et de `tests/` dans l’image |
 
-## Dossier professionnel — preuves encore à consolider
+## Avant un déploiement
 
-- **Exemple 4 — base relationnelle** : MCD/MLD/MPD, entités, migrations et anciennes captures existent. Les captures Workbench déjà enregistrées ne montrent pas toutes le schéma actuel. Ajouter une capture actuelle des tables/relations et conserver les sorties datées `doctrine:migrations:status`, `doctrine:schema:validate` et une structure SQL comme `SHOW CREATE TABLE menu_categorie`.
-- **Exemple 5 — SQL et NoSQL** : Quai Antique illustre Doctrine/SQL. Vite & Gourmand contient une implémentation MongoDB et des agrégations dans un autre projet. Conserver une preuve observable pour chaque technologie et demander confirmation à la formation que deux projets sont recevables dans un seul exemple ; ne pas attribuer MongoDB à Quai Antique.
-- **Exemple 6 — composants serveur Symfony** : contrôleurs, services, sécurité et tests sont présents. Le dossier local doit contenir les sorties de tests, des réponses HTTP de succès/refus et le résultat du test de concurrence. La mise en production peut rester en attente, conformément au choix convenu.
-
-La grille n’impose pas un nombre exact de captures ; les preuves doivent démontrer chacune des affirmations. Le dépôt des preuves est un dépôt Git local distinct sans remote : ne pas le pousser.
-
-## Blocages avant déploiement et Docker complet
-
-1. Préparer une image/configuration de production distincte : `APP_ENV=prod`, `APP_DEBUG=0`, dépendances sans outils de développement et secrets injectés par l’hébergeur.
-2. Définir le terminaison HTTPS et les en-têtes de sécurité, puis vérifier les routes `/api` et `/uploads` derrière le domaine public.
-3. Définir la sauvegarde/restauration des volumes MySQL et uploads, ainsi que l’exécution contrôlée des migrations au déploiement.
-4. Vérifier les coordonnées et mentions légales réelles avant publication.
-5. Exécuter un audit SonarQube complet et compléter les preuves DP séparément ; les deux actions UI client non attestées restent des limites de preuve, pas un blocage de la recette Front acceptée.
-
-## Historique Git à la date de cette note
-
-Les PR #3 (base de données), #4 (CRUD initial), #5 (sécurité), #6 (API complète) et #7 (Front API) sont fusionnées sur GitHub. La copie locale `main` doit être mise à jour par `git fetch origin` puis `git pull --ff-only origin main`. Le dossier des preuves DP demeure indépendant et local.
+1. Choisir l’hébergeur, le domaine et la terminaison HTTPS ; ajouter HSTS et une politique CSP.
+2. Configurer `trusted_proxies` si un proxy est placé devant Nginx, sinon les limiteurs comptent toutes les requêtes comme venant de la même IP.
+3. Injecter les secrets par l’hébergeur ; utiliser un utilisateur MySQL dédié, non root.
+4. Au premier déploiement : migrations, `app:init-restaurant`, `app:create-admin`.
+5. Prévoir la sauvegarde et la restauration de MySQL et du volume des uploads.
+6. Compléter les informations de l’éditeur et de l’hébergeur dans `mentions-legales.html`.
+7. Lancer un audit SonarQube et traiter ses alertes.

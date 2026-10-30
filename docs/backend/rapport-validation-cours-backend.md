@@ -1,6 +1,6 @@
 # Rapport de validation — documentation API, fixtures et tests
 
-> **Archive du 26 octobre :** les chiffres et limites ci-dessous décrivent cette date. Pour l’état du 28 octobre, les fonctionnalités ajoutées depuis et la suite actuelle (40 tests, 334 assertions), consulter [l’audit global actualisé](audit-global-quai-antique-2026-10-27.md). Le catalogue a depuis été chargé dans MySQL local avec `--append`.
+> **Archive du 26 octobre 2026 — ne décrit plus l’état actuel.** Depuis cette date : le travail a été commité et fusionné ; la suite PHPUnit compte 46 méthodes de test (48 exécutions) au lieu de 23 ; le code contient six migrations au lieu de cinq ; les menus sont lus et écrits via Doctrine ; les réservations, la galerie (avec téléversement), l’expiration et la révocation des jetons, les limiteurs de connexion et d’inscription et la commande `app:create-admin` sont implémentés. Pour l’état actuel, consulter [l’audit global actualisé](audit-global-quai-antique-2026-10-27.md).
 
 **Date de vérification :** 26 octobre 2026
 **Projet :** Quai Antique — API Symfony 7.4

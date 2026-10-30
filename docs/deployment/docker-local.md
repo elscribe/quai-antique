@@ -30,12 +30,14 @@ docker compose --env-file .env.docker up -d --build
 docker compose --env-file .env.docker ps
 ```
 
-Sur une base Docker neuve, appliquer les migrations puis les fixtures de démonstration :
+Sur une base Docker neuve, appliquer les migrations, puis charger les fixtures de démonstration (restaurant, carte, galerie, comptes et une réservation) :
 
 ```sh
 docker compose --env-file .env.docker exec api php bin/console doctrine:migrations:migrate --no-interaction
-docker compose --env-file .env.docker exec api php bin/console doctrine:fixtures:load --no-interaction
+docker compose --env-file .env.docker exec api php bin/console doctrine:fixtures:load --group=quai-antique-demo --no-interaction
 ```
+
+Pour une base sans données de démonstration, remplacer le chargement des fixtures par `app:init-restaurant` (configuration du restaurant) et `app:create-admin` (compte administrateur), comme décrit dans le [README](../../README.md).
 
 Le chargement des fixtures purge la base visée. Avant de lancer cette commande, vérifier que l’API cible bien la base Docker `quai_antique_docker` dans `.env.docker`.
 
@@ -47,9 +49,9 @@ docker compose --env-file .env.docker exec api php bin/console doctrine:migratio
 docker compose --env-file .env.docker exec -e APP_ENV=test -e DATABASE_URL=sqlite:///:memory: api php bin/phpunit -c phpunit.dist.xml --colors=never
 ```
 
-La suite PHPUnit force SQLite en mémoire afin de ne jamais purger la base MySQL Docker. Après l’actualisation de PHPUnit et l’ajout d’un contrôle d’upload à la limite de 3 MiB, le contrôle du 28/10 a obtenu **41 tests et 344 assertions réussis dans le conteneur Docker**.
+La suite PHPUnit force SQLite en mémoire (`phpunit.dist.xml`) afin de ne jamais purger la base MySQL Docker. Elle compte 46 méthodes de test, soit 48 exécutions. Le résultat de référence est la sortie brute datée conservée dans le dossier de validation finale.
 
-Le propriétaire a également vérifié dans le navigateur l’accueil, la Carte et la Galerie sur la stack parallèle au port `8086`. Après son accord, cette stack a été basculée sur `82`. Les appels Front vers l’API utilisent alors la même origine ; `http://127.0.0.1:82/api/health` répond 200.
+L’image Front remplace `src/api-config.js` par `docker/api-config.js` : le navigateur appelle l’API sur la même origine que la page (`http://127.0.0.1:82/api/…`), via Nginx. Pour le vérifier, ouvrir l’onglet Réseau des outils de développement : aucun appel ne doit partir vers `127.0.0.1:8000`.
 
 ## Arrêt et conservation des données
 
@@ -72,7 +74,11 @@ docker compose -p quai-antique-prod-preview --env-file .env.production -f compos
 docker compose -p quai-antique-prod-preview --env-file .env.production -f compose.production.yaml up -d --build
 docker compose -p quai-antique-prod-preview --env-file .env.production -f compose.production.yaml exec api php bin/console doctrine:migrations:migrate --no-interaction --env=prod
 docker compose -p quai-antique-prod-preview --env-file .env.production -f compose.production.yaml exec api php bin/console doctrine:schema:validate --env=prod
+docker compose -p quai-antique-prod-preview --env-file .env.production -f compose.production.yaml exec api php bin/console app:init-restaurant --env=prod
+docker compose -p quai-antique-prod-preview --env-file .env.production -f compose.production.yaml exec api php bin/console app:create-admin --env=prod --email=adresse@domaine --prenom=Prénom --nom=Nom
 ```
+
+Les fixtures ne sont pas installées dans l’image de production : la configuration du restaurant et le compte administrateur se créent avec ces deux commandes.
 
 Le site d’aperçu est disponible sur `http://127.0.0.1:8086` par défaut. Pour supprimer uniquement cet environnement de prévisualisation et ses données jetables, utiliser la même commande Compose avec `down -v`. Ne pas utiliser cette commande avec le projet Compose de développement.
 

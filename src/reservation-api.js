@@ -1,6 +1,5 @@
-import { apiBaseUrl } from "./api-config.js";
+import { fetchJson, messageUtilisateur } from "./http.js";
 
-const apiBase = apiBaseUrl;
 const form = document.querySelector("#reservation-form");
 const slotsContainer = document.querySelector("#availability-slots");
 const availabilityStatus = document.querySelector("#availability-status");
@@ -23,9 +22,8 @@ async function chargerDisponibilites() {
   availabilityStatus.textContent = "Recherche des créneaux…";
   const params = new URLSearchParams({ date: dateInput.value, guests: guestInput.value });
   try {
-    const response = await fetch(`${apiBase}/availability?${params}`, { signal: currentRequest.signal });
-    const body = await response.json();
-    if (!response.ok || !Array.isArray(body.data)) throw new Error(body.error || "Disponibilité indisponible.");
+    const body = await fetchJson(`availability?${params}`, { signal: currentRequest.signal, token: null });
+    if (!Array.isArray(body.data)) throw new Error(body.error || "Disponibilité indisponible.");
     for (const slot of body.data) {
       const button = document.createElement("button");
       button.type = "button";
@@ -71,26 +69,14 @@ form.addEventListener("submit", async (event) => {
   if (autres) allergies.push(autres);
   submit.disabled = true;
   try {
-    const response = await fetch(`${apiBase}/reservations`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-AUTH-TOKEN": token },
-      body: JSON.stringify({
-        date: dateInput.value, heure: timeInput.value, nb_convives: Number(guestInput.value),
-        allergies: allergies.length ? allergies.join(", ") : null,
-      }),
-    });
-    const body = await response.json();
-    if (!response.ok) {
-      if (response.status === 401) {
-        sessionStorage.removeItem("quai_api_token");
-        sessionStorage.removeItem("quai_api_roles");
-      }
-      if (response.status === 409) await chargerDisponibilites();
-      throw new Error(body.error || "La réservation n’a pas pu être enregistrée.");
-    }
+    await fetchJson("reservations", { method: "POST", body: {
+      date: dateInput.value, heure: timeInput.value, nb_convives: Number(guestInput.value),
+      allergies: allergies.length ? allergies.join(", ") : null,
+    } });
     window.location.assign("espace-client.html?reservation=confirmee");
   } catch (error) {
-    resultMessage.textContent = error.message || "La réservation n’a pas pu être enregistrée.";
+    if (error.status === 409) await chargerDisponibilites();
+    resultMessage.textContent = messageUtilisateur(error, "La réservation n’a pas pu être enregistrée.");
   } finally {
     submit.disabled = false;
   }
@@ -103,19 +89,8 @@ async function chargerPreferences() {
     return;
   }
   try {
-    const response = await fetch(`${apiBase}/account/me`, { headers: { "X-AUTH-TOKEN": token } });
-    if (response.status === 401) {
-      sessionStorage.removeItem("quai_api_token");
-      sessionStorage.removeItem("quai_api_roles");
-      reservationCaption.hidden = false;
-      return;
-    }
-    if (!response.ok) {
-      reservationCaption.hidden = false;
-      return;
-    }
+    const profile = (await fetchJson("account/me")).data;
     reservationCaption.hidden = true;
-    const profile = (await response.json()).data;
     sessionStorage.setItem("quai_api_roles", JSON.stringify(profile.roles || []));
     if (profile.nbConvivesDefaut) guestInput.value = profile.nbConvivesDefaut;
     const allergies = (profile.allergies || "").split(",").map((item) => item.trim());

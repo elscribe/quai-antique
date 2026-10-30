@@ -1,6 +1,8 @@
+import { fetchJson } from "./http.js";
+import { passwordMeetsRequirements } from "./password.js";
 const footerStyles = document.createElement("link");
 footerStyles.rel = "stylesheet";
-footerStyles.href = "footer.css?v=figma-footer-5";
+footerStyles.href = "footer.css?v=front-audit-2026-10-28";
 document.head.append(footerStyles);
 
 const sessionNavigation = document.querySelector("[data-session-nav]");
@@ -25,32 +27,26 @@ if (sessionNavigation) {
   } else {
     if (cachedRoles.length) setSessionLink(cachedRoles);
     else sessionNavigation.textContent = "Vérification de la session…";
-    fetch(`${apiBaseUrl}/account/me`, {
-      headers: { "X-AUTH-TOKEN": token },
-    }).then(async (response) => {
-      if (response.status === 401) {
-        sessionStorage.removeItem("quai_api_token");
-        sessionStorage.removeItem("quai_api_roles");
-        sessionNavigation.textContent = "Connexion";
-        sessionNavigation.href = "connexion.html";
-        return;
-      }
-      if (!response.ok) throw new Error("Impossible de vérifier la session.");
-      const profile = await response.json();
+    fetchJson("account/me").then((profile) => {
       const roles = profile.data.roles || [];
       sessionStorage.setItem("quai_api_roles", JSON.stringify(roles));
       setSessionLink(roles);
     }).catch(() => {
-      if (!cachedRoles.length) sessionNavigation.textContent = "Session à vérifier";
+      if (!sessionStorage.getItem("quai_api_token")) {
+        sessionNavigation.textContent = "Connexion";
+        sessionNavigation.href = "connexion.html";
+      } else if (!cachedRoles.length) sessionNavigation.textContent = "Session à vérifier";
     });
   }
 }
 
-const publicFooterMarkup = `<footer class="site-footer"><div class="footer-brand"><strong>Le Quai Antique</strong><p>Chambéry</p><p>Cuisine gastronomique inspirée par le terroir savoyard et orchestrée avec passion par le Chef Arnaud Michant.</p></div><div class="footer-section"><strong>Plan du site</strong><a href="index.html">Accueil</a><a href="galerie.html">Notre galerie</a><a href="carte.html">La carte &amp; menus</a><a href="reservation.html">Réserver une table</a><a href="contact.html">Contact &amp; accès</a></div><div class="footer-section"><strong>Contact &amp; accès</strong><p>14 Quai de la Rive Gauche<br>73000 Chambéry<br>04 79 12 34 56</p></div><div class="footer-section"><strong>Mentions</strong><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgu-cgv.html">CGU / CGV</a></div></footer>`;
+const publicFooterMarkup = `<footer class="site-footer"><div class="footer-brand"><strong>Le Quai Antique</strong><p>Chambéry</p><p>Cuisine gastronomique inspirée par le terroir savoyard et orchestrée avec passion par le Chef Arnaud Michant.</p></div><div class="footer-section"><strong>Plan du site</strong><a href="index.html">Accueil</a><a href="galerie.html">Notre galerie</a><a href="carte.html">La carte &amp; menus</a><a href="reservation.html">Réserver une table</a><a href="contact.html">Contact &amp; accès</a></div><div class="footer-section"><strong>Contact &amp; accès</strong><p>14 Quai de la Rive Gauche<br>73000 Chambéry<br>04 79 12 34 56</p><a href="mailto:contact@lequaiantique.fr">contact@lequaiantique.fr</a><strong>Horaires</strong><p data-public-hours>Horaires momentanément indisponibles. Contactez-nous au 04 79 12 34 56.</p></div><div class="footer-section"><strong>Mentions</strong><a href="mentions-legales.html">Mentions légales</a><a href="confidentialite.html">Confidentialité</a><a href="cgu-cgv.html">CGU / CGV</a></div></footer>`;
 
+// Pied de page public commun : gabarit statique (aucune donnée externe) cloné dans chaque page.
+const publicFooter = new DOMParser().parseFromString(publicFooterMarkup, "text/html").body.firstElementChild;
 document.querySelectorAll(".site-footer").forEach((footer) => {
   if (!footer.classList.contains("admin-footer"))
-    footer.outerHTML = publicFooterMarkup;
+    footer.replaceWith(publicFooter.cloneNode(true));
 });
 
 const legalDestinations = {
@@ -62,14 +58,6 @@ document.querySelectorAll(".site-footer a").forEach((link) => {
   const destination = legalDestinations[link.textContent.trim()];
   if (destination) link.setAttribute("href", destination);
 });
-
-const galleryActions = document.querySelector("#gallery-list");
-if (galleryActions) {
-  galleryActions.insertAdjacentHTML(
-    "afterend",
-    `<section class="gallery-actions" aria-label="Actions après la galerie"><a class="button button--outline" href="carte.html">Voir la carte</a><a class="button" href="reservation.html">Réserver une table</a></section>`,
-  );
-}
 
 const menuToggle = document.querySelector(".menu-toggle");
 const navigation = document.querySelector("#main-navigation");
@@ -91,7 +79,13 @@ const galleryDialog = document.querySelector("#gallery-dialog");
 gallery?.addEventListener("click", (event) => {
   const card = event.target.closest(".gallery-card");
   if (!card || !galleryDialog) return;
-  const image = document.querySelector("#gallery-dialog-image");
+  // L'image de la modale est créée au premier clic : pas de <img> sans source dans le HTML.
+  let image = document.querySelector("#gallery-dialog-image");
+  if (!image) {
+    image = document.createElement("img");
+    image.id = "gallery-dialog-image";
+    galleryDialog.querySelector("#gallery-dialog-title").before(image);
+  }
   image.src = card.dataset.src;
   image.alt = card.dataset.alt;
   document.querySelector("#gallery-dialog-title").textContent =
@@ -117,12 +111,6 @@ const isValidEmail = (email) => {
     !/\s/.test(email)
   );
 };
-const passwordMeetsRequirements = (password) =>
-  password.length >= 8 &&
-  /[a-z]/.test(password) &&
-  /[A-Z]/.test(password) &&
-  /\d/.test(password) &&
-  /[^\w\s]/.test(password);
 const setAccountFieldValidity = (input, valid) =>
   input?.setAttribute("aria-invalid", String(!valid));
 
@@ -175,4 +163,24 @@ const validateRegistration = (form) => {
     );
   },
 );
-import { apiBaseUrl } from "./api-config.js";
+
+
+const hoursTargets = document.querySelectorAll("[data-public-hours]");
+if (hoursTargets.length) {
+  fetchJson("restaurant", { token: null }).then(({ data }) => {
+    const time = (value) => {
+      if (typeof value !== "string" || !/^([01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?$/.test(value)) throw new Error("Horaires invalides");
+      return value.slice(0, 5);
+    };
+    const hours = `Du mardi au dimanche — Midi : ${time(data.horaire_midi.debut)} – ${time(data.horaire_midi.fin)} ; soir : ${time(data.horaire_soir.debut)} – ${time(data.horaire_soir.fin)}. Fermé le lundi.`;
+    hoursTargets.forEach((target) => { target.textContent = hours; });
+  }).catch(() => {
+    hoursTargets.forEach((target) => { target.textContent = "Horaires momentanément indisponibles. Contactez-nous au 04 79 12 34 56."; });
+  });
+}
+window.addEventListener("quai:session-expired", () => {
+  if (sessionNavigation) {
+    sessionNavigation.textContent = "Connexion";
+    sessionNavigation.href = "connexion.html";
+  }
+});

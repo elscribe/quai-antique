@@ -21,7 +21,8 @@ COPY docker/production-entrypoint /usr/local/bin/production-entrypoint
 RUN chmod 0755 /usr/local/bin/production-entrypoint \
     && composer dump-autoload --no-dev --classmap-authoritative --no-scripts \
     && mkdir -p var/cache var/log public/uploads \
-    && chown -R www-data:www-data var public/uploads
+    && chown -R www-data:www-data var public/uploads \
+    && rm -f /usr/local/bin/composer
 
 EXPOSE 9000
 
