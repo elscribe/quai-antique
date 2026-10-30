@@ -8,5 +8,7 @@ const allowedPath =
 
 export function photoUrl(value) {
   if (typeof value !== "string" || !allowedPath.test(value)) return null;
-  return `${apiOrigin}${value}`;
+  // /assets/ est servi par le Front (même origine que la page), /uploads/ par l'API.
+  if (value.startsWith("/uploads/")) return `${apiOrigin}${value}`;
+  return value;
 }
