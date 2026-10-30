@@ -55,6 +55,10 @@ final class ReservationApiTest extends ApiTestCase
         $this->client->request('GET', '/api/reservations?date='.$date, server: ['HTTP_X_AUTH_TOKEN' => $admin]);
         self::assertResponseIsSuccessful();
         self::assertSame('client@example.test', json_decode($this->client->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR)['data'][0]['client']['email']);
+        $this->client->request('GET', '/api/reservations/'.$uuid, server: ['HTTP_X_AUTH_TOKEN' => $other]);
+        self::assertResponseStatusCodeSame(404);
+        $this->client->request('PUT', '/api/reservations/'.$uuid, server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_AUTH_TOKEN' => $other], content: json_encode($payload, JSON_THROW_ON_ERROR));
+        self::assertResponseStatusCodeSame(404);
         $this->client->request('DELETE', '/api/reservations/'.$uuid, server: ['HTTP_X_AUTH_TOKEN' => $other]);
         self::assertResponseStatusCodeSame(404);
         $payload['nb_convives'] = 4;
@@ -74,6 +78,10 @@ final class ReservationApiTest extends ApiTestCase
         $date = (new \DateTimeImmutable('next tuesday', new \DateTimeZone('Europe/Paris')))->format('Y-m-d');
         $this->client->request('POST', '/api/reservations', server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_AUTH_TOKEN' => $token],
             content: json_encode(['date' => $date, 'heure' => '12:07', 'nb_convives' => 2], JSON_THROW_ON_ERROR));
+        self::assertResponseStatusCodeSame(400);
+        $pastDate = (new \DateTimeImmutable('yesterday', new \DateTimeZone('Europe/Paris')))->format('Y-m-d');
+        $this->client->request('POST', '/api/reservations', server: ['CONTENT_TYPE' => 'application/json', 'HTTP_X_AUTH_TOKEN' => $token],
+            content: json_encode(['date' => $pastDate, 'heure' => '12:00', 'nb_convives' => 2], JSON_THROW_ON_ERROR));
         self::assertResponseStatusCodeSame(400);
         $this->client->request('POST', '/api/reservations', server: ['CONTENT_TYPE' => 'application/json'],
             content: json_encode(['date' => $date, 'heure' => '12:00', 'nb_convives' => 2], JSON_THROW_ON_ERROR));

@@ -18,7 +18,7 @@ final class RestaurantSettingsController extends AbstractController
 {
     private const DAYS = ['mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'];
 
-    #[OA\Get(path: '/api/restaurant', summary: 'Consulter les horaires et la capacité', security: [], responses: [new OA\Response(response: 200, description: 'Restaurant.'), new OA\Response(response: 404, description: 'Restaurant non configuré.')])]
+    #[OA\Get(path: '/api/restaurant', summary: 'Consulter les horaires et la capacité', security: [], responses: [new OA\Response(response: 200, description: 'Restaurant.', content: new OA\JsonContent(properties: [new OA\Property(property: 'data', ref: '#/components/schemas/RestaurantResponse')])), new OA\Response(response: 404, description: 'Restaurant non configuré.')])]
     #[Route('/api/restaurant', name: 'api_restaurant_show', methods: ['GET'])]
     public function show(RestaurantRepository $restaurants): JsonResponse
     {
@@ -30,7 +30,7 @@ final class RestaurantSettingsController extends AbstractController
         new OA\Property(property: 'horaire_midi', required: ['debut', 'fin'], properties: [new OA\Property(property: 'debut', type: 'string', example: '12:00'), new OA\Property(property: 'fin', type: 'string', example: '14:00')], type: 'object'),
         new OA\Property(property: 'horaire_soir', required: ['debut', 'fin'], properties: [new OA\Property(property: 'debut', type: 'string', example: '19:00'), new OA\Property(property: 'fin', type: 'string', example: '21:00')], type: 'object'),
         new OA\Property(property: 'capacite_max', type: 'integer', minimum: 1, maximum: 65535),
-    ])), responses: [new OA\Response(response: 200, description: 'Paramètres enregistrés.'), new OA\Response(response: 400, description: 'Données invalides.'), new OA\Response(response: 401, description: 'Authentification requise.'), new OA\Response(response: 403, description: 'Administrateur requis.'), new OA\Response(response: 404, description: 'Restaurant non configuré.'), new OA\Response(response: 409, description: 'Des réservations futures seraient affectées.')])]
+    ])), responses: [new OA\Response(response: 200, description: 'Paramètres enregistrés.', content: new OA\JsonContent(properties: [new OA\Property(property: 'data', ref: '#/components/schemas/RestaurantResponse')])), new OA\Response(response: 400, description: 'Données invalides.'), new OA\Response(response: 401, description: 'Authentification requise.'), new OA\Response(response: 403, description: 'Administrateur requis.'), new OA\Response(response: 404, description: 'Restaurant non configuré.'), new OA\Response(response: 409, description: 'Des réservations futures seraient affectées.')])]
     #[Route('/api/restaurant', name: 'api_restaurant_update', methods: ['PUT'])]
     #[IsGranted('ROLE_ADMIN')]
     public function update(Request $request, RestaurantRepository $restaurants, EntityManagerInterface $em, ReservationService $reservationService): JsonResponse

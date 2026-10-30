@@ -13,6 +13,8 @@ Application du restaurant Quai Antique, réalisée dans le cadre du projet fil r
 
 Prérequis : Docker Desktop démarré.
 
+Pour exécuter Symfony ou Composer directement sur la machine (hors conteneur), PHP 8.4.1 ou supérieur est requis par les dépendances verrouillées. Les conteneurs PHP du projet utilisent PHP 8.5.
+
 1. Copier `.env.docker.example` vers `.env.docker`.
 2. Remplacer les valeurs d’exemple par des secrets locaux et faire correspondre `MYSQL_PASSWORD` à la valeur présente dans `DATABASE_URL`.
 3. Depuis la racine du dépôt, démarrer la stack :

@@ -1,4 +1,4 @@
-FROM php:8.5-fpm-bookworm
+FROM php:8.5.12-fpm-bookworm
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends libicu-dev unzip \
@@ -19,6 +19,7 @@ COPY docker/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
 COPY docker/production.ini /usr/local/etc/php/conf.d/production.ini
 COPY docker/production-entrypoint /usr/local/bin/production-entrypoint
 RUN chmod 0755 /usr/local/bin/production-entrypoint \
+    && composer dump-autoload --no-dev --classmap-authoritative --no-scripts \
     && mkdir -p var/cache var/log public/uploads \
     && chown -R www-data:www-data var public/uploads
 

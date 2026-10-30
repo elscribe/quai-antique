@@ -1,6 +1,73 @@
 nelmio_api_doc:
     documentation:
         components:
+            schemas:
+                MenuResponse:
+                    type: object
+                    required: [uuid, titre, description, prix, categories]
+                    properties:
+                        uuid: { type: string, format: uuid }
+                        titre: { type: string }
+                        description: { type: string }
+                        prix: { type: string, example: '29.00' }
+                        categories:
+                            type: array
+                            items:
+                                type: object
+                                required: [uuid, titre]
+                                properties:
+                                    uuid: { type: string, format: uuid }
+                                    titre: { type: string }
+                PhotoResponse:
+                    type: object
+                    required: [uuid, titre, url_image]
+                    properties:
+                        uuid: { type: string, format: uuid }
+                        titre: { type: string }
+                        url_image: { type: string }
+                ReservationResponse:
+                    type: object
+                    required: [uuid, date, heure, nb_convives, allergies, statut]
+                    properties:
+                        uuid: { type: string, format: uuid }
+                        date: { type: string, format: date, nullable: true }
+                        heure: { type: string, example: '19:30', nullable: true }
+                        nb_convives: { type: integer }
+                        allergies: { type: string, nullable: true }
+                        statut: { type: string }
+                        client:
+                            type: object
+                            nullable: true
+                            properties:
+                                prenom: { type: string, nullable: true }
+                                nom: { type: string, nullable: true }
+                                email: { type: string, format: email, nullable: true }
+                AvailabilitySlot:
+                    type: object
+                    required: [heure, places_restantes, disponible]
+                    properties:
+                        heure: { type: string, example: '19:30' }
+                        places_restantes: { type: integer }
+                        disponible: { type: boolean }
+                RestaurantServiceHours:
+                    type: object
+                    required: [jours, debut, fin]
+                    properties:
+                        jours:
+                            type: array
+                            items: { type: string }
+                        debut: { type: string, example: '12:00' }
+                        fin: { type: string, example: '14:00' }
+                RestaurantResponse:
+                    type: object
+                    required: [uuid, nom, description, horaire_midi, horaire_soir, capacite_max]
+                    properties:
+                        uuid: { type: string, format: uuid }
+                        nom: { type: string }
+                        description: { type: string, nullable: true }
+                        horaire_midi: { $ref: '#/components/schemas/RestaurantServiceHours' }
+                        horaire_soir: { $ref: '#/components/schemas/RestaurantServiceHours' }
+                        capacite_max: { type: integer }
             securitySchemes:
                 ApiToken:
                     type: apiKey

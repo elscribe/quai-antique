@@ -16,6 +16,7 @@ La stack Docker locale de développement est opérationnelle. Un profil Docker d
 - Au début de l’audit, PHP appliquait `upload_max_filesize=2M`, `post_max_size=8M`, `memory_limit=128M`. Le contrôleur accepte des fichiers jusqu’à 3 MiB : PHP pouvait rejeter un fichier avant la validation métier. La branche de préparation définit maintenant PHP à 4M/5M et Nginx à 5m ; les valeurs effectives sont vérifiées dans le conteneur démarré. Un test fonctionnel a téléversé une image de 3 MiB, obtenu 201 puis supprimé le fichier à nom aléatoire ; la base utilisée est SQLite en mémoire. Le proxy de production devra lui aussi autoriser au moins la taille correspondante.
 - Le dépôt conserve les images téléversées dans un volume Docker local. Ce volume n’est pas une sauvegarde ; aucune restauration n’a été exécutée en environnement de production.
 - Le profil séparé `compose.production.yaml` et ses deux Dockerfiles dédiés ont été construits dans un projet Compose distinct, lié uniquement à `127.0.0.1:8086`. L’aperçu a démarré sur des volumes neufs séparés de la stack de développement ; les six migrations ont été appliquées et Doctrine a confirmé le schéma synchronisé. `APP_ENV=prod`, `APP_DEBUG=false`, le cache prod est construit au démarrage et PHPUnit est absent de l’image.
+- Les noms de projet Compose sont explicites : `quai-antique` pour le développement (préservant les noms de volumes existants) et `quai-antique-prod-preview` pour la prévisualisation. Le contexte PHP de production emploie `back/Dockerfile.production.dockerignore` pour exclure les tests et fichiers PHPUnit sans enlever ces fichiers du contexte de développement; l’image exécute ensuite `composer dump-autoload --no-dev --classmap-authoritative` après la copie du code.
 - Dans cet aperçu, la page racine renvoie 200 avec `X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy` et `Permissions-Policy`. `/api/health` renvoie 200 ; `/api/account/me` sans jeton renvoie 401 ; le précontrôle CORS accepte l’origine et l’en-tête `X-AUTH-TOKEN`. `X-Powered-By` est masqué. Ces vérifications ne remplacent pas une recette hébergée sous HTTPS.
 - Le volume d’uploads neuf a été monté puis testé : l’utilisateur `www-data` peut y créer et supprimer un fichier temporaire ; Nginx monte ce même volume en lecture seule. Le test est limité à l’écriture système et ne remplace pas le parcours d’upload authentifié dans un navigateur.
 - Le healthcheck de l’API vérifie seulement que PHP-FPM écoute sur son port. Le healthcheck du service Web appelle `/api/health` via Nginx ; ce dernier vérifie le routage et l’application, mais `/api/health` ne contrôle pas MySQL. Un healthcheck qui vérifie les dépendances métier reste à définir selon l’hébergeur.
@@ -32,6 +33,25 @@ La stack Docker locale de développement est opérationnelle. Un profil Docker d
 7. **Préparer une livraison réversible.** Définir l’exécution contrôlée des migrations, health checks qui couvrent les dépendances requises, journaux/surveillance et retour arrière. Le health endpoint actuel est statique et ne confirme pas la connexion MySQL.
 8. **Répéter les parcours en préproduction.** Vérifier inscription/connexion, accès client/admin, réservation et capacité concurrente, gestion de contenu, OpenAPI selon la politique retenue, et restauration avant ouverture au public.
 9. **Compléter les obligations du service.** Vérifier mentions légales, politique de confidentialité, conservation des données, courriels transactionnels et contacts de support avec les informations réelles du propriétaire.
+
+## Initialiser le restaurant sur une base neuve
+
+Les fixtures servent uniquement aux environnements de démonstration et de test. Sur une base de production neuve, appliquer les migrations puis créer la configuration métier avec la commande idempotente `app:init-restaurant` :
+
+```sh
+php bin/console doctrine:migrations:migrate --env=prod --no-interaction
+php bin/console app:init-restaurant --env=prod
+```
+
+Par défaut, la commande configure une capacité de 40 couverts, le service du midi de 12:00 à 14:00 et celui du soir de 19:00 à 21:00, du mardi au dimanche. Les options `--capacite-max`, `--debut-midi`, `--fin-midi`, `--debut-soir` et `--fin-soir` permettent d’adapter ces valeurs. Chaque service doit durer deux heures, la capacité doit être comprise entre 1 et 65 535, et le service du midi doit finir avant le début du soir. Si un restaurant existe déjà, la commande réussit sans le modifier.
+
+Exemple :
+
+```sh
+php bin/console app:init-restaurant --env=prod --capacite-max=48 --debut-midi=11:30 --fin-midi=13:30 --debut-soir=18:30 --fin-soir=20:30
+```
+
+Vérifier ensuite `GET /api/restaurant` avant d’ouvrir les réservations et la gestion de contenu.
 
 ## Séquence de mise en œuvre recommandée
 

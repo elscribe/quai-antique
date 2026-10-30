@@ -22,7 +22,7 @@ final class MenuController
     private const ITEM_PATH = '/api/menus/{uuid}';
 
     #[OA\Get(path: '/api/menus', summary: 'Lister les menus du restaurant', security: [], responses: [
-        new OA\Response(response: 200, description: 'Menus enregistrés en base.'),
+        new OA\Response(response: 200, description: 'Menus enregistrés en base.', content: new OA\JsonContent(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/MenuResponse'))])),
     ])]
     #[Route('/api/menus', name: 'api_menus_index', methods: ['GET'])]
     public function index(MenuRepository $menus): JsonResponse
@@ -36,7 +36,7 @@ final class MenuController
     #[OA\Get(path: '/api/menus/{uuid}', summary: 'Consulter un menu', security: [], parameters: [
         new OA\Parameter(name: 'uuid', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid')),
     ], responses: [
-        new OA\Response(response: 200, description: 'Menu trouvé.'),
+        new OA\Response(response: 200, description: 'Menu trouvé.', content: new OA\JsonContent(properties: [new OA\Property(property: 'data', ref: '#/components/schemas/MenuResponse')])),
         new OA\Response(response: 404, description: 'Menu introuvable.'),
     ])]
     #[Route(self::ITEM_PATH, name: 'api_menus_show', methods: ['GET'])]
@@ -56,7 +56,7 @@ final class MenuController
             new OA\Property(property: 'categories', type: 'array', minItems: 1, items: new OA\Items(type: 'string', format: 'uuid')),
         ])
     ), responses: [
-        new OA\Response(response: 201, description: 'Menu créé; son URL est fournie dans Location.'),
+        new OA\Response(response: 201, description: 'Menu créé; son URL est fournie dans Location.', headers: [new OA\Header(header: 'Location', description: 'URL absolue du menu créé.', schema: new OA\Schema(type: 'string', format: 'uri'))], content: new OA\JsonContent(properties: [new OA\Property(property: 'data', ref: '#/components/schemas/MenuResponse')])),
         new OA\Response(response: 400, description: 'Données invalides.'),
         new OA\Response(response: 401, description: 'Authentification requise.'),
         new OA\Response(response: 403, description: 'Rôle administrateur requis.'),
@@ -99,7 +99,7 @@ final class MenuController
             new OA\Property(property: 'categories', type: 'array', minItems: 1, items: new OA\Items(type: 'string', format: 'uuid')),
         ]
     )), responses: [
-        new OA\Response(response: 200, description: 'Menu modifié.'),
+        new OA\Response(response: 200, description: 'Menu modifié.', content: new OA\JsonContent(properties: [new OA\Property(property: 'data', ref: '#/components/schemas/MenuResponse')])),
         new OA\Response(response: 400, description: 'Données invalides.'),
         new OA\Response(response: 401, description: 'Authentification requise.'),
         new OA\Response(response: 403, description: 'Rôle administrateur requis.'),

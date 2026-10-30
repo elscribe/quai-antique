@@ -17,14 +17,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class GalleryPhotoController extends AbstractController
 {
-    #[OA\Get(path: '/api/photos', summary: 'Lister les photos', security: [], responses: [new OA\Response(response: 200, description: 'Photos de la galerie.')])]
+    #[OA\Get(path: '/api/photos', summary: 'Lister les photos', security: [], responses: [new OA\Response(response: 200, description: 'Photos de la galerie.', content: new OA\JsonContent(properties: [new OA\Property(property: 'data', type: 'array', items: new OA\Items(ref: '#/components/schemas/PhotoResponse'))]))])]
     #[Route('/api/photos', name: 'api_photos_index', methods: ['GET'])]
     public function index(PhotoRepository $photos): JsonResponse
     {
         return $this->json(['data' => array_map($this->represent(...), $photos->findBy([], ['id' => 'ASC']))]);
     }
 
-    #[OA\Get(path: '/api/photos/{uuid}', summary: 'Consulter une photo', security: [], parameters: [new OA\Parameter(name: 'uuid', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid'))], responses: [new OA\Response(response: 200, description: 'Photo.'), new OA\Response(response: 404, description: 'Photo introuvable.')])]
+    #[OA\Get(path: '/api/photos/{uuid}', summary: 'Consulter une photo', security: [], parameters: [new OA\Parameter(name: 'uuid', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid'))], responses: [new OA\Response(response: 200, description: 'Photo.', content: new OA\JsonContent(properties: [new OA\Property(property: 'data', ref: '#/components/schemas/PhotoResponse')])), new OA\Response(response: 404, description: 'Photo introuvable.')])]
     #[Route('/api/photos/{uuid}', name: 'api_photos_show', methods: ['GET'])]
     public function show(string $uuid, PhotoRepository $photos): JsonResponse
     {
@@ -32,7 +32,7 @@ final class GalleryPhotoController extends AbstractController
         return $photo ? $this->json(['data' => $this->represent($photo)]) : $this->json(['error' => 'Photo introuvable.'], 404);
     }
 
-    #[OA\Post(path: '/api/photos', summary: 'Ajouter une photo existante', description: 'Chemin local autorisé sous /assets/ ou /uploads/ ; aucun téléversement.', requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(required: ['titre', 'url_image'], properties: [new OA\Property(property: 'titre', type: 'string', maxLength: 150), new OA\Property(property: 'url_image', type: 'string', example: '/assets/salle.png', maxLength: 255)])), responses: [new OA\Response(response: 201, description: 'Photo créée, URL dans Location.'), new OA\Response(response: 400, description: 'Données invalides.'), new OA\Response(response: 401, description: 'Authentification requise.'), new OA\Response(response: 403, description: 'Administrateur requis.'), new OA\Response(response: 409, description: 'Restaurant non configuré.')])]
+    #[OA\Post(path: '/api/photos', summary: 'Ajouter une photo existante', description: 'Chemin local autorisé sous /assets/ ou /uploads/ ; aucun téléversement.', requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(required: ['titre', 'url_image'], properties: [new OA\Property(property: 'titre', type: 'string', maxLength: 150), new OA\Property(property: 'url_image', type: 'string', example: '/assets/salle.png', maxLength: 255)])), responses: [new OA\Response(response: 201, description: 'Photo créée, URL dans Location.', headers: [new OA\Header(header: 'Location', description: 'URL absolue de la photo créée.', schema: new OA\Schema(type: 'string', format: 'uri'))], content: new OA\JsonContent(properties: [new OA\Property(property: 'data', ref: '#/components/schemas/PhotoResponse')])), new OA\Response(response: 400, description: 'Données invalides.'), new OA\Response(response: 401, description: 'Authentification requise.'), new OA\Response(response: 403, description: 'Administrateur requis.'), new OA\Response(response: 409, description: 'Restaurant non configuré.')])]
     #[Route('/api/photos', name: 'api_photos_create', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function create(Request $request, RestaurantRepository $restaurants, EntityManagerInterface $em, UrlGeneratorInterface $urls): JsonResponse
@@ -50,7 +50,7 @@ final class GalleryPhotoController extends AbstractController
         new OA\Property(property: 'titre', type: 'string', maxLength: 150),
         new OA\Property(property: 'image', type: 'string', format: 'binary'),
     ], type: 'object'))), responses: [
-        new OA\Response(response: 201, description: 'Photo ajoutée.'),
+        new OA\Response(response: 201, description: 'Photo ajoutée.', headers: [new OA\Header(header: 'Location', description: 'URL absolue de la photo créée.', schema: new OA\Schema(type: 'string', format: 'uri'))], content: new OA\JsonContent(properties: [new OA\Property(property: 'data', ref: '#/components/schemas/PhotoResponse')])),
         new OA\Response(response: 400, description: 'Image ou titre invalide.'),
         new OA\Response(response: 401, description: 'Authentification requise.'),
         new OA\Response(response: 403, description: 'Administrateur requis.'),
@@ -83,7 +83,7 @@ final class GalleryPhotoController extends AbstractController
     ], requestBody: new OA\RequestBody(required: true, content: new OA\MediaType(mediaType: 'multipart/form-data', schema: new OA\Schema(
         required: ['titre', 'image'], properties: [new OA\Property(property: 'titre', type: 'string'), new OA\Property(property: 'image', type: 'string', format: 'binary')], type: 'object'
     ))), responses: [
-        new OA\Response(response: 200, description: 'Photo mise à jour.'),
+        new OA\Response(response: 200, description: 'Photo mise à jour.', content: new OA\JsonContent(properties: [new OA\Property(property: 'data', ref: '#/components/schemas/PhotoResponse')])),
         new OA\Response(response: 400, description: 'Image ou titre invalide.'),
         new OA\Response(response: 401, description: 'Authentification requise.'),
         new OA\Response(response: 403, description: 'Administrateur requis.'),
@@ -109,7 +109,7 @@ final class GalleryPhotoController extends AbstractController
         return $this->json(['data' => $this->represent($photo)]);
     }
 
-    #[OA\Put(path: '/api/photos/{uuid}', summary: 'Modifier une photo', parameters: [new OA\Parameter(name: 'uuid', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid'))], requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(required: ['titre', 'url_image'], properties: [new OA\Property(property: 'titre', type: 'string', maxLength: 150), new OA\Property(property: 'url_image', type: 'string', maxLength: 255, example: '/assets/salle.png')])), responses: [new OA\Response(response: 200, description: 'Photo modifiée.'), new OA\Response(response: 400, description: 'Données invalides.'), new OA\Response(response: 401, description: 'Authentification requise.'), new OA\Response(response: 403, description: 'Administrateur requis.'), new OA\Response(response: 404, description: 'Photo introuvable.')])]
+    #[OA\Put(path: '/api/photos/{uuid}', summary: 'Modifier une photo', parameters: [new OA\Parameter(name: 'uuid', in: 'path', required: true, schema: new OA\Schema(type: 'string', format: 'uuid'))], requestBody: new OA\RequestBody(required: true, content: new OA\JsonContent(required: ['titre', 'url_image'], properties: [new OA\Property(property: 'titre', type: 'string', maxLength: 150), new OA\Property(property: 'url_image', type: 'string', maxLength: 255, example: '/assets/salle.png')])), responses: [new OA\Response(response: 200, description: 'Photo modifiée.', content: new OA\JsonContent(properties: [new OA\Property(property: 'data', ref: '#/components/schemas/PhotoResponse')])), new OA\Response(response: 400, description: 'Données invalides.'), new OA\Response(response: 401, description: 'Authentification requise.'), new OA\Response(response: 403, description: 'Administrateur requis.'), new OA\Response(response: 404, description: 'Photo introuvable.')])]
     #[Route('/api/photos/{uuid}', name: 'api_photos_update', methods: ['PUT'])]
     #[IsGranted('ROLE_ADMIN')]
     public function update(string $uuid, Request $request, PhotoRepository $photos, EntityManagerInterface $em): JsonResponse

@@ -53,6 +53,12 @@ Une base SQLite neuve, `/tmp/quai-antique-fixtures-audit-20261026.sqlite`, a ét
 
 **Précaution :** `doctrine:fixtures:load` purge la base cible avant de charger les données. L’essai a utilisé exclusivement la base SQLite dédiée ci-dessus; aucune fixture n’a été chargée dans MySQL de développement. Les comptes et mots de passe inclus dans les fixtures sont uniquement des données de démonstration locales et ne sont pas des comptes de production.
 
+### Mise à jour des fixtures — 28 octobre 2026
+
+Le relevé de volumes du 26 octobre ci-dessus est historique et ne correspond plus aux fixtures actuelles. `ReservationFixtures` utilise désormais une date calculée au prochain mardi à 19 h 30, cohérente avec les jours d’ouverture du restaurant; la date et l’heure proviennent du même objet date. La fixture vide `AppFixtures`, générée par la recette Symfony et sans rôle dans le jeu de démonstration, a été supprimée.
+
+Le jeu `quai-antique-demo` a été rechargé sur une base SQLite temporaire dédiée le 28 octobre. Le contrôle observé est : `restaurant=1`, `utilisateur=2`, `categorie=5`, `plat=11`, `menu=3`, `menu_categorie=9`, `photo=9`, `reservation=1`. La réservation obtenue est datée du `2026-11-03` à `19:30` (mardi). Cette vérification n’a touché ni MySQL ni les volumes Docker actifs.
+
 ## 3. Cours « Tester application web » — validé pour la couverture implémentée
 
 ### Mise en œuvre
