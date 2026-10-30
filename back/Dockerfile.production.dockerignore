@@ -7,7 +7,9 @@ vendor
 var
 public/uploads
 public/bundles
-**/tests
+tests
+phpunit.dist.xml
+phpunit.xml
+.phpunit.cache
+.phpunit.result.cache
 bin/phpunit
-**/phpunit.dist.xml
-**/.phpunit.cache

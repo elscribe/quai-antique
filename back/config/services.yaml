@@ -18,6 +18,27 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
+        # Les fixtures dépendent de doctrine/doctrine-fixtures-bundle (require-dev) :
+        # elles ne sont enregistrées qu'en dev et en test (voir when@dev / when@test ci-dessous),
+        # ce qui évite toute référence à une classe absente dans l'image de production (--no-dev).
+        exclude:
+            - '../src/DataFixtures/'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+when@dev:
+    services:
+        _defaults:
+            autowire: true
+            autoconfigure: true
+        App\DataFixtures\:
+            resource: '../src/DataFixtures/'
+
+when@test:
+    services:
+        _defaults:
+            autowire: true
+            autoconfigure: true
+        App\DataFixtures\:
+            resource: '../src/DataFixtures/'
