@@ -1,13 +1,14 @@
-import { apiBaseUrl, apiOrigin } from "./api-config.js";
+import { fetchJson } from "./http.js";
+import { photoUrl } from "./photo-url.js";
 const gallery = document.querySelector("#gallery-list");
 const status = document.querySelector("#gallery-status");
 
 try {
-  const response = await fetch(`${apiBaseUrl}/photos`);
-  const body = await response.json();
-  if (!response.ok || !Array.isArray(body.data)) throw new Error("Galerie indisponible");
+  const body = await fetchJson("photos", { token: null });
+  if (!Array.isArray(body.data)) throw new Error("Galerie indisponible");
   for (const photo of body.data) {
-    const url = photo.url_image.startsWith("/uploads/") ? apiOrigin + photo.url_image : photo.url_image;
+    const url = photoUrl(photo.url_image);
+    if (!url) continue;
     const button = document.createElement("button");
     button.type = "button";
     button.className = "gallery-card";
@@ -16,13 +17,13 @@ try {
     button.dataset.title = photo.titre;
     const image = document.createElement("img");
     image.src = url;
-    image.alt = photo.titre;
+    image.alt = ""; // le titre est déjà lu dans le <span> du bouton : pas de doublon pour les lecteurs d'écran
     const title = document.createElement("span");
     title.textContent = photo.titre;
     button.append(image, title);
     gallery.append(button);
   }
-  status.textContent = body.data.length ? "" : "La galerie sera bientôt disponible.";
+  status.textContent = gallery.children.length ? "" : "La galerie sera bientôt disponible.";
 } catch {
   status.textContent = "La galerie est momentanément indisponible.";
 }

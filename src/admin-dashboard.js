@@ -1,6 +1,5 @@
-import { apiBaseUrl } from "./api-config.js";
+import { fetchJson, messageUtilisateur } from "./http.js";
 
-const api = apiBaseUrl;
 const token = sessionStorage.getItem("quai_api_token");
 const status = document.querySelector("#admin-status");
 const content = document.querySelector("#admin-content");
@@ -10,14 +9,15 @@ const list = document.querySelector("#admin-reservations");
 const settings = document.querySelector("#restaurant-settings");
 
 async function request(path, method = "GET", data = null) {
-  const headers = { "X-AUTH-TOKEN": token };
-  if (data !== null) headers["Content-Type"] = "application/json";
-  const response = await fetch(`${api}/${path}`, {
-    method, headers, body: data === null ? null : JSON.stringify(data),
-  });
-  const body = response.status === 204 ? {} : await response.json();
-  if (!response.ok) throw new Error(body.error || "La demande a échoué.");
-  return body;
+  return fetchJson(path, { method: method, body: data });
+}
+
+function afficherErreur(error) {
+  status.textContent = messageUtilisateur(error);
+}
+
+function horaireValide(horaire) {
+  return horaire && typeof horaire.debut === "string" && typeof horaire.fin === "string";
 }
 
 function ajouterChamp(form, label, name, type, value) {
@@ -36,6 +36,7 @@ function ajouterChamp(form, label, name, type, value) {
 async function chargerReservations() {
   const date = filter.elements.date.value;
   const body = await request(date ? `reservations?date=${encodeURIComponent(date)}` : "reservations");
+  if (!Array.isArray(body.data)) throw new TypeError("Réponse /reservations inattendue");
   list.replaceChildren();
   if (!body.data.length) list.textContent = "Aucune réservation pour cette sélection.";
   for (const item of body.data) {
@@ -69,7 +70,7 @@ async function chargerReservations() {
         });
         status.textContent = "Réservation modifiée.";
         await chargerReservations();
-      } catch (error) { status.textContent = error.message; }
+      } catch (error) { afficherErreur(error); }
     });
     remove.addEventListener("click", async () => {
       if (!window.confirm("Supprimer cette réservation ?")) return;
@@ -77,7 +78,7 @@ async function chargerReservations() {
         await request(`reservations/${encodeURIComponent(item.uuid)}`, "DELETE");
         status.textContent = "Réservation supprimée.";
         await chargerReservations();
-      } catch (error) { status.textContent = error.message; }
+      } catch (error) { afficherErreur(error); }
     });
     article.append(title, email, form);
     list.append(article);
@@ -86,7 +87,7 @@ async function chargerReservations() {
 
 filter.addEventListener("submit", async (event) => {
   event.preventDefault();
-  try { await chargerReservations(); } catch (error) { status.textContent = error.message; }
+  try { await chargerReservations(); } catch (error) { afficherErreur(error); }
 });
 
 settings.addEventListener("submit", async (event) => {
@@ -99,14 +100,17 @@ settings.addEventListener("submit", async (event) => {
       capacite_max: Number(fields.capacite_max.value),
     });
     status.textContent = "Horaires et capacité enregistrés.";
-  } catch (error) { status.textContent = error.message; }
+  } catch (error) { afficherErreur(error); }
 });
 
 try {
   if (!token) throw new Error("Connectez-vous avec un compte administrateur.");
   const profile = await request("account/me");
-  if (!profile.data.roles.includes("ROLE_ADMIN")) throw new Error("Cet espace est réservé aux administrateurs.");
+  if (!Array.isArray(profile.data?.roles) || !profile.data.roles.includes("ROLE_ADMIN")) throw new Error("Cet espace est réservé aux administrateurs.");
   const restaurant = (await request("restaurant")).data;
+  if (!restaurant || !horaireValide(restaurant.horaire_midi) || !horaireValide(restaurant.horaire_soir)) {
+    throw new Error("Les réglages du restaurant sont incomplets. Vérifiez qu’ils ont été initialisés sur le serveur.");
+  }
   settings.elements.midi_debut.value = restaurant.horaire_midi.debut;
   settings.elements.midi_fin.value = restaurant.horaire_midi.fin;
   settings.elements.soir_debut.value = restaurant.horaire_soir.debut;
@@ -118,5 +122,5 @@ try {
 } catch (error) {
   content.hidden = true;
   loginPrompt.hidden = false;
-  status.textContent = error.message;
+  afficherErreur(error);
 }

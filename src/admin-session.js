@@ -1,6 +1,5 @@
-import { apiBaseUrl } from "./api-config.js";
+import { fetchJson, messageUtilisateur } from "./http.js";
 
-const api = apiBaseUrl;
 const tokenKey = "quai_api_token";
 const accountName = document.querySelector("#admin-account-name");
 const logoutButton = document.querySelector("#admin-logout");
@@ -14,12 +13,8 @@ async function chargerCompteAdministrateur() {
     return null;
   }
 
-  const response = await fetch(`${api}/account/me`, {
-    headers: { "X-AUTH-TOKEN": token },
-  });
-  if (!response.ok) throw new Error("Session invalide ou expirée.");
-
-  const profile = await response.json();
+  logoutButton.hidden = false;
+  const profile = await fetchJson("account/me");
   if (!profile.data.roles.includes("ROLE_ADMIN")) {
     throw new Error("Cette page est réservée aux administrateurs.");
   }
@@ -35,20 +30,14 @@ logoutButton.addEventListener("click", async () => {
   sessionStatus.textContent = "Déconnexion en cours…";
 
   try {
-    const token = sessionStorage.getItem(tokenKey);
-    const response = await fetch(`${api}/logout`, {
-      method: "POST",
-      headers: { "X-AUTH-TOKEN": token },
-    });
-    if (!response.ok && response.status !== 401) {
-      throw new Error("Le serveur n’a pas confirmé la déconnexion.");
-    }
+    try { await fetchJson("logout", { method: "POST" }); }
+    catch (error) { if (error.status !== 401) throw error; }
 
     sessionStorage.removeItem(tokenKey);
     sessionStorage.removeItem("quai_api_roles");
     window.location.assign("connexion.html");
   } catch (error) {
-    sessionStatus.textContent = error.message || "Déconnexion impossible. Réessayez.";
+    sessionStatus.textContent = messageUtilisateur(error, "Déconnexion impossible. Réessayez.");
     logoutButton.disabled = false;
   }
 });
@@ -57,6 +46,6 @@ try {
   await chargerCompteAdministrateur();
 } catch (error) {
   accountName.textContent = "Session non vérifiée";
-  logoutButton.hidden = true;
-  sessionStatus.textContent = error.message;
+  logoutButton.hidden = !sessionStorage.getItem(tokenKey);
+  sessionStatus.textContent = messageUtilisateur(error);
 }

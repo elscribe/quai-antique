@@ -1,6 +1,6 @@
-import { apiBaseUrl } from "./api-config.js";
+import { passwordMeetsRequirements as motDePasseValide } from "./password.js";
+import { fetchJson, messageUtilisateur } from "./http.js";
 
-const api = apiBaseUrl;
 const tokenKey = "quai_api_token";
 const login = document.querySelector("#login-form");
 const registration = document.querySelector("#registration-form");
@@ -15,20 +15,10 @@ function message(element, content, error = false) {
   element.className = error ? "form-message form-message--error" : "form-message form-message--success";
 }
 
-function motDePasseValide(value) {
-  return value.length >= 8 && value.length <= 128 && /[a-z]/.test(value)
-    && /[A-Z]/.test(value) && /[0-9]/.test(value) && /[^a-zA-Z0-9\s]/.test(value);
-}
+
 
 async function post(path, payload, token = null) {
-  const headers = { "Content-Type": "application/json" };
-  if (token) headers["X-AUTH-TOKEN"] = token;
-  const response = await fetch(`${api}/${path}`, {
-    method: "POST", headers, body: payload === null ? null : JSON.stringify(payload),
-  });
-  const body = response.status === 204 ? {} : await response.json();
-  if (!response.ok) throw new Error(body.error || "La demande n’a pas pu aboutir.");
-  return body;
+  return fetchJson(path, { method: "POST", body: payload, token });
 }
 
 function garderSession(body) {
@@ -70,7 +60,7 @@ login?.addEventListener("submit", async (event) => {
     message(loginMessage, `Vous êtes connecté(e), ${body.data.prenom}.`);
     redirigerApresConnexion(body.data.roles);
   } catch (error) {
-    message(loginMessage, error.message || "Connexion impossible.", true);
+    message(loginMessage, messageUtilisateur(error, "Connexion impossible."), true);
   } finally {
     button.disabled = false;
   }
@@ -102,7 +92,7 @@ registration?.addEventListener("submit", async (event) => {
     message(registrationMessage, `Votre compte est créé, ${body.data.prenom}. Vous êtes connecté(e).`);
     redirigerApresConnexion(body.data.roles);
   } catch (error) {
-    message(registrationMessage, error.message || "Inscription impossible.", true);
+    message(registrationMessage, messageUtilisateur(error, "Inscription impossible."), true);
   } finally {
     button.disabled = false;
   }
@@ -125,26 +115,22 @@ logout.addEventListener("click", async () => {
   }
 });
 
-if (new URLSearchParams(window.location.search).get("deconnecte") === "1") {
+const parametres = new URLSearchParams(window.location.search);
+if (parametres.get("deconnecte") === "1") {
   message(loginMessage, "Vous êtes déconnecté(e).");
+} else if (parametres.get("motdepasse") === "modifie") {
+  message(loginMessage, "Votre mot de passe a été modifié. Connectez-vous avec le nouveau mot de passe.");
 }
 
 const existingToken = sessionStorage.getItem(tokenKey);
 if (existingToken) {
   try {
-    const response = await fetch(`${api}/account/me`, { headers: { "X-AUTH-TOKEN": existingToken } });
-    if (response.status === 401) {
-      sessionStorage.removeItem(tokenKey);
-      sessionStorage.removeItem("quai_api_roles");
-      logout.hidden = true;
-    } else if (response.ok) {
-      const body = await response.json();
-      sessionStorage.setItem("quai_api_roles", JSON.stringify(body.data.roles || []));
-      accountLinks.hidden = false;
-      adminLink.hidden = !body.data.roles?.includes("ROLE_ADMIN");
-      redirigerApresConnexion(body.data.roles);
-    }
-  } catch {
-    message(loginMessage, "Impossible de vérifier la session pour le moment.", true);
+    const body = await fetchJson("account/me");
+    sessionStorage.setItem("quai_api_roles", JSON.stringify(body.data.roles || []));
+    accountLinks.hidden = false;
+    adminLink.hidden = !body.data.roles?.includes("ROLE_ADMIN");
+    redirigerApresConnexion(body.data.roles);
+  } catch (error) {
+    message(loginMessage, messageUtilisateur(error, "Impossible de vérifier la session pour le moment."), true);
   }
 }

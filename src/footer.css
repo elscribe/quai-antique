@@ -157,3 +157,5 @@
   .legal-article { gap: 32px; padding: 20px; }
   .legal-article h2 { font-size: 18px; line-height: 26px; }
 }
+
+.admin-sidebar > p { color: #d9b56c; }

@@ -1,15 +1,12 @@
-import { apiBaseUrl } from "./api-config.js";
+import { fetchJson } from "./http.js";
 
-const apiUrl = apiBaseUrl;
 const formatPrix = new Intl.NumberFormat("fr-FR", {
   style: "currency",
   currency: "EUR",
 });
 
 async function lireCollection(path) {
-  const response = await fetch(`${apiUrl}/${path}`);
-  if (!response.ok) throw new Error(`Erreur HTTP ${response.status}`);
-  const body = await response.json();
+  const body = await fetchJson(path, { token: null });
   if (!Array.isArray(body.data)) throw new Error("Réponse invalide");
   return body.data;
 }

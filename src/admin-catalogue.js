@@ -1,6 +1,5 @@
-import { apiBaseUrl } from "./api-config.js";
+import { fetchJson, messageUtilisateur } from "./http.js";
 
-const apiBase = apiBaseUrl;
 const token = sessionStorage.getItem("quai_api_token");
 const status = document.querySelector("#catalogue-admin-status");
 const zone = document.querySelector("#catalogue-admin");
@@ -17,14 +16,7 @@ const targets = {
 };
 
 async function requete(path, method = "GET", payload = null) {
-  const headers = { "X-AUTH-TOKEN": token };
-  if (payload !== null) headers["Content-Type"] = "application/json";
-  const response = await fetch(`${apiBase}/${path}`, {
-    method, headers, body: payload === null ? null : JSON.stringify(payload),
-  });
-  const body = response.status === 204 ? {} : await response.json();
-  if (!response.ok) throw new Error(body.error || "La demande a échoué.");
-  return body;
+  return fetchJson(path, { method: method, body: payload });
 }
 
 function afficherListe(type, items) {
@@ -69,7 +61,7 @@ function afficherListe(type, items) {
         await requete(`${type}/${encodeURIComponent(item.uuid)}`, "DELETE");
         status.textContent = "Élément supprimé.";
         await charger();
-      } catch (error) { status.textContent = error.message; }
+      } catch (error) { status.textContent = messageUtilisateur(error); }
     });
     article.append(titre, detail, edit, remove);
     target.append(article);
@@ -123,7 +115,7 @@ for (const [type, form] of Object.entries(forms)) {
       fields.uuid.value = "";
       status.textContent = "Modifications enregistrées.";
       await charger();
-    } catch (error) { status.textContent = error.message; }
+    } catch (error) { status.textContent = messageUtilisateur(error); }
   });
 }
 
@@ -137,5 +129,5 @@ try {
 } catch (error) {
   zone.hidden = true;
   loginPrompt.hidden = false;
-  status.textContent = error.message;
+  status.textContent = messageUtilisateur(error);
 }

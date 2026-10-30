@@ -11,7 +11,7 @@
     <aside class="admin-sidebar" aria-label="Navigation administration">
       <a class="brand" href="index.html">Quai Antique</a>
       <p>ESPACE ADMIN</p>
-      <nav>
+      <nav aria-label="Navigation de l’administration">
         <a href="administration.html">Tableau de bord</a
         ><a href="administration.html#reservations">Réservations</a
         ><a href="gestion-galerie.html">Galerie d'images</a
@@ -55,14 +55,14 @@
       <div id="catalogue-admin" hidden>
         <section class="admin-panel"><h2>Catégories</h2>
           <form id="categorie-form" class="account-form"><input name="uuid" type="hidden" />
-            <label>Titre<input name="titre" maxlength="100" required /></label>
+            <label>Titre<input type="text" name="titre" maxlength="100" required /></label>
             <button class="button" type="submit">Enregistrer la catégorie</button>
             <button class="button button--outline" type="reset">Nouvelle catégorie</button>
           </form><div id="categories-admin"></div>
         </section>
         <section class="admin-panel"><h2>Plats</h2>
           <form id="plat-form" class="account-form"><input name="uuid" type="hidden" />
-            <label>Titre<input name="titre" maxlength="150" required /></label>
+            <label>Titre<input type="text" name="titre" maxlength="150" required /></label>
             <label>Description<textarea name="description" maxlength="5000" required></textarea></label>
             <label>Prix en euros<input name="prix" type="number" min="0" max="9999.99" step="0.01" required /></label>
             <label>Catégorie<select name="categorie_uuid" required></select></label>
@@ -71,7 +71,7 @@
         </section>
         <section class="admin-panel"><h2>Menus</h2>
           <form id="menu-form" class="account-form"><input name="uuid" type="hidden" />
-            <label>Titre<input name="titre" maxlength="150" required /></label>
+            <label>Titre<input type="text" name="titre" maxlength="150" required /></label>
             <label>Description des choix<textarea name="description" maxlength="5000" required></textarea></label>
             <label>Prix en euros<input name="prix" type="number" min="0" max="9999.99" step="0.01" required /></label>
             <label>Catégories proposées (au moins une)<select name="categories" multiple size="5" required></select></label>
@@ -86,7 +86,7 @@
       ><a href="gestion-galerie.html">Galerie d'images</a
       ><a href="gestion-carte.html">Carte &amp; menus</a>
     </footer>
-    <script type="module" src="main.js?v=front-session-nav-1"></script>
+    <script type="module" src="main.js?v=front-audit-2026-10-28"></script>
     <script type="module" src="admin-catalogue.js"></script>
     <script type="module" src="admin-session.js?v=account-session-3"></script>
   </body>

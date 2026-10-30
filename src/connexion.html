@@ -87,12 +87,12 @@
           <form id="registration-form" class="account-form" novalidate>
             <div class="account-form__columns">
               <label
-                >Prénom<input
+                >Prénom<input type="text"
                   name="firstName"
                   autocomplete="given-name"
                   required /></label
               ><label
-                >Nom<input name="lastName" autocomplete="family-name" required
+                >Nom<input type="text" name="lastName" autocomplete="family-name" required
               /></label>
             </div>
             <label
@@ -148,7 +148,7 @@
                 />
                 Fruits à coque</label
               >
-              <label>Autres allergies ou régimes<input name="otherAllergies" maxlength="5000" /></label>
+              <label>Autres allergies ou régimes<input type="text" name="otherAllergies" maxlength="5000" /></label>
             </fieldset>
             <button class="button" type="submit">Créer mon compte</button>
             <output id="registration-message" class="form-message" aria-live="polite"></output>
@@ -186,7 +186,7 @@
       </div>
       <p class="footer-legal">© 2026 Le Quai Antique. Tous droits réservés.</p>
     </footer>
-    <script type="module" src="main.js?v=front-session-nav-1"></script>
+    <script type="module" src="main.js?v=front-audit-2026-10-28"></script>
     <script type="module" src="connexion-api.js?v=session-roles-1"></script>
   </body>
 </html>

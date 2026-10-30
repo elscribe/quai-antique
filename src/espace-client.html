@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Quai Antique — Espace client</title>
-    <link rel="stylesheet" href="styles.css?v=front-multipage-12" />
+    <link rel="stylesheet" href="styles.css?v=front-audit-2026-10-282" />
   </head>
   <body>
     <a class="skip-link" href="#contenu">Aller au contenu</a>
@@ -42,8 +42,8 @@
       </section>
       <section class="client-section client-profile"><h2>Mes informations</h2>
         <form id="client-profile" class="account-form">
-          <label>Prénom<input name="prenom" autocomplete="given-name" required maxlength="80" /></label>
-          <label>Nom<input name="nom" autocomplete="family-name" required maxlength="80" /></label>
+          <label>Prénom<input type="text" name="prenom" autocomplete="given-name" required maxlength="80" /></label>
+          <label>Nom<input type="text" name="nom" autocomplete="family-name" required maxlength="80" /></label>
           <label>Adresse e-mail<input name="email" type="email" autocomplete="email" required maxlength="255" /></label>
           <label id="client-current-password-field" hidden>Mot de passe actuel<input name="currentPassword" type="password" autocomplete="current-password" /></label>
           <label>Couverts par défaut<input name="nbConvivesDefaut" type="number" min="1" max="65535" /></label>
@@ -53,7 +53,9 @@
         <form id="client-password" class="account-form">
           <h3>Changer mon mot de passe</h3>
           <label>Mot de passe actuel<input name="currentPassword" type="password" autocomplete="current-password" required /></label>
-          <label>Nouveau mot de passe<input name="password" type="password" autocomplete="new-password" required /></label>
+          <label>Nouveau mot de passe<input name="password" type="password" autocomplete="new-password" required aria-describedby="password-policy" /></label>
+          <p id="password-policy">Au moins 8 caractères, avec une majuscule, une minuscule, un chiffre et un caractère spécial.</p>
+          <label>Confirmer le nouveau mot de passe<input name="confirmPassword" type="password" autocomplete="new-password" required /></label>
           <button class="button button--outline" type="submit">Changer le mot de passe</button>
           <p>Après changement, reconnectez-vous.</p>
         </form>
@@ -95,7 +97,7 @@
       </div>
       <p class="footer-legal">© 2026 Le Quai Antique. Tous droits réservés.</p>
     </footer>
-    <script type="module" src="main.js?v=front-session-nav-1"></script>
-    <script type="module" src="espace-client-api.js?v=session-roles-1"></script>
+    <script type="module" src="main.js?v=front-audit-2026-10-28"></script>
+    <script type="module" src="espace-client-api.js?v=reaudit-profile-2026-10-28"></script>
   </body>
 </html>
