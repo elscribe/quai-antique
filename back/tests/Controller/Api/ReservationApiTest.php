@@ -88,6 +88,24 @@ final class ReservationApiTest extends ApiTestCase
         self::assertResponseStatusCodeSame(401);
     }
 
+    public function testNulBytesInDateAndTimeAreRejectedAsInvalidInput(): void
+    {
+        $this->setupRestaurant();
+        $token = $this->createTestUser();
+        $headers = ['CONTENT_TYPE' => 'application/json', 'HTTP_X_AUTH_TOKEN' => $token];
+
+        $this->client->request('POST', '/api/reservations', server: $headers, content: json_encode([
+            'date' => "2026-10-28\0", 'heure' => '12:00', 'nb_convives' => 2,
+        ], JSON_THROW_ON_ERROR));
+        self::assertResponseStatusCodeSame(400);
+
+        $date = (new \DateTimeImmutable('next tuesday', new \DateTimeZone('Europe/Paris')))->format('Y-m-d');
+        $this->client->request('POST', '/api/reservations', server: $headers, content: json_encode([
+            'date' => $date, 'heure' => "12:00\0", 'nb_convives' => 2,
+        ], JSON_THROW_ON_ERROR));
+        self::assertResponseStatusCodeSame(400);
+    }
+
     public function testDeletingAccountRequiresPasswordAndDeletesItsReservations(): void
     {
         $this->setupRestaurant();
