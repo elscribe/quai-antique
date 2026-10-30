@@ -1,4 +1,6 @@
 {
+    "name": "quai-antique/application",
+    "description": "Application web du restaurant Quai Antique, projet de formation DWWM.",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
@@ -30,6 +32,9 @@
         "symfony/yaml": "7.4.*"
     },
     "config": {
+        "platform": {
+            "php": "8.4.1"
+        },
         "allow-plugins": {
             "php-http/discovery": true,
             "symfony/flex": true,
