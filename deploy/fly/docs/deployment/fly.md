@@ -28,7 +28,7 @@ Les autres variables (`APP_ENV=prod`, `DEFAULT_URI`, `CORS_ALLOW_ORIGIN`) sont d
 
 ## Premier déploiement et compte administrateur
 
-Le script `_claude-sync/deploiement-fly.sh` (hors dépôt) enchaîne : test local de l'image, création des deux applications et de leurs volumes, secrets générés aléatoirement, déploiement de MySQL puis de l'application, et vérifications HTTP. Le compte administrateur se crée ensuite par SSH, mot de passe saisi de façon masquée :
+Le script de première mise en ligne (qui n'est plus dans le dossier, après exécution) enchaînait : test local de l'image, création des deux applications et de leurs volumes, secrets générés aléatoirement, déploiement de MySQL puis de l'application, et vérifications HTTP. Le compte administrateur se crée ensuite par SSH, mot de passe saisi de façon masquée :
 
 ```sh
 fly ssh console --app quai-antique-jmf --pty -C "su -s /bin/sh www-data -c 'php bin/console app:create-admin --env=prod --email=... --prenom=... --nom=...'"
