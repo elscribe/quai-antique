@@ -1,0 +1,40 @@
+# Application web Quai Antique sur Fly.io (Front + API dans une même image).
+app = "quai-antique-jmf"
+primary_region = "cdg"
+
+[build]
+  dockerfile = "Dockerfile.fly"
+  ignorefile = "Dockerfile.fly.dockerignore"
+
+[deploy]
+  release_command = "/usr/local/bin/fly-release"
+
+[env]
+  APP_ENV = "prod"
+  APP_DEBUG = "0"
+  DEFAULT_URI = "https://quai-antique-jmf.fly.dev"
+  CORS_ALLOW_ORIGIN = '^https://quai-antique-jmf\.fly\.dev$'
+
+# Photos téléversées par l'administrateur : volume persistant
+[mounts]
+  source = "uploads"
+  destination = "/var/www/app/public/uploads"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [[http_service.checks]]
+    grace_period = "30s"
+    interval = "30s"
+    method = "GET"
+    path = "/api/health"
+    timeout = "5s"
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1

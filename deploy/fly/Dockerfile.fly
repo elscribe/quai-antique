@@ -1,0 +1,42 @@
+# Image unique pour Fly.io : Nginx (Front + proxy /api) et PHP-FPM (API Symfony) dans le même conteneur.
+# La base MySQL est une application Fly séparée (fly.mysql.toml), jointe par le réseau privé .internal.
+FROM php:8.5.12-fpm-bookworm
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libicu-dev unzip nginx \
+    && docker-php-ext-install intl pdo_mysql \
+    && sed -i 's/^;clear_env = no/clear_env = no/' /usr/local/etc/php-fpm.d/www.conf \
+    && rm -f /etc/nginx/sites-enabled/default \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
+
+WORKDIR /var/www/app
+
+# API Symfony, sans dépendances de développement ni tests
+COPY back/composer.json back/composer.lock ./
+RUN composer install --no-dev --no-interaction --prefer-dist --no-progress --no-scripts --optimize-autoloader
+COPY back/ ./
+COPY back/docker/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
+COPY back/docker/production.ini /usr/local/etc/php/conf.d/production.ini
+RUN composer dump-autoload --no-dev --classmap-authoritative --no-scripts \
+    && mkdir -p var/cache var/log public/uploads \
+    && chown -R www-data:www-data var public/uploads \
+    && rm -f /usr/local/bin/composer
+
+# Front statique ; api-config.js appelle l'API sur la même origine
+COPY src/ /usr/share/nginx/html/
+COPY assets/ /usr/share/nginx/html/assets/
+COPY docker/api-config.js /usr/share/nginx/html/api-config.js
+
+COPY deploy/fly/docker/fly/nginx.conf /etc/nginx/conf.d/quai-antique.conf
+COPY deploy/fly/docker/fly/entrypoint.sh /usr/local/bin/fly-entrypoint
+COPY deploy/fly/docker/fly/release.sh /usr/local/bin/fly-release
+# Droits de lecture explicites : les fichiers copiés depuis le Mac peuvent être en 600
+RUN chmod 0755 /usr/local/bin/fly-entrypoint /usr/local/bin/fly-release \
+    && chmod -R a+rX /var/www/app /usr/share/nginx/html /etc/nginx/conf.d /usr/local/etc/php/conf.d \
+    && nginx -t
+
+ENV APP_ENV=prod APP_DEBUG=0
+EXPOSE 8080
+CMD ["/usr/local/bin/fly-entrypoint"]
