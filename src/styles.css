@@ -68,12 +68,12 @@ h1,h2,h3 { font-family:Montserrat,Arial,sans-serif; }
 .menu-offers h3 { display:flex; justify-content:space-between; margin:0 0 18px; color:var(--gold); font-size:20px; }
 .menu-offers p { margin:0; font-size:14px; line-height:28px; }
 .form-page,.dashboard { width:min(1050px,calc(100% - 48px)); margin:0 auto; padding:64px 0 96px; }
-.reservation-page { width:min(1282px,calc(100% - 48px)); min-height:1100px; margin:0 auto; padding:34px 0 110px; }
+.reservation-page { width:min(100% - 32px,560px); min-height:auto; margin:0 auto; padding:36px 0 72px; }
 .eyebrow { margin:0 0 8px; color:var(--gold); font-size:12px; font-weight:500; letter-spacing:.06em; }
-.reservation-page h1 { margin:0 0 6px; font-size:34px; line-height:42px; }
-.reservation-lead { margin:0 0 54px; color:#736b61; }
-.reservation-form { display:grid; width:min(670px,100%); gap:26px; }
-.reservation-basics { display:grid; grid-template-columns:300px 340px; gap:30px; }
+.reservation-page h1 { margin:0 0 6px; font-size:28px; line-height:36px; }
+.reservation-lead { margin:0 0 36px; color:#736b61; }
+.reservation-form { display:grid; width:100%; gap:20px; }
+.reservation-basics { display:grid; grid-template-columns:1fr; gap:18px; }
 .reservation-basics label,.reservation-note { display:grid; gap:8px; font-size:12px; font-weight:500; }
 .reservation-basics select,.reservation-basics input { min-height:42px; padding:9px 12px; font-size:13px; }
 .time-slots,.allergy-options { margin:0; border:0; padding:0; }
@@ -86,9 +86,19 @@ h1,h2,h3 { font-family:Montserrat,Arial,sans-serif; }
 .allergy-options label { display:flex; align-items:center; gap:7px; font-size:12px; }
 .allergy-options input { width:14px; height:14px; accent-color:var(--gold); }
 .reservation-note textarea { min-height:88px; padding:10px 12px; font-size:13px; }
-.reservation-form .button { justify-self:start; min-width:220px; }
+.reservation-form .button { justify-self:stretch; width:100%; min-width:0; }
 .reservation-form input[aria-invalid='true'], .reservation-form select[aria-invalid='true'], .account-form input[aria-invalid='true'] { border-color:#a12626; box-shadow:0 0 0 2px rgba(161,38,38,.12); }
-.reservation-caption { width:min(670px,100%); margin-top:24px; color:#736b61; font-size:13px; }
+.reservation-caption { width:100%; margin-top:24px; color:#736b61; font-size:13px; }
+/* Réservation : base mobile, puis adaptation progressive vers le desktop. */
+@media (min-width:761px) {
+  .reservation-page { width:min(1282px,calc(100% - 48px)); min-height:1100px; padding:34px 0 110px; }
+  .reservation-page h1 { font-size:34px; line-height:42px; }
+  .reservation-lead { margin-bottom:54px; }
+  .reservation-form { width:min(670px,100%); gap:26px; }
+  .reservation-basics { grid-template-columns:300px 340px; gap:30px; }
+  .reservation-form .button { justify-self:start; width:auto; min-width:220px; }
+  .reservation-caption { width:min(670px,100%); }
+}
 .site-header--auth { min-height:72px; border-bottom:0; }
 .account-page { width:min(1202px,calc(100% - 48px)); margin:0 auto; padding:44px 0 96px; }
 .account-page h1 { margin:0 0 10px; color:#2e2626; font-size:32px; line-height:42px; }
@@ -133,7 +143,7 @@ input:focus,select:focus,textarea:focus { outline:3px solid rgba(144,100,39,.22)
 .footer-legal { display:none; }.site-footer--compact { display:grid; min-height:255px; padding:34px 56px; }
 @media (max-width:1100px) { .home-intro,.home-preview--dark,.home-preview--light,.auth-layout { grid-template-columns:1fr; gap:32px; padding:64px 24px; }.home-intro>div,.home-preview>div,.auth-layout>div { width:min(554px,100%); margin:auto; }.home-intro img,.home-preview--light img { width:min(455px,100%); height:auto; margin:auto; }.home-preview__images { width:min(762px,100%); grid-template-columns:repeat(2,1fr); gap:16px; margin:auto; }.home-preview__images img { width:100%; }.site-footer { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:32px; }.account-cards { grid-template-columns:1fr; }.account-card--registration { min-height:auto; } }
 @media (min-width:761px) and (max-width:900px) { .menu-offers { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-@media (max-width:760px) { .site-header { min-height:56px; padding:0 16px; }.brand { font-size:17px; }.menu-toggle { display:block; }.menu-toggle::after { content:'☰'; font-size:22px; line-height:1; }.main-nav { display:none; width:100%; flex-direction:column; align-items:stretch; gap:0; padding:12px 0; }.main-nav.is-open { display:flex; }.main-nav a { border-top:1px solid rgba(255,255,255,.18); padding:10px 0; }.site-header { flex-wrap:wrap; }.home-hero { min-height:420px; padding-top:74px; }.home-hero h1 { font-size:32px; line-height:40px; }.home-hero p { font-size:14px; line-height:20px; }.gallery-page,.menu-columns,.menu-offers,.form-grid,.admin-grid,.reservation-basics,.account-form__columns { grid-template-columns:1fr; }.gallery-page { gap:16px; width:min(100% - 32px,500px); }.menu-page,.form-page,.dashboard,.reservation-page,.account-page { width:min(100% - 32px,560px); }.menu-columns { gap:10px; }.menu-offers { gap:16px; }.auth-layout { padding:32px 0; }.site-footer { display:flex; flex-direction:column; gap:24px; min-height:0; padding:32px 24px; }.site-footer .footer-brand { align-items:center; text-align:center; }.site-footer .footer-brand strong { font-size:18px; line-height:24px; }.site-footer .footer-brand p { font-size:14px; line-height:20px; }.site-footer .footer-section { width:100%; gap:12px; }.site-footer .footer-section strong { margin:0; padding-bottom:5px; font-size:16px; line-height:20px; }.site-footer .footer-section strong::after { right:0; width:auto; bottom:0; }.site-footer .footer-section a,.site-footer .footer-section p { font-size:14px; line-height:20px; }.site-footer .footer-section a { margin:0; }.dashboard-card { display:block; }.dashboard-card .button { margin:14px 8px 0 0; }.reservation-page { min-height:auto; padding:36px 0 72px; }.reservation-lead { margin-bottom:36px; }.reservation-basics { gap:18px; }.time-slot { flex:1 1 54px; }.account-page { padding:36px 0 72px; }.account-page h1 { font-size:28px; line-height:36px; }.account-card { padding:24px 20px; }.account-options { align-items:flex-start; flex-direction:column; } }
+@media (max-width:760px) { .site-header { min-height:56px; padding:0 16px; }.brand { font-size:17px; }.menu-toggle { display:block; }.menu-toggle::after { content:'☰'; font-size:22px; line-height:1; }.main-nav { display:none; width:100%; flex-direction:column; align-items:stretch; gap:0; padding:12px 0; }.main-nav.is-open { display:flex; }.main-nav a { border-top:1px solid rgba(255,255,255,.18); padding:10px 0; }.site-header { flex-wrap:wrap; }.home-hero { min-height:420px; padding-top:74px; }.home-hero h1 { font-size:32px; line-height:40px; }.home-hero p { font-size:14px; line-height:20px; }.gallery-page,.menu-columns,.menu-offers,.form-grid,.admin-grid,.account-form__columns { grid-template-columns:1fr; }.gallery-page { gap:16px; width:min(100% - 32px,500px); }.menu-page,.form-page,.dashboard,.account-page { width:min(100% - 32px,560px); }.menu-columns { gap:10px; }.menu-offers { gap:16px; }.auth-layout { padding:32px 0; }.site-footer { display:flex; flex-direction:column; gap:24px; min-height:0; padding:32px 24px; }.site-footer .footer-brand { align-items:center; text-align:center; }.site-footer .footer-brand strong { font-size:18px; line-height:24px; }.site-footer .footer-brand p { font-size:14px; line-height:20px; }.site-footer .footer-section { width:100%; gap:12px; }.site-footer .footer-section strong { margin:0; padding-bottom:5px; font-size:16px; line-height:20px; }.site-footer .footer-section strong::after { right:0; width:auto; bottom:0; }.site-footer .footer-section a,.site-footer .footer-section p { font-size:14px; line-height:20px; }.site-footer .footer-section a { margin:0; }.dashboard-card { display:block; }.dashboard-card .button { margin:14px 8px 0 0; }.time-slot { flex:1 1 54px; }.account-page { padding:36px 0 72px; }.account-page h1 { font-size:28px; line-height:36px; }.account-card { padding:24px 20px; }.account-options { align-items:flex-start; flex-direction:column; } }
 
 .site-footer strong, .home-preview--dark h2, .menu-offers h3 { color: #d9b56c; }
 .home-preview--dark .button--outline { color: #d9b56c; border-color: #d9b56c; }

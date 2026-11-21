@@ -53,11 +53,69 @@ async function chargerDisponibilites() {
 dateInput.addEventListener("change", chargerDisponibilites);
 guestInput.addEventListener("input", chargerDisponibilites);
 
+// Messages par champ : ils reprennent uniquement les contraintes déjà déclarées dans reservation.html.
+function erreurCouverts() {
+  const validity = guestInput.validity;
+  if (validity.valueMissing || validity.badInput) return "Indiquez le nombre de couverts.";
+  if (validity.rangeUnderflow || validity.rangeOverflow) return `Le nombre de couverts doit être compris entre ${guestInput.min} et ${guestInput.max}.`;
+  if (validity.stepMismatch) return "Le nombre de couverts doit être un nombre entier.";
+  return "";
+}
+
+function erreurDate() {
+  return dateInput.value ? "" : "Choisissez une date valide.";
+}
+
+function erreurCreneau() {
+  return timeInput.value ? "" : "Sélectionnez un créneau disponible.";
+}
+
+function afficherErreur(field, message) {
+  const errorElement = document.getElementById(`${field.id}-error`);
+  if (message) {
+    field.setAttribute("aria-invalid", "true");
+  } else {
+    field.removeAttribute("aria-invalid");
+  }
+  if (errorElement) errorElement.textContent = message;
+}
+
+const validations = [
+  [guestInput, erreurCouverts],
+  [dateInput, erreurDate],
+  [timeInput, erreurCreneau],
+];
+
+function validerChamps() {
+  let premierInvalide = null;
+  for (const [field, verifier] of validations) {
+    const message = verifier();
+    afficherErreur(field, message);
+    if (message && !premierInvalide) premierInvalide = field;
+  }
+  return premierInvalide;
+}
+
+// Un champ signalé redevient neutre dès qu'il est corrigé.
+guestInput.addEventListener("input", () => {
+  if (guestInput.hasAttribute("aria-invalid")) afficherErreur(guestInput, erreurCouverts());
+});
+dateInput.addEventListener("change", () => {
+  if (dateInput.hasAttribute("aria-invalid")) afficherErreur(dateInput, erreurDate());
+});
+slotsContainer.addEventListener("click", () => {
+  if (timeInput.hasAttribute("aria-invalid")) afficherErreur(timeInput, erreurCreneau());
+});
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const token = sessionStorage.getItem("quai_api_token");
-  if (!dateInput.value || !guestInput.checkValidity() || !timeInput.value) {
+  const premierInvalide = validerChamps();
+  if (premierInvalide) {
     resultMessage.textContent = "Choisissez une date, le nombre de couverts et un créneau disponible.";
+    // Le champ caché du créneau ne peut pas recevoir le focus : on renvoie vers le premier créneau proposé.
+    const cible = premierInvalide === timeInput ? slotsContainer.querySelector("button:not([disabled])") : premierInvalide;
+    cible?.focus();
     return;
   }
   if (!token) {
